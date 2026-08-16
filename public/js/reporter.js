@@ -241,6 +241,37 @@ function setupFormHandler() {
   });
 }
 
+// PWA Service Worker & Install Handler
+let deferredPrompt = null;
+const installBtn = document.getElementById('pwaInstallBtn');
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(err => {
+      console.log('SW registration error:', err);
+    });
+  });
+}
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (installBtn) {
+    installBtn.style.display = 'inline-flex';
+    installBtn.onclick = async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          showToast('✅ वार्ताप्राइम ऐप आपके फोन पर इंस्टॉल हो गया!');
+        }
+        deferredPrompt = null;
+        installBtn.style.display = 'none';
+      }
+    };
+  }
+});
+
 document.addEventListener('DOMContentLoaded', async () => {
   await loadLocations();
   loadReporterProfile();

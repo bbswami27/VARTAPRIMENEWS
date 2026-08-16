@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>वार्ताप्राइम न्यूज़ - फील्ड रिपोर्टर पोर्टल</title>
   <meta name="theme-color" content="#111827">
+  <link rel="manifest" href="/manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@500;600;700&family=Hind:wght@400;500;600;700&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
@@ -22,7 +23,10 @@
           <div class="rep-logo-sub">फील्ड संवाददाता डेस्क</div>
         </div>
       </div>
-      <a href="/" target="_blank" class="rep-portal-badge">🌐 मुख्य वेबसाइट</a>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button id="pwaInstallBtn" class="rep-portal-badge" style="background:#059669;color:#fff;border:none;cursor:pointer;display:none;font-weight:700;">📲 ऐप इंस्टॉल करें</button>
+        <a href="/" target="_blank" class="rep-portal-badge">🌐 मुख्य वेबसाइट</a>
+      </div>
     </div>
   </header>
 

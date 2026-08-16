@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>वार्ताप्राइम न्यूज़ - एडमिन अप्रूवल डैशबोर्ड</title>
+  <link rel="manifest" href="/manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@500;600;700&family=Hind:wght@400;500;600;700&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
@@ -28,6 +29,10 @@
       </div>
 
       <div class="admin-controls">
+        <button id="adminPwaInstallBtn" class="btn btn-secondary" style="background:#059669;color:#fff;border:none;display:none;">
+          <span>📲 ऐप इंस्टॉल करें</span>
+        </button>
+
         <div class="countdown-box" title="अगला स्वतः 30-मिनट फेचिंग चक्र">
           <span>⏰ अगला रिफ्रेश:</span>
           <strong id="nextFetchCountdown">गणना जारी...</strong>

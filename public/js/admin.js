@@ -787,3 +787,34 @@ document.addEventListener('DOMContentLoaded', () => {
   // Auto refresh admin stats every 60s
   setInterval(loadStats, 60000);
 });
+
+// PWA Service Worker & Install Handler for Admin
+let adminDeferredPrompt = null;
+const adminInstallBtn = document.getElementById('adminPwaInstallBtn');
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(err => {
+      console.log('SW registration error:', err);
+    });
+  });
+}
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  adminDeferredPrompt = e;
+  if (adminInstallBtn) {
+    adminInstallBtn.style.display = 'inline-flex';
+    adminInstallBtn.onclick = async () => {
+      if (adminDeferredPrompt) {
+        adminDeferredPrompt.prompt();
+        const { outcome } = await adminDeferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          showToast('✅ वार्ताप्राइम एडमिन ऐप इंस्टॉल हो गया!');
+        }
+        adminDeferredPrompt = null;
+        adminInstallBtn.style.display = 'none';
+      }
+    };
+  }
+});

@@ -1,0 +1,36 @@
+{
+  "name": "वार्ताप्राइम एडमिन व रिपोर्टर",
+  "short_name": "VartaPrime Desk",
+  "description": "वार्ताप्राइम न्यूज़ - संपादक व रिपोर्टर मोबाइल पोर्टल",
+  "start_url": "/reporter.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0B1528",
+  "theme_color": "#E65100",
+  "icons": [
+    {
+      "src": "/images/chatterpatter.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/chatterpatter.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "संपादक एडमिन पैनल",
+      "url": "/admin.html",
+      "description": "खबरें अप्रूव व एडिट करें"
+    },
+    {
+      "name": "रिपोर्टर ग्राउंड पोर्टल",
+      "url": "/reporter.html",
+      "description": "नई खबर व फोटो भेजें"
+    }
+  ]
+}
