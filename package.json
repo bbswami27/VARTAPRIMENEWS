@@ -1,0 +1,25 @@
+{
+  "name": "vartaprime-news",
+  "version": "1.0.0",
+  "description": "Automated Hindi News Portal with 30-min RSS Feeder and Admin Approval System",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "news",
+    "hindi-news",
+    "rss-feeder",
+    "approval-system",
+    "vartaprime"
+  ],
+  "author": "VartaPrime News",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "node-cron": "^3.0.3",
+    "rss-parser": "^3.13.0"
+  }
+}

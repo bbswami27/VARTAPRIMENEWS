@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VartaPrime News | हरियाणा और देश-दुनिया की ताज़ा ख़बरें</title>
+  <meta name="description" content="वार्ताप्राइम न्यूज़ - हरियाणा, देश, विदेश, राजनीति, बिज़नेस, क्राइम, खेल और मनोरंजन की सबसे तेज़ और सटीक खबरें।">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@500;600;700;800&family=Hind:wght@400;500;600;700&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Top Origin Banner -->
+  <div class="top-haryana-banner">
+    <div class="wrap">
+      <span>Made with ❤️ in Haryana, India</span>
+    </div>
+  </div>
+
+  <!-- Top Utility Bar (Reporter Bot removed as requested) -->
+  <div class="utility-bar">
+    <div class="wrap">
+      <div class="utility-left">
+        <span class="date-samvat" id="dateStr">
+          <span id="liveDateText">शनिवार, 15 अगस्त 2026</span> &nbsp;|&nbsp;
+          <span style="color:var(--press-red);font-weight:700;" id="liveTimeText">12:55:00 PM</span>
+        </span>
+        <span class="weather-badge" id="topPanipatWeather">🌤️ पानीपत: तापमान लोड हो रहा है...</span>
+      </div>
+      <div class="utility-links">
+        <a href="#epaperModal" onclick="alert('ई-पेपर जल्द ही उपलब्ध होगा!'); return false;">📰 ई-पेपर</a>
+        <a href="#adModal" onclick="alert('विज्ञापन के लिए संपर्क करें: ads@vartaprimenews.com'); return false;">📢 विज्ञापन दें</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Masthead with Waving Indian Tricolor and Attached Sovereign Akhand Bharat Map -->
+  <header class="masthead">
+    <div class="masthead-container">
+      <!-- Left: Animated Waving Indian Flag -->
+      <div class="masthead-flag-side" title="विजयी विश्व तिरंगा प्यारा, झंडा ऊंचा रहे हमारा">
+        <div class="flag-pole-wrapper">
+          <div class="flag-pole"></div>
+          <div class="waving-flag">
+            <div class="flag-stripe saffron"></div>
+            <div class="flag-stripe white">
+              <div class="ashoka-chakra"></div>
+            </div>
+            <div class="flag-stripe green"></div>
+            <div class="flag-wave-overlay"></div>
+          </div>
+        </div>
+        <div class="flag-caption">🇮🇳 विजयी विश्व तिरंगा प्यारा</div>
+      </div>
+
+      <!-- Center: VartaPrime News Brand -->
+      <div class="masthead-center">
+        <div class="eyebrow">80वां स्वतंत्रता दिवस विशेष &nbsp;•&nbsp; निष्पक्ष एवं निर्भीक पत्रकारिता</div>
+        <div class="logo-container" onclick="window.scrollTo({top:0,behavior:'smooth'});">
+          <h1 class="logo">वार्ता<span>प्राइम</span></h1>
+          <div class="hindi-name">VartaPrime News</div>
+        </div>
+        <div class="tagline">हरियाणा की आवाज़, देश-दुनिया की हर खबर &nbsp;•&nbsp; vartaprimenews.com</div>
+      </div>
+
+      <!-- Right: User Attached Authentic Akhand Bharat Map (1945) -->
+      <div class="masthead-map-side" title="संपूर्ण अखंड भारत (United Empire of the Indias 1945)">
+        <div class="map-wrapper akhand-map-wrapper">
+          <img src="/images/akhand_bharat_map.jpg" alt="संपूर्ण अखंड भारत 1945" class="akhand-bharat-img">
+        </div>
+        <div class="map-caption">🗺️ अखंड भारत (1945) 🇮🇳</div>
+      </div>
+    </div>
+  </header>
+  <div class="tricolor-rule"></div>
+
+  <!-- Navigation Bar -->
+  <nav>
+    <div class="wrap">
+      <div class="nav-links-scroll" id="navWrap">
+        <button class="nav-btn active" data-cat="home">🏠 मुख्य पृष्ठ</button>
+        <button class="nav-btn" data-cat="haryana" data-name="हरियाणा">🌾 हरियाणा</button>
+        <button class="nav-btn" data-cat="desh" data-name="देश">🇮🇳 देश</button>
+        <button class="nav-btn" data-cat="yuva" data-name="युवा">🚀 युवा व करियर</button>
+        <button class="nav-btn" data-cat="videsh" data-name="विदेश">🌍 विदेश</button>
+        <button class="nav-btn" data-cat="currentaffairs" data-name="समसामयिकी">📚 करंट अफेयर्स (GK)</button>
+        <button class="nav-btn" data-cat="dilli" data-name="दिल्ली">🏙️ दिल्ली</button>
+        <button class="nav-btn" data-cat="business" data-name="बिज़नेस">📈 बिज़नेस</button>
+        <button class="nav-btn" data-cat="shiksha" data-name="शिक्षा">🎓 शिक्षा</button>
+        <button class="nav-btn" data-cat="khel" data-name="खेल">🏏 खेल</button>
+        <button class="nav-btn" data-cat="rajniti" data-name="राजनीति">🏛️ राजनीति</button>
+        <button class="nav-btn" data-cat="swasthya" data-name="स्वास्थ्य">🩺 स्वास्थ्य</button>
+        <button class="nav-btn" data-cat="manoranjan" data-name="मनोरंजन">🎬 मनोरंजन</button>
+        <button class="nav-btn" data-cat="dharm" data-name="धर्म">🛕 धर्म</button>
+      </div>
+      <div class="nav-tools">
+        <button class="search-toggle-btn" id="navSearchBtn" title="समाचार खोजें">🔍 खोजें</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Search Bar Overlay -->
+  <div class="search-bar-wrap" id="searchOverlay">
+    <div class="wrap">
+      <div class="search-inner">
+        <input type="text" id="searchInput" placeholder="खबरें, शहर, या विषय खोजें (उदा. हरियाणा, बजट, क्रिकेट)...">
+        <button id="searchSubmit">सर्च</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Breaking News Ticker -->
+  <div class="ticker">
+    <div class="tag">⚡ ब्रेकिंग न्यूज़</div>
+    <div class="ticker-track-wrap">
+      <div class="ticker-track" id="tickerTrack">
+        <span>हरियाणा और देश-दुनिया की पल-पल की ताज़ा खबरों के लिए वार्ताप्राइम से जुड़े रहें...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="wrap">
+
+    <!-- Top Free Local Ad Strip -->
+    <div class="free-ad-banner-strip">
+      <div class="free-ad-banner-text">
+        <span class="free-ad-badge">📢 जनहित मंच</span>
+        <span><strong>हरियाणा हैंडलूम एक्सपो 2026 (पानीपत):</strong> बुनकरों व स्थानीय कारीगरों के उत्कृष्ट उत्पादों की भव्य प्रदर्शनी। विशेष छूट उपलब्ध।</span>
+      </div>
+      <button class="free-ad-banner-btn" onclick="alert('प्रदर्शनी स्थल: हुडा ग्राउंड, सेक्टर 12, पानीपत। प्रवेश निःशुल्क!')">विवरण देखें</button>
+    </div>
+
+    <!-- HOME VIEW: Zero Wasted Space, 100% Packed News -->
+    <div id="home-view">
+      <!-- 1. Hero Top 5 Stories Section -->
+      <section class="hero">
+        <div class="hero-lead" id="heroLead">
+          <span class="lead-tag">मुख्य ख़बर</span>
+          <div class="imgbox"></div>
+          <h1>हरियाणा में नई औद्योगिक नीति लागू: युवाओं के लिए लाखों रोजगार के अवसर होंगे सृजित</h1>
+          <div class="meta">
+            <span class="meta-source">वार्ताप्राइम डेस्क</span>
+            <span class="meta-time">अपडेट: आज</span>
+          </div>
+        </div>
+
+        <div class="hero-side" id="heroSide">
+          <!-- Dynamic 4 Top Stories (Total 5 Hero Stories) -->
+        </div>
+      </section>
+
+      <!-- 2. High-Density Main Layout (Continuous 5-5 News per Category + Sticky Sidebar) -->
+      <div class="content-layout">
+        <div class="main-news-stream">
+
+          <!-- Free Local Commercial Announcement Card -->
+          <div class="free-ad-wrapper">
+            <div class="free-ad-card">
+              <div class="free-ad-header">
+                <span class="free-ad-badge">स्थानीय विशेष (निःशुल्क)</span>
+                <span class="free-ad-tag">📍 पानीपत व कुरुक्षेत्र</span>
+              </div>
+              <div class="free-ad-title">🧵 पानीपत टेक्सटाइल व होम फर्निशिंग मेला</div>
+              <div class="free-ad-desc">हैंडलूम चादरें, पर्दे, सोफा कवर और कालीन फैक्ट्री दरों पर उपलब्ध। सभी खुदरा व थोक खरीदारों का स्वागत है।</div>
+              <div class="free-ad-footer">
+                <span>स्थान: मॉडल टाउन व जीटी रोड मार्किट</span>
+                <a href="#adInfo" onclick="alert('संपर्क: 98120-XXXXX | प्रवेश निःशुल्क'); return false;">जानकारी प्राप्त करें ➔</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- All Categories Top 5-5 News Container (Zero Wasted Space) -->
+          <div class="dense-news-grid" id="mainDenseGrid">
+            <!-- Dynamically injected top 5 news from every category -->
+          </div>
+        </div>
+
+        <!-- Sidebar (Weather + Free Camps + ChatterPatter In-Feed + Trending) -->
+        <aside class="sidebar">
+          <!-- Haryana 22 Districts Weather Widget -->
+          <div class="haryana-weather-card">
+            <div class="h-weather-header">
+              <div class="h-weather-title">
+                <h3>🌡️ हरियाणा मौसम (22 जिले)</h3>
+                <span class="h-weather-subtitle">लाइव तापमान व मौसम की स्थिति</span>
+              </div>
+              <button class="h-weather-refresh-btn" onclick="loadHaryanaWeather(true)" title="मौसम डेटा ताज़ा करें">🔄</button>
+            </div>
+
+            <div class="h-weather-search-box">
+              <input type="text" id="districtSearchInput" placeholder="🔍 जिला खोजें (उदा. करनाल, रोहतक)..." oninput="filterDistricts(this.value)">
+            </div>
+
+            <div class="districts-weather-grid" id="districtsWeatherGrid">
+              <div style="text-align:center;padding:20px;color:var(--ink-muted);font-size:13px;">
+                मौसम जानकारी लोड हो रही है...
+              </div>
+            </div>
+          </div>
+
+          <!-- In-Feed ChatterPatter Sponsored Ad Card -->
+          <div class="sidebar-cp-card">
+            <div class="sidebar-cp-badge">🔥 लोकप्रिय चैटिंग ऐप</div>
+            <img src="/images/chatterpatter.jpg" alt="ChatterPatter App" class="sidebar-cp-img">
+            <h4 class="sidebar-cp-title">ChatterPatter App</h4>
+            <p class="sidebar-cp-desc">100% भारतीय सुपर-फास्ट मैसेजिंग ऐप। HD कॉलिंग, ग्रुप्स व रील्स।</p>
+            <button class="sidebar-cp-btn" onclick="alert('ChatterPatter ऐप डाउनलोड लिंक आपके फ़ोन पर भेजा गया!');">📲 मुफ़्त डाउनलोड करें</button>
+          </div>
+
+          <!-- Hiteshi: Free Camps & Public Welfare (Haryana & Chandigarh) -->
+          <div class="hiteshi-camps-widget">
+            <div class="hiteshi-header">
+              <div class="hiteshi-title-wrap">
+                <span class="hiteshi-badge">🤝 जनहित सेवा</span>
+                <h3 class="hiteshi-title">हितैषी: निःशुल्क शिविर व सूचनाएं</h3>
+                <p class="hiteshi-subtitle">हरियाणा व चंडीगढ़ के आगामी निःशुल्क जनहित शिविर</p>
+              </div>
+            </div>
+
+            <div class="hiteshi-list">
+              <!-- Camp 1: Rohtak -->
+              <div class="hiteshi-card">
+                <div class="hiteshi-card-top">
+                  <span class="hiteshi-tag health">🩺 स्वास्थ्य व नेत्र शिविर</span>
+                  <span class="hiteshi-loc">📍 रोहतक</span>
+                </div>
+                <h4 class="hiteshi-name">निःशुल्क मोतियाबिंद, बीपी-शुगर जांच व दवा वितरण</h4>
+                <p class="hiteshi-desc">पीजीआई रोहतक के विशेषज्ञ डॉक्टरों द्वारा निःशुल्क परामर्श व जांच।</p>
+                <div class="hiteshi-meta">
+                  <span>📅 प्रत्येक रविवार (प्रातः 9 से 2 बजे)</span>
+                  <button class="hiteshi-btn" onclick="alert('स्थान: सामुदायिक केंद्र, सेक्टर 14, रोहतक | हेल्पलाइन: 98960-12345');">विवरण देखें</button>
+                </div>
+              </div>
+
+              <!-- Camp 2: Chandigarh -->
+              <div class="hiteshi-card">
+                <div class="hiteshi-card-top">
+                  <span class="hiteshi-tag blood">🩸 रक्तदान महादान शिविर</span>
+                  <span class="hiteshi-loc">📍 चंडीगढ़ व पंचकूला</span>
+                </div>
+                <h4 class="hiteshi-name">रोटरी क्लब एवं पीजीआईएमईआर स्वैच्छिक रक्तदान शिविर</h4>
+                <p class="hiteshi-desc">रक्तदाताओं को प्रशंसा पत्र, डोनर कार्ड व स्वास्थ्य किट प्रदान की जाएगी।</p>
+                <div class="hiteshi-meta">
+                  <span>📅 आगामी शनिवार (प्रातः 10 से सायं 3 बजे)</span>
+                  <button class="hiteshi-btn" onclick="alert('स्थान: रोटरी भवन, सेक्टर 18, चंडीगढ़ | हेल्पलाइन: 0172-278XXXX');">विवरण देखें</button>
+                </div>
+              </div>
+
+              <!-- Camp 3: Panipat Free Specs -->
+              <div class="hiteshi-card">
+                <div class="hiteshi-card-top">
+                  <span class="hiteshi-tag eye">👓 चश्मा वितरण शिविर</span>
+                  <span class="hiteshi-loc">📍 पानीपत</span>
+                </div>
+                <h4 class="hiteshi-name">वरिष्ठ नागरिकों हेतु निःशुल्क नेत्र परीक्षण व चश्मे</h4>
+                <p class="hiteshi-desc">रेड क्रॉस भवन पानीपत में अनुभवी नेत्र विशेषज्ञों द्वारा आधुनिक मशीनों से जांच।</p>
+                <div class="hiteshi-meta">
+                  <span>📅 प्रतिदिन (प्रातः 10 से सायं 4 बजे)</span>
+                  <button class="hiteshi-btn" onclick="alert('स्थान: रेड क्रॉस भवन, जीटी रोड, पानीपत | हेल्पलाइन: 98120-67890');">विवरण देखें</button>
+                </div>
+              </div>
+
+              <!-- Camp 4: Gurugram Job Fair -->
+              <div class="hiteshi-card">
+                <div class="hiteshi-card-top">
+                  <span class="hiteshi-tag job">💼 युवा रोजगार मेला</span>
+                  <span class="hiteshi-loc">📍 गुरुग्राम व फरीदाबाद</span>
+                </div>
+                <h4 class="hiteshi-name">हरियाणा कौशल विकास निःशुल्क मेगा रोजगार मेला</h4>
+                <p class="hiteshi-desc">50+ प्रतिष्ठित कंपनियों में 10वीं, 12वीं, आईटीआई व स्नातकों के लिए सीधे साक्षात्कार।</p>
+                <div class="hiteshi-meta">
+                  <span>📅 आगामी मंगलवार (प्रातः 9:30 बजे से)</span>
+                  <button class="hiteshi-btn" onclick="alert('स्थान: राजकीय आईटीआई, सेक्टर 14, गुरुग्राम | ऑन-द-स्पॉट रजिस्ट्रेशन');">विवरण देखें</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Trending List -->
+          <div class="trending-box">
+            <h3 class="trending-title">🔥 सबसे ज्यादा पढ़ी गई खबरें</h3>
+            <div id="trendingList">
+              <!-- Dynamic Trending List -->
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- DEDICATED CATEGORY VIEWS (Shown when clicking specific category in Nav) -->
+
+    <!-- 1. Dedicated Haryana View (All 22 Districts) -->
+    <div id="haryana-view" class="category-view" style="display:none;">
+      <div class="section-head">
+        <h2>🌾 हरियाणा लाइव (Haryana 22 Districts)</h2>
+        <div class="rule"></div>
+        <span class="count-badge" id="haryanaNewsCount">22 जिले</span>
+      </div>
+
+      <!-- All 22 Haryana Districts Pills -->
+      <div class="district-filter-container">
+        <span class="district-filter-label">📍 जिला चुनें:</span>
+        <div class="district-pills-scroll" id="haryanaDistrictPills">
+          <button class="district-pill active" onclick="filterHaryanaDistrict('all', this)">सभी 22 जिले</button>
+          <button class="district-pill" onclick="filterHaryanaDistrict('पानीपत', this)">पानीपत</button>
+          <button class="district-pill" onclick="filterHaryanaDistrict('करनाल', this)">करनाल</button>
+          <button class="district-pill" onclick="filterHaryanaDistrict('गुरुग्राम', this)">गुरुग्राम</button>
+          <button class="district-pill" onclick="filterHaryanaDistrict('फरीदाबाद', this)">फरीदाबाद</button>
+          <button class="district-pill" onclick="filterHaryanaDistrict('हिसार', this)">हिसार</button>
+          <button class="district-pill" onclick="filterHaryanaDistrict('रोहतक', this)">रोहतक</button>
+          <button class="district-pill" onclick="filterHaryanaDistrict('अंबाला', this)">अंबाला</button>
+          <button class="district-pill" onclick="filterHaryanaDistrict('पंचकूला', this)">पंचकूला</button>
+          <button class="district-pill" onclick="filterHaryanaDistrict('कुरुक्षेत्र', this)">कुरुक्षेत्र</button>
+          <button class="district-pill" onclick="filterHaryanaDistrict('सोनीपत', this)">सोनीपत</button>
+          <button class="district-pill" onclick="filterHaryanaDistrict('यमुनानगर', this)">यमुनानगर</button>
+          <button class="district-pill" onclick="filterHaryanaDistrict('सिरसा', this)">सिरसा</button>
+          <button class="district-pill" onclick="filterHaryanaDistrict('भिवानी', this)">भिवानी</button>
+          <button class="district-pill" onclick="filterHaryanaDistrict('जींद', this)">जींद</button>
+          <button class="district-pill" onclick="filterHaryanaDistrict('कैथल', this)">कैथल</button>
+          <button class="district-pill" onclick="filterHaryanaDistrict('रेवाड़ी', this)">रेवाड़ी</button>
+          <button class="district-pill" onclick="filterHaryanaDistrict('पलवल', this)">पलवल</button>
+          <button class="district-pill" onclick="filterHaryanaDistrict('महेंद्रगढ़', this)">महेंद्रगढ़</button>
+          <button class="district-pill" onclick="filterHaryanaDistrict('झज्जर', this)">झज्जर</button>
+          <button class="district-pill" onclick="filterHaryanaDistrict('फतेहाबाद', this)">फतेहाबाद</button>
+          <button class="district-pill" onclick="filterHaryanaDistrict('नूहं', this)">नूहं</button>
+          <button class="district-pill" onclick="filterHaryanaDistrict('चरखी दादरी', this)">चरखी दादरी</button>
+        </div>
+      </div>
+
+      <div class="grid grid-3" id="haryanaDistrictGrid"></div>
+    </div>
+
+    <!-- 2. Dedicated Desh View (National & States) -->
+    <div id="desh-view" class="category-view" style="display:none;">
+      <div class="section-head">
+        <h2>🇮🇳 देश (National News & States)</h2>
+        <div class="rule"></div>
+        <span class="count-badge" id="deshNewsCount">राष्ट्रीय</span>
+      </div>
+
+      <!-- State & District Filter Bar -->
+      <div class="state-filter-container">
+        <span style="font-size:13.5px;font-weight:700;color:var(--navy);">📍 राज्य / प्रदेश चुनें:</span>
+        <select id="deshStateSelect" class="state-select" onchange="onDeshStateChange(this.value)">
+          <option value="all">🇮🇳 सभी राज्य (All States)</option>
+          <option value="उत्तर प्रदेश">उत्तर प्रदेश</option>
+          <option value="दिल्ली (NCR)">दिल्ली (NCR)</option>
+          <option value="पंजाब">पंजाब</option>
+          <option value="राजस्थान">राजस्थान</option>
+          <option value="बिहार">बिहार</option>
+          <option value="मध्य प्रदेश">मध्य प्रदेश</option>
+          <option value="उत्तराखंड">उत्तराखंड</option>
+          <option value="हिमाचल प्रदेश">हिमाचल प्रदेश</option>
+          <option value="महाराष्ट्र">महाराष्ट्र</option>
+          <option value="गुजरात">गुजरात</option>
+        </select>
+
+        <select id="deshDistrictSelect" class="state-select" onchange="onDeshDistrictChange(this.value)" style="display:none;">
+          <option value="all">🏙️ सभी जिले</option>
+        </select>
+      </div>
+
+      <div class="grid grid-3" id="deshDistrictGrid"></div>
+    </div>
+
+    <!-- 3. Dedicated Yuva & Career View -->
+    <div id="yuva-view" class="category-view" style="display:none;">
+      <div class="section-head">
+        <h2>🚀 युवा शक्ति, स्टार्टअप व रोजगार (Youth & Career)</h2>
+        <div class="rule"></div>
+        <span class="count-badge">कौशल • नवाचार • करियर</span>
+      </div>
+
+      <div class="exam-capsule-box" style="background:#FFFFFF;border:1px solid var(--line);border-left:4px solid #059669;padding:14px 18px;margin-bottom:20px;border-radius:4px;">
+        <div style="font-weight:700;font-size:15px;color:#059669;margin-bottom:4px;">🎯 युवा स्वावलंबन व नवाचार मंच</div>
+        <div style="font-size:13.5px;color:var(--ink-soft);line-height:1.5;">
+          हरियाणा व देश के युवाओं के लिए स्टार्टअप सीड फंड, AI व रोबोटिक्स ट्रेनिंग, स्वरोजगार सब्सिडी एवं प्रतियोगी परीक्षाओं के नवीनतम मार्गदर्शन।
+        </div>
+      </div>
+
+      <div class="grid grid-3" id="yuvaGrid"></div>
+    </div>
+
+    <!-- 4. Dedicated Current Affairs View -->
+    <div id="currentaffairs-view" class="category-view" style="display:none;">
+      <div class="section-head">
+        <h2>📚 समसामयिकी व प्रतियोगी परीक्षा दृष्टि (Current Affairs & GK Capsule)</h2>
+        <div class="rule"></div>
+        <span class="count-badge">HSSC • CET • SSC • UPSC • Banking</span>
+      </div>
+
+      <div class="exam-capsule-box" style="background:#FFFFFF;border:1px solid var(--line);border-left:4px solid var(--navy);padding:14px 18px;margin-bottom:20px;border-radius:4px;">
+        <div style="font-weight:700;font-size:15px;color:var(--navy);margin-bottom:4px;">🎯 आज के मुख्य परीक्षा उपयोगी तथ्य (Daily Exam GK Highlights)</div>
+        <div style="font-size:13.5px;color:var(--ink-soft);line-height:1.5;">
+          • <strong>राष्ट्रीय नीति:</strong> 80वें स्वतंत्रता दिवस 2026 पर विकसित भारत 2047 विजन दस्तावेज जारी।<br>
+          • <strong>हरियाणा GK:</strong> पानीपत पेट्रोकेमिकल विस्तार व खरखौदा मारुति प्लांट से रोजगार के नए अवसर।<br>
+          • <strong>विज्ञान व अंतरिक्ष:</strong> इसरो निसार (NISAR) और शुक्रयान मिशन की तैयारियां पूर्णता की ओर।
+        </div>
+      </div>
+
+      <div class="grid grid-3" id="currentAffairsGrid"></div>
+    </div>
+
+    <!-- 5. Generic Category View for Other Tabs (Videsh, Delhi, Business, Shiksha, Khel, etc.) -->
+    <div id="generic-view" class="category-view" style="display:none;">
+      <div class="section-head">
+        <h2 id="genericCatTitle">समाचार</h2>
+        <div class="rule"></div>
+        <span class="count-badge" id="genericCatCount">ताज़ा अपडेट्स</span>
+      </div>
+      <div class="grid grid-3" id="genericCatGrid"></div>
+    </div>
+
+  </main>
+
+  <!-- Full Article Reading Modal -->
+  <div class="modal-backdrop" id="articleModal" onclick="if(event.target === this) closeArticleModal()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-category-tag" id="modalCat">समाचार</span>
+        <button class="modal-close-btn" onclick="closeArticleModal()" title="बंद करें">&times;</button>
+      </div>
+      <div class="modal-body">
+        <h1 id="modalTitle">शीर्षक</h1>
+        <div class="modal-meta-bar">
+          <div class="modal-meta-left">
+            <span id="modalSource" style="font-weight:600;color:var(--ink);">वार्ताप्राइम</span>
+            <span id="modalTime">समय</span>
+            <span id="modalViews">0 व्यूज</span>
+          </div>
+          <div class="modal-share-bar">
+            <button class="share-btn wa" onclick="shareWhatsApp()">🟢 WhatsApp</button>
+            <button class="share-btn fb" onclick="shareFacebook()">🔵 Facebook</button>
+            <button class="share-btn" onclick="copyArticleLink()">📋 लिंक कॉपी</button>
+          </div>
+        </div>
+
+        <div class="modal-img-container">
+          <img id="modalImg" src="" alt="समाचार तस्वीर">
+        </div>
+
+        <div class="modal-text" id="modalContent"></div>
+
+        <div class="modal-source-box" style="font-size:11px;color:var(--ink-muted);border-top:1px dashed var(--line);padding-top:12px;margin-top:20px;opacity:0.75;">
+          <span>स्रोत संदर्भ: <strong id="modalSourceBottom">वार्ताप्राइम</strong></span>
+          <span style="margin: 0 8px;">•</span>
+          <a id="modalOrigLink" href="#" target="_blank" rel="noopener noreferrer" style="color:var(--ink-muted);text-decoration:underline;">मूल संदर्भ देखें ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="wrap">
+      <div class="fgrid">
+        <div class="f-about">
+          <h3>VartaPrime <span>News</span></h3>
+          <p>वार्ताप्राइम न्यूज़ हरियाणा और देश का अग्रणी डिजिटल समाचार मंच है, जो आपको देता है हर पल की निष्पक्ष, सटीक और विश्वसनीय खबरें।</p>
+          <div style="font-size: 13px; color: #E08D3C;">सत्य • निष्पक्ष • निर्भीक</div>
+        </div>
+        <div>
+          <h4>प्रमुख श्रेणियां</h4>
+          <ul>
+            <li><a href="javascript:void(0)" onclick="filterByCategory('हरियाणा')">हरियाणा</a></li>
+            <li><a href="javascript:void(0)" onclick="filterByCategory('देश')">देश</a></li>
+            <li><a href="javascript:void(0)" onclick="filterByCategory('युवा')">युवा व करियर</a></li>
+            <li><a href="javascript:void(0)" onclick="filterByCategory('बिज़नेस')">बिज़नेस</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>अन्य श्रेणियां</h4>
+          <ul>
+            <li><a href="javascript:void(0)" onclick="filterByCategory('खेल')">खेल</a></li>
+            <li><a href="javascript:void(0)" onclick="filterByCategory('शिक्षा')">शिक्षा</a></li>
+            <li><a href="javascript:void(0)" onclick="filterByCategory('समसामयिकी')">करंट अफेयर्स GK</a></li>
+            <li><a href="javascript:void(0)" onclick="filterByCategory('मनोरंजन')">मनोरंजन</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>त्वरित सेवाएं</h4>
+          <ul>
+            <li><a href="#epaperModal" onclick="alert('ई-पेपर जल्द ही उपलब्ध होगा!'); return false;">ई-पेपर संस्करण</a></li>
+            <li><a href="#adModal" onclick="alert('विज्ञापन के लिए संपर्क करें: ads@vartaprimenews.com'); return false;">विज्ञापन दरें</a></li>
+            <li><a href="#">RSS फीड्स व अपडेट्स</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>नीतियां व संपर्क</h4>
+          <ul>
+            <li><a href="#">हमारे बारे में</a></li>
+            <li><a href="#">गोपनीयता नीति</a></li>
+            <li><a href="#">नियम व शर्तें</a></li>
+            <li><a href="#">संपादकीय टीम</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© 2026 VartaPrime News (वार्ताप्राइम न्यूज़)। सर्वाधिकार सुरक्षित।</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>

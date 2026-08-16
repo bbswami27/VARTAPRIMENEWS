@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VartaPrime Reporter Bot | WhatsApp & Telegram AI Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --wa-green: #075E54;
+      --wa-green-light: #25D366;
+      --wa-bg: #E5DDD5;
+      --wa-chat-in: #FFFFFF;
+      --wa-chat-out: #DCF8C6;
+      --tg-blue: #2481CC;
+      --tg-bg: #0E1621;
+      --tg-chat-in: #182533;
+      --tg-chat-out: #2B5278;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Hind', sans-serif; }
+    body { background: #111b21; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 12px; }
+
+    .bot-phone-container {
+      width: 100%;
+      max-width: 480px;
+      height: 94vh;
+      background: #0b141a;
+      border-radius: 24px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      border: 2px solid #2a3942;
+    }
+
+    /* Mode Header */
+    .mode-bar {
+      background: #1f2c34;
+      display: flex;
+      border-bottom: 1px solid #2a3942;
+    }
+    .mode-tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: #8696a0;
+      transition: 0.2s;
+    }
+    .mode-tab.active.wa { color: #25D366; border-bottom: 3px solid #25D366; background: rgba(37,211,102,0.1); }
+    .mode-tab.active.tg { color: #38BDF8; border-bottom: 3px solid #38BDF8; background: rgba(56,189,248,0.1); }
+
+    /* App Header */
+    .app-header {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: background 0.3s;
+    }
+    .app-header.wa-mode { background: #1f2c34; border-bottom: 1px solid #2a3942; }
+    .app-header.tg-mode { background: #17212b; border-bottom: 1px solid #242f3d; }
+
+    .bot-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      background: #25D366;
+    }
+    .tg-mode .bot-avatar { background: #2481CC; }
+
+    .bot-info { flex: 1; }
+    .bot-info h3 { font-size: 16px; font-weight: 600; color: #e9edef; }
+    .bot-info p { font-size: 12px; color: #8696a0; }
+
+    /* Chat Area */
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background-size: cover;
+    }
+    .wa-theme { background: #0b141a url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png') repeat; }
+    .tg-theme { background: #0e1621; }
+
+    .msg {
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.45;
+      position: relative;
+      word-break: break-word;
+    }
+    .msg.bot {
+      align-self: flex-start;
+      background: #202c33;
+      color: #e9edef;
+      border-bottom-left-radius: 2px;
+    }
+    .msg.user {
+      align-self: flex-end;
+      background: #005c4b;
+      color: #e9edef;
+      border-bottom-right-radius: 2px;
+    }
+    .tg-theme .msg.bot { background: #182533; }
+    .tg-theme .msg.user { background: #2b5278; }
+
+    .msg-time {
+      font-size: 10px;
+      color: #8696a0;
+      float: right;
+      margin-top: 4px;
+      margin-left: 8px;
+    }
+
+    /* Template Pills */
+    .quick-pills {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 8px 12px;
+      background: #111b21;
+      border-top: 1px solid #2a3942;
+    }
+    .pill {
+      background: #202c33;
+      color: #00a884;
+      border: 1px solid #2a3942;
+      padding: 4px 10px;
+      border-radius: 14px;
+      font-size: 12px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .pill:hover { background: #2a3942; }
+
+    /* Input & Submission Form */
+    .input-panel {
+      background: #202c33;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      border-top: 1px solid #2a3942;
+    }
+    .reporter-meta-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .meta-input {
+      background: #111b21;
+      border: 1px solid #2a3942;
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      outline: none;
+    }
+    .meta-input:focus { border-color: #00a884; }
+
+    .headline-input {
+      background: #111b21;
+      border: 1px solid #2a3942;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      outline: none;
+      width: 100%;
+    }
+    .headline-input:focus { border-color: #00a884; }
+
+    .content-input {
+      background: #111b21;
+      border: 1px solid #2a3942;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+      width: 100%;
+      resize: none;
+      height: 65px;
+    }
+    .content-input:focus { border-color: #00a884; }
+
+    .action-bar {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .file-btn {
+      background: #111b21;
+      border: 1px solid #2a3942;
+      color: #8696a0;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .file-btn:hover { color: #fff; border-color: #00a884; }
+
+    .image-preview-badge {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      background: rgba(37,211,102,0.15);
+      border: 1px solid #25D366;
+      color: #25D366;
+      font-size: 11.5px;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .send-btn {
+      flex: 1;
+      background: #00a884;
+      color: #111b21;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: 0.2s;
+    }
+    .send-btn:hover { background: #02906f; color: #fff; }
+    .tg-mode-active .send-btn { background: #2481CC; color: #fff; }
+    .tg-mode-active .send-btn:hover { background: #1c66a4; }
+
+    .preview-thumb {
+      width: 32px;
+      height: 32px;
+      border-radius: 4px;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bot-phone-container">
+    
+    <!-- Platform Switcher Tabs -->
+    <div class="mode-bar">
+      <button class="mode-tab wa active" onclick="setMode('wa')">🟢 WhatsApp रिपोर्टर AI</button>
+      <button class="mode-tab tg" onclick="setMode('tg')">🔵 Telegram रिपोर्टर AI</button>
+    </div>
+
+    <!-- App Header -->
+    <div class="app-header wa-mode" id="appHeader">
+      <div class="bot-avatar" id="botIcon">🤖</div>
+      <div class="bot-info">
+        <h3 id="botTitle">वार्ताप्राइम रिपोर्टर बॉट</h3>
+        <p id="botStatus">🟢 24x7 लाइव • एडमिन पैनल से कनेक्टेड</p>
+      </div>
+      <a href="/admin.html" target="_blank" style="color:#38BDF8;font-size:12px;text-decoration:none;border:1px solid #38BDF8;padding:4px 8px;border-radius:6px;">🛡️ एडमिन पैनल</a>
+    </div>
+
+    <!-- Chat Messages -->
+    <div class="chat-messages wa-theme" id="chatMessages">
+      
+      <div class="msg bot">
+        <strong>🙏 नमस्कार संवाददाता जी!</strong><br>
+        वार्ताप्राइम न्यूज़ रिपोर्टर AI बॉट में आपका स्वागत है। आप अपने जिले की ताज़ा ग्राउंड रिपोर्ट, ब्रेकिंग न्यूज़ व फोटो सीधे यहाँ भेज सकते हैं।<br><br>
+        <em>यह खबर सीधे एडमिन पैनल में अप्रूवल कतार में दर्ज हो जाएगी।</em>
+        <span class="msg-time" id="welcomeTime">12:55 PM</span>
+      </div>
+
+    </div>
+
+    <!-- Quick Template Pills -->
+    <div class="quick-pills">
+      <span class="pill" onclick="applyTemplate('breaking')">⚡ ब्रेकिंग न्यूज़</span>
+      <span class="pill" onclick="applyTemplate('accident')">🚗 सड़क हादसा</span>
+      <span class="pill" onclick="applyTemplate('rain')">🌧️ मौसम / बारिश अलर्ट</span>
+      <span class="pill" onclick="applyTemplate('camp')">🩺 निःशुल्क शिविर</span>
+      <span class="pill" onclick="applyTemplate('crime')">🚔 पुलिस कार्रवाई</span>
+      <span class="pill" onclick="applyTemplate('mandi')">🌾 किसान व मंडी</span>
+    </div>
+
+    <!-- Input Submission Form -->
+    <div class="input-panel" id="inputPanel">
+      
+      <!-- Reporter Details Row -->
+      <div class="reporter-meta-row">
+        <input type="text" class="meta-input" id="repName" placeholder="👤 आपका नाम (Reporter Name)" value="राजेश शर्मा">
+        <select class="meta-input" id="repDistrict">
+          <option value="पानीपत">📍 पानीपत</option>
+          <option value="करनाल">📍 करनाल</option>
+          <option value="गुरुग्राम">📍 गुरुग्राम</option>
+          <option value="फरीदाबाद">📍 फरीदाबाद</option>
+          <option value="रोहतक">📍 रोहतक</option>
+          <option value="हिसार">📍 हिसार</option>
+          <option value="अंबाला">📍 अंबाला</option>
+          <option value="पंचकूला">📍 पंचकूला</option>
+          <option value="कुरुक्षेत्र">📍 कुरुक्षेत्र</option>
+          <option value="सोनीपत">📍 सोनीपत</option>
+          <option value="यमुनानगर">📍 यमुनानगर</option>
+          <option value="सिरसा">📍 सिरसा</option>
+          <option value="भिवानी">📍 भिवानी</option>
+          <option value="जींद">📍 जींद</option>
+          <option value="कैथल">📍 कैथल</option>
+          <option value="रेवाड़ी">📍 रेवाड़ी</option>
+          <option value="पलवल">📍 पलवल</option>
+          <option value="महेंद्रगढ़">📍 महेंद्रगढ़</option>
+          <option value="झज्जर">📍 झज्जर</option>
+          <option value="फतेहाबाद">📍 फतेहाबाद</option>
+          <option value="चरखी दादरी">📍 चरखी दादरी</option>
+          <option value="नूंह">📍 नूंह</option>
+          <option value="दिल्ली">📍 दिल्ली</option>
+          <option value="चंडीगढ़">📍 चंडीगढ़</option>
+        </select>
+      </div>
+
+      <div class="reporter-meta-row">
+        <input type="tel" class="meta-input" id="repPhone" placeholder="📞 मोबाइल नंबर" value="98120-XXXXX">
+        <select class="meta-input" id="repCategory">
+          <option value="हरियाणा">🏷️ श्रेणी: हरियाणा</option>
+          <option value="दिल्ली">🏷️ श्रेणी: दिल्ली</option>
+          <option value="युवा">🏷️ श्रेणी: युवा</option>
+          <option value="क्राइम">🏷️ श्रेणी: क्राइम</option>
+          <option value="राजनीति">🏷️ श्रेणी: राजनीति</option>
+          <option value="बिज़नेस">🏷️ श्रेणी: बिज़नेस</option>
+          <option value="शिक्षा">🏷️ श्रेणी: शिक्षा</option>
+          <option value="स्वास्थ्य">🏷️ श्रेणी: स्वास्थ्य</option>
+          <option value="खेल">🏷️ श्रेणी: खेल</option>
+          <option value="धर्म">🏷️ श्रेणी: धर्म</option>
+        </select>
+      </div>
+
+      <!-- Headline -->
+      <input type="text" class="headline-input" id="newsHeadline" placeholder="✍️ समाचार का शीर्षक (Headline) लिखें...">
+
+      <!-- Content Textarea -->
+      <textarea class="content-input" id="newsBody" placeholder="📝 विस्तृत समाचार विवरण लिखें (स्थान, घटना, प्रत्यक्षदर्शी, बयान)..."></textarea>
+
+      <!-- Action & Photo Bar -->
+      <div class="action-bar">
+        <label class="file-btn" for="photoInput">
+          📷 <span>फोटो अपलोड</span>
+        </label>
+        <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="handleImageSelect(event)">
+
+        <div class="image-preview-badge" id="previewBadge">
+          <img id="previewImg" class="preview-thumb" src="">
+          <span>तस्वीर संलग्न</span>
+          <span style="cursor:pointer;" onclick="removeImage()">✖</span>
+        </div>
+
+        <button class="send-btn" id="sendBtn" onclick="submitReporterNews()">
+          🚀 <span>भेजें</span>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    let currentPlatform = 'wa';
+    let attachedImageData = '';
+
+    document.getElementById('welcomeTime').textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    function setMode(mode) {
+      currentPlatform = mode;
+      const tabs = document.querySelectorAll('.mode-tab');
+      tabs.forEach(t => t.classList.remove('active'));
+
+      const header = document.getElementById('appHeader');
+      const chat = document.getElementById('chatMessages');
+      const container = document.querySelector('.bot-phone-container');
+
+      if (mode === 'wa') {
+        document.querySelector('.mode-tab.wa').classList.add('active');
+        header.className = 'app-header wa-mode';
+        chat.className = 'chat-messages wa-theme';
+        container.classList.remove('tg-mode-active');
+        document.getElementById('botIcon').textContent = '🤖';
+        document.getElementById('botTitle').textContent = 'वार्ताप्राइम WhatsApp AI बॉट';
+      } else {
+        document.querySelector('.mode-tab.tg').classList.add('active');
+        header.className = 'app-header tg-mode';
+        chat.className = 'chat-messages tg-theme';
+        container.classList.add('tg-mode-active');
+        document.getElementById('botIcon').textContent = '✈️';
+        document.getElementById('botTitle').textContent = 'वार्ताप्राइम Telegram AI बॉट';
+      }
+    }
+
+    function applyTemplate(type) {
+      const dist = document.getElementById('repDistrict').value;
+      const hInput = document.getElementById('newsHeadline');
+      const bInput = document.getElementById('newsBody');
+
+      switch (type) {
+        case 'breaking':
+          hInput.value = `${dist}: बड़ी खबर, प्रशासनिक अधिकारियों ने किया महत्वपूर्ण फैसला`;
+          bInput.value = `${dist} में आज सुबह प्रशासनिक स्तर पर अहम बैठक आयोजित हुई जिसमें जनता की सुविधा व सुरक्षा को लेकर कड़े दिशा-निर्देश जारी किए गए।`;
+          break;
+        case 'accident':
+          hInput.value = `${dist}: नेशनल हाईवे पर भीषण सड़क हादसा, पुलिस मौके पर तैनात`;
+          bInput.value = `${dist} के पास मुख्य मार्ग पर दो वाहनों की टक्कर की सूचना मिलते ही पुलिस व एंबुलेंस मौके पर पहुंची। घायलों को तुरंत नजदीकी अस्पताल में भर्ती कराया गया।`;
+          break;
+        case 'rain':
+          hInput.value = `${dist} में मौसम का बदला मिजाज, मौसम विभाग ने जारी किया भारी वर्षा का अलर्ट`;
+          bInput.value = `${dist} व आसपास के इलाकों में तेज हवाओं के साथ मूसलाधार बारिश का दौर शुरू हो गया है। प्रशासन ने जलभराव से निपटने के लिए राहत टीमें अलर्ट कर दी हैं।`;
+          break;
+        case 'camp':
+          hInput.value = `${dist}: निःशुल्क स्वास्थ्य व नेत्र जांच शिविर का भव्य आयोजन`;
+          bInput.value = `${dist} के सामुदायिक केंद्र में अनुभवी डॉक्टरों की टीम द्वारा निःशुल्क परामर्श, दवा वितरण एवं स्वास्थ्य जांच शिविर आयोजित किया गया, जिसमें सैकड़ों नागरिकों ने लाभ उठाया।`;
+          break;
+        case 'crime':
+          hInput.value = `${dist}: पुलिस ने 24 घंटे में सुलझाई चोरी की गुत्थी, आरोपी गिरफ्तार`;
+          bInput.value = `${dist} पुलिस की स्पेशल टीम ने तत्परता दिखाते हुए आपराधिक वारदात में शामिल आरोपियों को गिरफ्तार कर चोरी का माल बरामद कर लिया है।`;
+          break;
+        case 'mandi':
+          hInput.value = `${dist} अनाज मंडी: फसलों की बंपर आवक, किसानों को त्वरित भुगतान की व्यवस्था`;
+          bInput.value = `${dist} मंडी में किसानों की उपज की पारदर्शी खरीद सुचारू रूप से जारी है। मंडी सचिव ने बताया कि किसानों के बैंक खातों में डीबीटी के माध्यम से भुगतान किया जा रहा है।`;
+          break;
+      }
+    }
+
+    function handleImageSelect(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        attachedImageData = evt.target.result;
+        document.getElementById('previewImg').src = attachedImageData;
+        document.getElementById('previewBadge').style.display = 'flex';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeImage() {
+      attachedImageData = '';
+      document.getElementById('photoInput').value = '';
+      document.getElementById('previewBadge').style.display = 'none';
+    }
+
+    async function submitReporterNews() {
+      const name = document.getElementById('repName').value.trim();
+      const phone = document.getElementById('repPhone').value.trim();
+      const district = document.getElementById('repDistrict').value;
+      const category = document.getElementById('repCategory').value;
+      const headline = document.getElementById('newsHeadline').value.trim();
+      const newsText = document.getElementById('newsBody').value.trim();
+
+      if (!headline || !newsText) {
+        alert('कृपया समाचार का शीर्षक और विवरण दोनों लिखें!');
+        return;
+      }
+
+      // Add user message to chat UI
+      const chat = document.getElementById('chatMessages');
+      const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      let userMsgHTML = `
+        <div class="msg user">
+          <strong>📍 ${district} | ${category}</strong><br>
+          <strong>${escapeHtml(headline)}</strong><br>
+          <p style="margin-top:4px;">${escapeHtml(newsText)}</p>
+          ${attachedImageData ? `<img src="${attachedImageData}" style="width:100%;max-height:160px;border-radius:6px;margin-top:6px;object-fit:cover;">` : ''}
+          <span class="msg-time">${timeStr} ✓✓</span>
+        </div>
+      `;
+      chat.insertAdjacentHTML('beforeend', userMsgHTML);
+      chat.scrollTop = chat.scrollHeight;
+
+      // Disable button during submit
+      const sendBtn = document.getElementById('sendBtn');
+      sendBtn.disabled = true;
+      sendBtn.innerHTML = `⏳ <span>भेज रहे हैं...</span>`;
+
+      try {
+        const res = await fetch('/api/reporter/bot-submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            reporterName: name,
+            reporterPhone: phone,
+            platform: currentPlatform,
+            district: district,
+            category: category,
+            headline: headline,
+            newsText: newsText,
+            imageData: attachedImageData
+          })
+        });
+
+        const json = await res.json();
+
+        if (json.success) {
+          // Clear inputs
+          document.getElementById('newsHeadline').value = '';
+          document.getElementById('newsBody').value = '';
+          removeImage();
+
+          // Bot confirmation response
+          setTimeout(() => {
+            const botReplyHTML = `
+              <div class="msg bot">
+                <strong>✅ खबर सफलतापूर्वक प्राप्त हुई!</strong><br>
+                शीर्षक: <em>${escapeHtml(json.data.title)}</em><br>
+                आईडी: <code>#${json.data.id}</code><br>
+                संवाददाता: ${escapeHtml(json.data.reporter)} (${json.data.district})<br><br>
+                🛡️ यह खबर <strong>एडमिन अप्रूवल कतार</strong> में दर्ज हो गई है। संपादक द्वारा समीक्षा के बाद पोर्टल पर लाइव होगी।
+                <div style="margin-top:8px;">
+                  <a href="/admin.html" target="_blank" style="color:#38BDF8;font-size:12px;text-decoration:underline;">एडमिन डैशबोर्ड में देखें ➔</a>
+                </div>
+                <span class="msg-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+              </div>
+            `;
+            chat.insertAdjacentHTML('beforeend', botReplyHTML);
+            chat.scrollTop = chat.scrollHeight;
+          }, 600);
+
+        } else {
+          alert('त्रुटि: ' + json.message);
+        }
+
+      } catch (err) {
+        alert('सर्वर से कनेक्ट करने में त्रुटि: ' + err.message);
+      } finally {
+        sendBtn.disabled = false;
+        sendBtn.innerHTML = `🚀 <span>भेजें</span>`;
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+  </script>
+</body>
+</html>

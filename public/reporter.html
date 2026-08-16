@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>वार्ताप्राइम न्यूज़ - फील्ड रिपोर्टर पोर्टल</title>
+  <meta name="theme-color" content="#111827">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@500;600;700&family=Hind:wght@400;500;600;700&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/reporter.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="rep-header">
+    <div class="rep-container">
+      <div class="rep-logo">
+        <span class="rep-logo-badge">VARTAPRIME</span>
+        <div>
+          <div class="rep-logo-title">रिपोर्टर पोर्टल</div>
+          <div class="rep-logo-sub">फील्ड संवाददाता डेस्क</div>
+        </div>
+      </div>
+      <a href="/" target="_blank" class="rep-portal-badge">🌐 मुख्य वेबसाइट</a>
+    </div>
+  </header>
+
+  <div class="rep-container">
+
+    <!-- Card 1: Reporter Info & News Submission Form -->
+    <div class="rep-card">
+      <h2>✍️ ज़मीनी समाचार भेजें (File Ground Report)</h2>
+      <p class="rep-card-subtitle">आपके द्वारा भेजा गया समाचार सीधे मुख्य संपादक के अप्रूवल डैशबोर्ड में जाएगा।</p>
+
+      <form id="reporterNewsForm">
+        <!-- Reporter Identity -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>संवाददाता / रिपोर्टर का नाम *</label>
+            <input type="text" class="form-control" id="repName" placeholder="उदा. राहुल शर्मा (पानीपत)" required>
+          </div>
+
+          <div class="form-group">
+            <label>मोबाइल / WhatsApp नंबर</label>
+            <input type="tel" class="form-control" id="repPhone" placeholder="98765-XXXXX">
+          </div>
+        </div>
+
+        <!-- State & District Selection -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>राज्य (State) *</label>
+            <select class="form-control" id="repState" required>
+              <option value="हरियाणा" selected>हरियाणा</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>जिला (District) *</label>
+            <select class="form-control" id="repDistrict" required>
+              <option value="पानीपत">पानीपत</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Category & Breaking -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>समाचार श्रेणी (Category) *</label>
+            <select class="form-control" id="repCategory" required>
+              <option value="हरियाणा" selected>हरियाणा</option>
+              <option value="दिल्ली">दिल्ली</option>
+              <option value="युवा">युवा</option>
+              <option value="देश">देश</option>
+              <option value="क्राइम">क्राइम</option>
+              <option value="राजनीति">राजनीति</option>
+              <option value="बिज़नेस">बिज़नेस</option>
+              <option value="शिक्षा">शिक्षा</option>
+              <option value="करियर">करियर</option>
+              <option value="स्वास्थ्य">स्वास्थ्य</option>
+              <option value="खेल">खेल</option>
+              <option value="मनोरंजन">मनोरंजन</option>
+              <option value="धर्म">धर्म</option>
+              <option value="लाइफस्टाइल">लाइफस्टाइल</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="display:flex;align-items:flex-end;">
+            <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:12px;font-size:14px;color:#FCA5A5;">
+              <input type="checkbox" id="repIsBreaking" style="width:20px;height:20px;accent-color:var(--rep-primary);">
+              <span>⚡ यह अत्यंत महत्वपूर्ण / ब्रेकिंग न्यूज़ है</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Headline -->
+        <div class="form-group">
+          <label>समाचार शीर्षक (Headline) *</label>
+          <input type="text" class="form-control" id="repTitle" placeholder="आकर्षक और स्पष्ट शीर्षक लिखें..." required>
+        </div>
+
+        <!-- Photo Upload / Camera -->
+        <div class="form-group">
+          <label>घटनास्थल / खबर की तस्वीर (Camera / Photo Upload)</label>
+          <div class="image-upload-box" onclick="document.getElementById('repImageFile').click()">
+            <div style="font-size:24px;margin-bottom:4px;">📸</div>
+            <div style="font-size:13.5px;color:#E2E8F0;font-weight:600;">फोटो खींचें या गैलरी से अपलोड करें</div>
+            <div style="font-size:11.5px;color:var(--rep-muted);">JPG, PNG, WebP सपोर्टेड</div>
+            <input type="file" id="repImageFile" accept="image/*" style="display:none;">
+            <img id="repImagePreview" class="image-preview" alt="तस्वीर प्रिव्यू">
+          </div>
+          <div style="margin-top:8px;">
+            <input type="url" class="form-control" id="repImageUrl" placeholder="या फोटो का इंटरनेट लिंक यहाँ पेस्ट करें...">
+          </div>
+        </div>
+
+        <!-- Short Summary -->
+        <div class="form-group">
+          <label>संक्षिप्त सार (Short Summary)</label>
+          <textarea class="form-control" id="repDescription" rows="2" placeholder="2 पंक्तियों में खबर का मुख्य बिंदु..."></textarea>
+        </div>
+
+        <!-- Full Story -->
+        <div class="form-group">
+          <label>विस्तृत समाचार रिपोर्ट (Full Detailed Story) *</label>
+          <textarea class="form-control" id="repContent" rows="6" placeholder="घटना का पूरा विवरण, समय, स्थान, प्रत्यक्षदर्शियों या अधिकारियों के बयान लिखें..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit-news">
+          🚀 संपादक को भेजें (Submit News)
+        </button>
+      </form>
+    </div>
+
+    <!-- Card 2: Submitted History -->
+    <div class="rep-card">
+      <h2>📋 आपकी हालिया ग्राउंड रिपोर्ट्स</h2>
+      <div class="submitted-list" id="mySubmissionsList">
+        <!-- Dynamic History -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Toast Element -->
+  <div class="rep-toast" id="repToast"></div>
+
+  <script src="/js/reporter.js"></script>
+</body>
+</html>
