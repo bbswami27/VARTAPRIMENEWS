@@ -63,7 +63,14 @@ img {
 .wrap {
   max-width: 1220px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 16px;
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  .wrap {
+    padding: 0 10px;
+  }
 }
 
 /* ===== Top Origin Banner ===== */
@@ -71,67 +78,95 @@ img {
   background: #111827;
   color: #E08D3C;
   border-bottom: 2px solid var(--press-red);
-  padding: 10px 0;
+  padding: 6px 10px;
   text-align: center;
-  font-size: 20px;
+  font-size: clamp(12px, 3.5vw, 17px);
   font-weight: 700;
   letter-spacing: 0.03em;
+  width: 100%;
 }
 
 .top-haryana-banner span {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  gap: 6px;
 }
 
 /* ===== Utility Bar ===== */
 .utility-bar {
   background: var(--navy);
   color: #E2E8F0;
-  font-size: 13px;
+  font-size: 12px;
   border-bottom: 1px solid rgba(255,255,255,0.08);
+  width: 100%;
 }
 
 .utility-bar .wrap {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 38px;
+  min-height: 36px;
+  padding: 4px 16px;
+  gap: 10px;
 }
 
 .utility-left {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
-.date-samvat {
-  font-weight: 500;
-  opacity: 0.95;
-  white-space: nowrap;
+.utility-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
-.weather-badge {
-  display: inline-flex;
+@media (max-width: 768px) {
+  .utility-bar .wrap {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding: 6px 10px;
+    gap: 4px;
+  }
+  .utility-left, .utility-right {
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+  }
+}
+
+.date-display {
+  display: flex;
   align-items: center;
   gap: 6px;
-  background: rgba(255,255,255,0.1);
-  padding: 2px 10px;
+}
+
+.weather-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255,255,255,0.08);
+  padding: 2px 8px;
   border-radius: 12px;
-  font-size: 12px;
+  font-size: 11.5px;
 }
 
 .utility-links {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 14px;
 }
 
 .utility-links a, .utility-links button {
   background: none;
   border: none;
   color: inherit;
-  font-size: 13px;
+  font-size: 12px;
   cursor: pointer;
   opacity: 0.88;
   display: inline-flex;
@@ -148,7 +183,7 @@ img {
 .admin-link-btn {
   background: var(--press-red) !important;
   color: #fff !important;
-  padding: 3px 12px;
+  padding: 3px 10px;
   border-radius: 4px;
   font-weight: 600;
   opacity: 1 !important;
@@ -162,41 +197,57 @@ img {
 /* ===== Masthead with Tricolor Flag & Sovereign Map ===== */
 .masthead {
   background: var(--paper);
-  padding: 16px 0 12px;
+  padding: 12px 0 10px;
   position: relative;
+  width: 100%;
 }
 
 .masthead-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: 140px 1fr 140px;
   align-items: center;
-  justify-content: space-between;
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 16px;
-  gap: 20px;
+  gap: 12px;
 }
 
 .masthead-center {
-  flex: 1;
   text-align: center;
   min-width: 0;
+  width: 100%;
 }
 
 .masthead-flag-side,
 .masthead-map-side {
-  width: 155px;
-  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
+@media (max-width: 768px) {
+  .masthead {
+    padding: 8px 0;
+  }
+  .masthead-container {
+    grid-template-columns: 50px 1fr 50px;
+    gap: 6px;
+    padding: 0 8px;
+  }
+  .masthead-flag-side {
+    max-width: 50px;
+  }
+  .masthead-map-side {
+    max-width: 50px;
+  }
+}
+
 /* Waving Indian Flag */
 .flag-pole-wrapper {
   display: flex;
   align-items: flex-start;
-  height: 90px;
+  height: 80px;
 }
 
 .flag-pole {
@@ -1699,21 +1750,317 @@ footer li a:hover {
   gap: 6px;
 }
 
-/* Responsive */
-@media (max-width: 1020px) {
-  .hero { grid-template-columns: 1fr; }
-  .content-layout { grid-template-columns: 1fr; }
-  .grid { grid-template-columns: repeat(2, 1fr); }
-  footer .fgrid { grid-template-columns: repeat(2, 1fr); }
+/* ==========================================================================
+   Comprehensive Mobile & Tablet Responsive System (100% Mobile Ready)
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  .content-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .sidebar {
+    width: 100%;
+  }
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-@media (max-width: 640px) {
-  .masthead .logo { font-size: 40px; }
-  .grid { grid-template-columns: 1fr; }
-  .modal-body { padding: 18px 16px; }
-  .modal-body h1 { font-size: 24px; }
-  .hero-lead h1 { font-size: 24px; }
-  footer .fgrid { grid-template-columns: 1fr; }
+@media (max-width: 768px) {
+  /* Global wrapping & layout */
+  .wrap {
+    padding: 0 10px;
+  }
+
+  /* Top Haryana Origin Banner */
+  .top-haryana-banner {
+    font-size: 13px;
+    padding: 6px 8px;
+  }
+
+  /* Utility Bar */
+  .utility-bar .wrap {
+    flex-direction: column;
+    padding: 6px 8px;
+    gap: 6px;
+    text-align: center;
+  }
+  .utility-left, .utility-right {
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+  }
+  .utility-links {
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* Masthead Mobile Grid */
+  .masthead {
+    padding: 8px 0;
+  }
+  .masthead-container {
+    display: grid !important;
+    grid-template-columns: 46px 1fr 46px !important;
+    align-items: center;
+    gap: 6px;
+    padding: 0 6px;
+  }
+  .masthead-flag-side {
+    width: 46px !important;
+    max-width: 46px;
+  }
+  .masthead-map-side {
+    width: 46px !important;
+    max-width: 46px;
+  }
+  .masthead-center {
+    width: 100%;
+    min-width: 0;
+    padding: 0 2px;
+    text-align: center;
+  }
+
+  /* Flag on Mobile */
+  .flag-pole-wrapper {
+    height: 42px;
+  }
+  .flag-pole {
+    height: 42px;
+    width: 3px;
+  }
+  .flag-pole::before {
+    width: 8px;
+    height: 8px;
+    top: -4px;
+    left: -3px;
+  }
+  .waving-flag {
+    width: 40px;
+    height: 26px;
+  }
+  .ashoka-chakra {
+    width: 9px;
+    height: 9px;
+    border-width: 1px;
+  }
+  .ashoka-chakra::before {
+    width: 2px;
+    height: 2px;
+  }
+  .flag-caption, .map-caption {
+    display: none !important; /* Hide captions on small mobile screens to prevent overflow */
+  }
+
+  /* Map on Mobile */
+  .akhand-map-wrapper {
+    width: 44px;
+    height: 44px;
+    border-width: 1.5px;
+  }
+
+  /* Typography on Mobile */
+  .masthead .eyebrow {
+    font-size: 9.5px;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    margin-bottom: 1px;
+  }
+  .masthead .logo {
+    font-size: clamp(26px, 7.5vw, 34px) !important;
+    line-height: 1.05;
+    margin: 0;
+    white-space: nowrap;
+  }
+  .masthead .hindi-name {
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    margin-bottom: 1px;
+  }
+  .masthead .tagline {
+    font-size: 9.5px;
+    line-height: 1.2;
+    margin-top: 1px;
+  }
+
+  /* Navigation Bar */
+  nav button.nav-btn {
+    padding: 9px 12px;
+    font-size: 13.5px;
+  }
+  .nav-tools {
+    display: none; /* In mobile, categories scroll horizontally cleanly */
+  }
+
+  /* Hero Section Mobile */
+  .hero {
+    grid-template-columns: 1fr !important;
+    gap: 12px;
+    margin-top: 10px;
+  }
+  .hero-lead .imgbox {
+    height: 200px;
+  }
+  .hero-lead h1 {
+    font-size: 18px !important;
+    line-height: 1.35;
+  }
+  .hero-side {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .horizontal-side-item {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    padding: 8px 6px;
+    background: #FFFFFF;
+    border-radius: 4px;
+    border: 1px solid var(--line);
+  }
+  .horizontal-side-item .num {
+    font-size: 18px;
+    min-width: 24px;
+  }
+  .side-thumb {
+    width: 68px;
+    height: 56px;
+    object-fit: cover;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .side-headline {
+    font-size: 13px !important;
+    line-height: 1.3;
+  }
+
+  /* News Stream Cards Mobile */
+  .dense-news-grid,
+  .grid-3,
+  .grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px;
+  }
+
+  .horizontal-card {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 10px !important;
+    padding: 8px 10px !important;
+    background: #FFFFFF;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    align-items: center;
+  }
+
+  .horizontal-card .card-thumb {
+    width: 80px !important;
+    height: 72px !important;
+    flex-shrink: 0 !important;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .horizontal-card .card-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .horizontal-card .card-content-wrap {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .horizontal-card .card-headline {
+    font-size: 13.5px !important;
+    line-height: 1.35 !important;
+    margin: 2px 0 4px !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-top-meta {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    font-size: 10px;
+  }
+
+  .card-bottom-meta {
+    font-size: 10.5px;
+    color: var(--ink-muted);
+  }
+
+  /* District Pills Scroll */
+  .district-filter-container {
+    padding: 8px 0;
+  }
+  .district-pills-scroll {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 5px;
+    padding: 4px 0 6px;
+  }
+  .district-pills-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  .district-pill {
+    flex-shrink: 0;
+    font-size: 11.5px;
+    padding: 4px 9px;
+  }
+
+  /* Modal Reading View Mobile */
+  .modal-content {
+    width: 95% !important;
+    max-width: 95% !important;
+    max-height: 90vh !important;
+    border-radius: 8px;
+    margin: auto;
+  }
+  .modal-body {
+    padding: 14px 12px !important;
+  }
+  .modal-body h1 {
+    font-size: 19px !important;
+    line-height: 1.35 !important;
+  }
+  .modal-meta-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .modal-share-bar {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .share-btn {
+    flex: 1;
+    font-size: 11px;
+    padding: 5px 6px;
+    text-align: center;
+  }
+
+  /* Footer Mobile */
+  footer .fgrid {
+    grid-template-columns: 1fr !important;
+    gap: 20px;
+  }
+  .foot-bottom {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
 }
 
 /* ===== Free Local & Public Notice Side Advertisements ===== */
