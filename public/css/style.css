@@ -21,15 +21,18 @@
   --shadow-lg: 0 10px 30px rgba(0,0,0,0.14);
   --radius-sm: 4px;
   --radius-md: 8px;
-  --font-serif: 'Noto Serif Devanagari', serif;
-  --font-sans: 'Hind', sans-serif;
-  --font-display: 'Teko', sans-serif;
+  --font-serif: 'Noto Serif Devanagari', 'Rozha One', 'Mangal', 'Nirmala UI', Georgia, serif;
+  --font-sans: 'Noto Sans Devanagari', 'Hind', 'Nirmala UI', 'Mangal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Teko', 'Noto Sans Devanagari', 'Nirmala UI', sans-serif;
 }
 
-* {
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  text-rendering: optimizeLegibility;
 }
 
 html {
@@ -40,8 +43,9 @@ body {
   background-color: var(--paper);
   color: var(--ink);
   font-family: var(--font-sans);
-  line-height: 1.55;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, .headline {
