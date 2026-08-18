@@ -1,5 +1,5 @@
 // ==========================================================================
-// VartaPrime News - Authentic Source News Cleaner & 100% Pure Hindi Engine
+// VartaPrimeNews - Authentic Source News Cleaner & 100% Pure Hindi Engine
 // NO AI Synthetic generation - Preserves 100% authentic news from source
 // ==========================================================================
 

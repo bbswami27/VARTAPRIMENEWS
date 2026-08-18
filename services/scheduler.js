@@ -1,5 +1,5 @@
 // ==========================================================================
-// VartaPrime News - 30 Minutes Automatic Cron Scheduler
+// VartaPrimeNews - 30 Minutes Automatic Cron Scheduler
 // ==========================================================================
 
 const cron = require('node-cron');

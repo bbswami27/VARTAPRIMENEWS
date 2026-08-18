@@ -1,5 +1,5 @@
 // ==========================================================================
-// VartaPrime News - Live Weather Service for Panipat & All 22 Haryana Districts
+// VartaPrimeNews - Live Weather Service for Panipat & All 22 Haryana Districts
 // ==========================================================================
 
 const haryanaDistricts = [

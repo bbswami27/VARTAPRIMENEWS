@@ -1,5 +1,5 @@
 // ==========================================================================
-// VartaPrime News - Mobile Field Reporter Client Logic
+// VartaPrimeNews - Mobile Field Reporter Client Logic
 // ==========================================================================
 
 let locationsData = {

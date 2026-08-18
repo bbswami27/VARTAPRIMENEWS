@@ -1,5 +1,5 @@
 // ==========================================================================
-// VartaPrime News - Admin Dashboard Logic
+// VartaPrimeNews - Admin Dashboard Logic
 // ==========================================================================
 
 const API_BASE = '/api/admin';
@@ -145,7 +145,9 @@ async function loadPending() {
 
       // Filter by source type if requested
       if (srcType === 'reporter') {
-        list = list.filter(item => item.sourceType === 'reporter');
+        list = list.filter(item => item.sourceType === 'reporter' || String(item.sourceType || '').endsWith('_reporter'));
+      } else if (srcType === 'citizen') {
+        list = list.filter(item => item.sourceType === 'citizen_reporter');
       } else if (srcType === 'rss') {
         list = list.filter(item => item.sourceType !== 'reporter');
       }
@@ -812,6 +814,17 @@ async function loadAdminLocations() {
   }
 }
 
+async function loadIntegrationStatus() {
+  const el = document.getElementById('integrationStatus');
+  if (!el) return;
+  try {
+    const json = await (await fetch('/api/admin/integrations')).json();
+    const s = json.data || {};
+    const badge = (label, active) => `${active ? '🟢' : '⚪'} ${label}`;
+    el.textContent = `वितरण चैनल: ${badge('GitPit', s.gitpit)}  •  ${badge('WhatsApp', s.whatsapp)}  •  ${badge('Telegram', s.telegram)}`;
+  } catch (_) { el.textContent = 'वितरण चैनल स्थिति उपलब्ध नहीं है।'; }
+}
+
 // Init
 document.addEventListener('DOMContentLoaded', () => {
   setupTabs();
@@ -824,6 +837,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadPending();
   loadApproved();
   loadFeeds();
+  loadIntegrationStatus();
 
   // Search & Filter listeners
   document.getElementById('pendingCatFilter')?.addEventListener('change', loadPending);

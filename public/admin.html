@@ -53,6 +53,10 @@
   <!-- Main Container -->
   <div class="admin-wrap" style="padding-top: 10px;">
 
+    <div id="integrationStatus" style="background:#0f172a;color:#e2e8f0;padding:10px 14px;border-radius:7px;margin-bottom:12px;font-size:13px;">
+      वितरण चैनल स्थिति लोड हो रही है…
+    </div>
+
     <!-- Stats Grid -->
     <div class="stats-grid">
       <div class="stat-card">
@@ -150,7 +154,8 @@
         <div class="toolbar-right">
           <select class="input-select" id="pendingSourceTypeFilter" onchange="loadPendingNews()">
             <option value="all">📁 सभी स्रोत (RSS + रिपोर्टर)</option>
-            <option value="reporter">🎤 केवल रिपोर्टर रिपोर्ट्स</option>
+            <option value="reporter">🎤 केवल अधिकृत रिपोर्टर</option>
+            <option value="citizen">📱 केवल नागरिक रिपोर्टर</option>
             <option value="rss">📡 केवल RSS फ़ीड्स</option>
           </select>
 
@@ -529,7 +534,7 @@
   <!-- Admin Footer -->
   <footer style="margin-top:50px;padding:24px 0;border-top:1px solid var(--admin-border);background:#111827;text-align:center;">
     <div class="admin-wrap" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;">
-      <span style="font-size:14px;color:var(--admin-muted);">© 2026 VartaPrime News Administration Panel</span>
+      <span style="font-size:14px;color:var(--admin-muted);">© 2026 VartaPrimeNews Administration Panel</span>
       <span style="font-size:20px;font-weight:700;color:#E08D3C;letter-spacing:0.02em;">Made with ❤️ in Haryana, India</span>
     </div>
   </footer>

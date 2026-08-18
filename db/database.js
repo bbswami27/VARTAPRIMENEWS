@@ -1,5 +1,5 @@
 // ==========================================================================
-// VartaPrime News - Persistent JSON Database Layer
+// VartaPrimeNews - Persistent JSON Database Layer
 // ==========================================================================
 
 const fs = require('fs');
@@ -242,8 +242,9 @@ const db = {
       category: data.category || 'हरियाणा',
       state: data.state || 'हरियाणा',
       district: data.district || 'पानीपत',
-      source: data.reporterName ? `${data.reporterName} (${data.district || 'ब्यूरो'})` : 'वार्ताप्राइम फील्ड रिपोर्टर',
-      sourceType: 'reporter',
+      source: data.reporterName ? `${data.reporterName} (${data.district || 'ब्यूरो'})` : 'VartaPrimeNews संवाददाता',
+      sourceType: data.sourceType || 'reporter',
+      submissionPlatform: data.submissionPlatform || 'web',
       reporterName: data.reporterName || 'फील्ड रिपोर्टर',
       reporterPhone: data.reporterPhone || '',
       link: '#',

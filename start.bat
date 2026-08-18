@@ -1,7 +1,7 @@
 @echo off
-title VartaPrime News Server & Approval System
+title VartaPrimeNews Server & Approval System
 echo ========================================================
-echo   VartaPrime News - Hindi News Portal & Auto Ingestor
+echo   VartaPrimeNews - Hindi News Portal & Auto Ingestor
 echo ========================================================
 echo.
 echo Checking dependencies...
@@ -11,7 +11,7 @@ if not exist node_modules (
 )
 
 echo.
-echo Starting VartaPrime News Server...
+echo Starting VartaPrimeNews Server...
 echo Portal: http://localhost:3000
 echo Admin:  http://localhost:3000/admin.html
 echo.

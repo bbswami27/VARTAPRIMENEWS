@@ -1,5 +1,5 @@
 // ==========================================================================
-// VartaPrime News - Public Portal Client Logic
+// VartaPrimeNews - Public Portal Client Logic
 // ==========================================================================
 
 const API_BASE = '/api';

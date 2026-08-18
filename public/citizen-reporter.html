@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <meta name="theme-color" content="#7f1d1d">
+  <title>Citizen Reporter | VartaPrimeNews</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/citizen.css">
+</head>
+<body>
+  <header><a href="/">VartaPrimeNews</a><span>नागरिक रिपोर्टर पैनल</span></header>
+  <main>
+    <section class="intro">
+      <div class="badge">जनता की आवाज़</div>
+      <h1>घटना की सही जानकारी हमें भेजें</h1>
+      <p>आपकी रिपोर्ट पहले संपादकीय जाँच में जाएगी। सत्यापन के बाद ही उसे प्रकाशित किया जाएगा।</p>
+    </section>
+    <form id="citizenForm" class="card">
+      <div class="grid">
+        <label>आपका नाम *<input id="name" maxlength="80" required placeholder="पूरा नाम"></label>
+        <label>मोबाइल / WhatsApp<input id="phone" type="tel" maxlength="16" placeholder="10 अंकों का नंबर"></label>
+        <label>राज्य *<select id="state" required><option>हरियाणा</option></select></label>
+        <label>जिला *<select id="district" required><option>पानीपत</option></select></label>
+        <label>श्रेणी *<select id="category" required><option>हरियाणा</option><option>देश</option><option>क्राइम</option><option>राजनीति</option><option>शिक्षा</option><option>स्वास्थ्य</option><option>खेल</option><option>अन्य</option></select></label>
+      </div>
+      <label>खबर का शीर्षक *<input id="title" maxlength="180" required placeholder="क्या हुआ—संक्षेप में लिखें"></label>
+      <label>पूरा विवरण *<textarea id="content" maxlength="8000" required rows="7" placeholder="घटना कब, कहाँ और कैसे हुई? केवल सत्यापित तथ्य लिखें।"></textarea></label>
+      <label>फोटो या वीडियो का सार्वजनिक लिंक<input id="imageurl" type="url" placeholder="https://..."></label>
+      <label class="consent"><input id="consent" type="checkbox" required><span>मैं घोषित करता/करती हूँ कि दी गई जानकारी मेरी जानकारी के अनुसार सही है और मुझे यह सामग्री भेजने का अधिकार है। *</span></label>
+      <button id="submitBtn" type="submit">रिपोर्ट संपादकीय टीम को भेजें</button>
+      <div id="message" role="status"></div>
+    </form>
+    <section class="platforms">
+      <h2>दूसरे माध्यम</h2>
+      <p>अधिकृत Reporter WhatsApp और Telegram bot से भी खबर भेज सकते हैं। GitPit में VartaPrimeNews का Citizen Reporter विकल्प इसी सुरक्षित form को खोलेगा।</p>
+    </section>
+  </main>
+  <script src="/js/citizen.js"></script>
+</body>
+</html>

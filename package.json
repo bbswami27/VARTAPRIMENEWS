@@ -14,7 +14,7 @@
     "approval-system",
     "vartaprime"
   ],
-  "author": "VartaPrime News",
+  "author": "VartaPrimeNews",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",

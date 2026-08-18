@@ -1,5 +1,5 @@
 // ==========================================================================
-// VartaPrime News - Main Express Server & REST API
+// VartaPrimeNews - Main Express Server & REST API
 // ==========================================================================
 
 const express = require('express');
@@ -17,8 +17,29 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({
+  limit: '10mb',
+  verify: (req, res, buffer) => { req.rawBody = buffer; }
+}));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+function panelGuard(role) {
+  return (req, res, next) => {
+    const expectedUser = role === 'admin' ? (process.env.ADMIN_USERNAME || 'admin') : (process.env.REPORTER_USERNAME || 'reporter');
+    const expectedPass = role === 'admin' ? process.env.ADMIN_PASSWORD : process.env.REPORTER_PASSWORD;
+    // Local/demo installs remain usable; production should set both passwords.
+    if (!expectedPass) return next();
+    const encoded = (req.headers.authorization || '').replace(/^Basic\s+/i, '');
+    let supplied = '';
+    try { supplied = Buffer.from(encoded, 'base64').toString('utf8'); } catch (_) {}
+    if (supplied === `${expectedUser}:${expectedPass}`) return next();
+    res.set('WWW-Authenticate', `Basic realm="VartaPrimeNews ${role}"`);
+    return res.status(401).send('इस पैनल के लिए अधिकृत लॉगिन आवश्यक है।');
+  };
+}
+
+app.use(['/admin', '/admin.html', '/api/admin'], panelGuard('admin'));
+app.use(['/reporter', '/reporter.html'], panelGuard('reporter'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // --------------------------------------------------------------------------
@@ -143,6 +164,7 @@ app.post('/api/admin/approve/:id', (req, res) => {
     if (!approved) {
       return res.status(404).json({ success: false, message: 'समाचार नहीं मिला।' });
     }
+    distributeTopNews(approved).then(result => console.log('[Distribution]', result));
     res.json({ success: true, message: 'समाचार सफलतापूर्वक स्वीकृत व लाइव किया गया!', data: approved });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
@@ -292,6 +314,10 @@ app.post('/api/admin/toggle-hero/:id', (req, res) => {
   }
 });
 
+app.get('/api/admin/integrations', (req, res) => {
+  res.json({ success: true, data: integrationStatus() });
+});
+
 // POST /api/admin/fetch-now - Trigger immediate RSS ingestion
 app.post('/api/admin/fetch-now', async (req, res) => {
   try {
@@ -439,6 +465,27 @@ app.post('/api/reporter/submit', (req, res) => {
   }
 });
 
+// Citizen reporters always enter the pending review queue and can never publish.
+app.post('/api/citizen/submit', (req, res) => {
+  try {
+    const { title, description, content, category, state, district, reporterName, reporterPhone, imageurl, consent } = req.body;
+    if (!title || !content || !reporterName || !consent) {
+      return res.status(400).json({ success: false, message: 'नाम, शीर्षक, पूरी खबर और घोषणा अनिवार्य हैं।' });
+    }
+    if (String(title).length > 180 || String(content).length > 8000) {
+      return res.status(400).json({ success: false, message: 'खबर निर्धारित सीमा से अधिक लंबी है।' });
+    }
+    const item = db.addReporterSubmission({
+      title, description, content, category, state, district, reporterName,
+      reporterPhone, imageurl, isBreaking: false,
+      sourceType: 'citizen_reporter', submissionPlatform: 'web'
+    });
+    res.json({ success: true, message: 'आपकी नागरिक रिपोर्ट संपादकीय जाँच के लिए सुरक्षित हो गई है।', data: { id: item.id } });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'रिपोर्ट भेजने में तकनीकी समस्या आई।' });
+  }
+});
+
 // Reporter AI Bot Webhooks & Submit
 app.use('/api/reporter', require('./routes/reporterBot'));
 
@@ -455,10 +502,14 @@ app.get('/reporter-bot', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'reporter-bot.html'));
 });
 
+app.get('/citizen-reporter', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'citizen-reporter.html'));
+});
+
 // Start Server
 app.listen(PORT, () => {
   console.log(`========================================================`);
-  console.log(`🗞️  VartaPrime News Server Live!`);
+  console.log(`🗞️  VartaPrimeNews Server Live!`);
   console.log(`🌐 Public Portal:   http://localhost:${PORT}`);
   console.log(`🛡️  Admin Dashboard: http://localhost:${PORT}/admin.html`);
   console.log(`========================================================`);
