@@ -4,7 +4,7 @@
   "description": "Automated Hindi News Portal with 30-min RSS Feeder and Admin Approval System",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node --max-old-space-size=450 server.js",
     "dev": "node server.js"
   },
   "keywords": [

@@ -479,7 +479,7 @@ async function fetchFeed(feed) {
 
     if (!parsed.items || !parsed.items.length) return articles;
 
-    for (const item of parsed.items.slice(0, 20)) {
+    for (const item of parsed.items.slice(0, 10)) {
       const rawTitle = cleanText(item.title);
       if (!rawTitle) continue;
 
@@ -559,7 +559,7 @@ async function fetchAllFeeds() {
   db.updateStats({ lastFetchStatus: 'इन प्रोसेस... (Fetching...)' });
 
   let allArticles = [];
-  const batchSize = 4;
+  const batchSize = 2; // Lightweight batching for 512MB RAM environments (Render Free Tier)
   for (let i = 0; i < feeds.length; i += batchSize) {
     const batch = feeds.slice(i, i + batchSize);
     const results = await Promise.all(batch.map(fetchFeed));

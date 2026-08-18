@@ -60,7 +60,22 @@ function readJSON(filePath, defaultValue = []) {
 
 function writeJSON(filePath, data) {
   try {
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
+    let toWrite = data;
+    if (filePath === APPROVED_FILE && Array.isArray(data)) {
+      toWrite = data.slice(0, 150);
+    } else if (filePath === PENDING_FILE && Array.isArray(data)) {
+      toWrite = data.slice(0, 100);
+    } else if (filePath === REJECTED_FILE && Array.isArray(data)) {
+      toWrite = data.slice(0, 50);
+    } else if (filePath === HISTORY_FILE && typeof data === 'object' && data !== null) {
+      const keys = Object.keys(data);
+      if (keys.length > 1000) {
+        const trimmed = {};
+        keys.slice(-1000).forEach(k => trimmed[k] = data[k]);
+        toWrite = trimmed;
+      }
+    }
+    fs.writeFileSync(filePath, JSON.stringify(toWrite, null, 2), 'utf8');
   } catch (err) {
     console.error(`Error writing ${filePath}:`, err);
   }
