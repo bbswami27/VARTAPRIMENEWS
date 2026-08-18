@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>विज्ञापन एजेंसी व ब्रांड पार्टनरशिप पोर्टल (Advt Agency) | वार्ताप्राइम न्यूज़</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@600;700;800&family=Teko:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background: #0f172a; color: #f1f5f9; font-family: 'Hind', sans-serif; }
+    .advt-container { max-width: 950px; margin: 30px auto; padding: 0 20px; }
+    .advt-card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 28px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+    .advt-header { text-align: center; border-bottom: 1px solid #334155; padding-bottom: 20px; margin-bottom: 25px; }
+    .advt-header h1 { font-family: 'Noto Serif Devanagari', serif; font-size: 26px; color: #f59e0b; margin: 0 0 8px 0; }
+    .advt-header p { font-size: 14px; color: #94a3b8; margin: 0; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-weight: 600; font-size: 13.5px; margin-bottom: 6px; color: #cbd5e1; }
+    .form-control { width: 100%; padding: 10px 14px; background: #0f172a; border: 1px solid #334155; border-radius: 6px; color: #fff; font-family: inherit; font-size: 14px; box-sizing: border-box; }
+    .form-control:focus { outline: none; border-color: #f59e0b; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+    @media(max-width:700px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+    .btn-submit { width: 100%; padding: 13px; background: #d97706; color: #fff; border: none; border-radius: 6px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.2s; }
+    .btn-submit:hover { background: #b45309; }
+    .toast { position: fixed; bottom: 20px; right: 20px; background: #059669; color: #fff; padding: 12px 20px; border-radius: 8px; font-weight: 600; display: none; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+    .rate-box { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 14px; text-align: center; margin-bottom: 20px; }
+    .rate-box h4 { margin: 0 0 4px 0; color: #f59e0b; font-size: 15px; }
+    .rate-box p { margin: 0; font-size: 12px; color: #94a3b8; }
+    .badge-advt { background: #d97706; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <div class="advt-container">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+      <a href="/" style="color:#f59e0b;text-decoration:none;font-weight:600;font-size:13px;">← मुख्य वेबसाइट पर जाएं</a>
+      <span class="badge-advt">ADVT & SPONSORSHIP DESK</span>
+    </div>
+
+    <div class="advt-card">
+      <div class="advt-header">
+        <h1>📢 विज्ञापन एजेंसी व कमर्शियल पार्टनर पोर्टल (Advt Agency Panel)</h1>
+        <p>डिजिटल बैनर विज्ञापन, स्पॉन्सर्ड आर्टिकल (PR), ब्रांड प्रमोशन व स्थानीय व्यापार अभियानों के लिए एकीकृत बुकिंग पोर्टल।</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="rate-box">
+          <h4>🏷️ टॉप हेडर बैनर</h4>
+          <p>मुख्य पृष्ठ के शीर्ष पर 100% विजिबिलिटी</p>
+        </div>
+        <div class="rate-box">
+          <h4>📰 स्पॉन्सर्ड स्टोरी (PR)</h4>
+          <p>स्थाई ब्रांड रिपोर्ट व SEO बैकलिंक</p>
+        </div>
+        <div class="rate-box">
+          <h4>📍 जिला / श्रेणी स्पॉन्सर</h4>
+          <p>पानीपत/हरियाणा/NCR लक्षित ऑडियंस</p>
+        </div>
+      </div>
+
+      <form id="advtForm" onsubmit="handleAdvtSubmit(event)">
+        <div class="grid-2">
+          <div class="form-group">
+            <label>एजेंसी / ब्रांड का नाम (Agency / Brand Name) *</label>
+            <input type="text" id="advtBrand" class="form-control" placeholder="उदा. पिक्सेल मीडिया, स्थानीय प्रतिष्ठान..." required>
+          </div>
+          <div class="form-group">
+            <label>संपर्क व्यक्ति व मोबाइल नंबर (Contact Person & Phone) *</label>
+            <input type="text" id="advtContact" class="form-control" placeholder="उदा. रोहित शर्मा (+91...)" required>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label>ईमेल आईडी (Official Email) *</label>
+            <input type="email" id="advtEmail" class="form-control" placeholder="ads@brand.com" required>
+          </div>
+          <div class="form-group">
+            <label>विज्ञापन का प्रकार (Ad Campaign Type) *</label>
+            <select id="advtType" class="form-control" required>
+              <option value="Header Banner">टॉप हेडर बैनर (Leaderboard 728x90)</option>
+              <option value="Sponsored Article">प्रायोजित समाचार / PR आर्टिकल (Sponsored Story)</option>
+              <option value="Sidebar Sticky">साइडबार स्टिकी बैनर (Square/Vertical)</option>
+              <option value="In-Article Banner">खबर के बीच में बैनर (Native Content Ad)</option>
+              <option value="City Target">जिला विशेष विज्ञापन (Panipat/Haryana Target)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>विज्ञापन शीर्षक / अभियान का नाम (Campaign Title / Tagline) *</label>
+          <input type="text" id="advtTitle" class="form-control" placeholder="अभियान का मुख्य संदेश या विज्ञापन का शीर्षक दर्ज करें..." required>
+        </div>
+
+        <div class="form-group">
+          <label>विज्ञापन विवरण / प्रेस विज्ञप्ति सामग्री (Ad Content / Brief) *</label>
+          <textarea id="advtDesc" class="form-control" rows="5" placeholder="उत्पाद/सेवा का विवरण, डिस्काउंट ऑफर, स्टोर का पता व अन्य जरूरी जानकारी दर्ज करें..." required></textarea>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label>क्रिएटिव / बैनर इमेज URL (Banner / Creative Image URL)</label>
+            <input type="url" id="advtImage" class="form-control" placeholder="https://... इमेज का लिंक">
+          </div>
+          <div class="form-group">
+            <label>टारगेट वेबसाइट / लैंडिंग पेज लिंक (Click-through URL)</label>
+            <input type="url" id="advtTargetUrl" class="form-control" placeholder="https://yourbrand.com/offer">
+          </div>
+        </div>
+
+        <button type="submit" id="submitAdvtBtn" class="btn-submit">
+          📢 विज्ञापन बुकिंग रिक्वेस्ट सबमिट करें (Submit Ad Campaign)
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    function showToast(msg, isError = false) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.background = isError ? '#dc2626' : '#059669';
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 4500);
+    }
+
+    async function handleAdvtSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitAdvtBtn');
+      btn.disabled = true;
+      btn.textContent = 'प्रक्रिया में है...';
+
+      const payload = {
+        title: '📢 [विज्ञापन] ' + document.getElementById('advtTitle').value.trim(),
+        description: document.getElementById('advtType').value + ' | संपर्क: ' + document.getElementById('advtContact').value.trim() + ' (' + document.getElementById('advtEmail').value.trim() + ')',
+        content: document.getElementById('advtDesc').value.trim() + '\n\nटारगेट लिंक: ' + (document.getElementById('advtTargetUrl').value.trim() || 'लागू नहीं'),
+        category: 'बिज़नेस',
+        source: document.getElementById('advtBrand').value.trim() + ' (प्रायोजित)',
+        reporterName: document.getElementById('advtContact').value.trim(),
+        reporterPhone: document.getElementById('advtEmail').value.trim(),
+        imageurl: document.getElementById('advtImage').value.trim(),
+        isBreaking: false
+      };
+
+      try {
+        const res = await fetch('/api/reporter/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+        if (json.success) {
+          showToast('🎉 विज्ञापन अभियान सफलतापूर्वक सबमिट हो गया! वार्ताप्राइम मार्केटिंग टीम जल्द संपर्क करेगी।');
+          document.getElementById('advtForm').reset();
+        } else {
+          showToast('त्रुटि: ' + (json.message || 'सबमिट नहीं हो सका'), true);
+        }
+      } catch (err) {
+        showToast('तकनीकी समस्या: ' + err.message, true);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '📢 विज्ञापन बुकिंग रिक्वेस्ट सबमिट करें (Submit Ad Campaign)';
+      }
+    }
+  </script>
+</body>
+</html>

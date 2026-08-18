@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>समाचार एजेंसी वायर पोर्टल (News Agency Wire) | वार्ताप्राइम न्यूज़</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@600;700;800&family=Teko:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background: #0b1320; color: #e2e8f0; font-family: 'Hind', sans-serif; }
+    .agency-container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
+    .agency-card { background: #152238; border: 1px solid #1e3a5f; border-radius: 12px; padding: 28px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+    .agency-header { text-align: center; border-bottom: 1px solid #1e3a5f; padding-bottom: 20px; margin-bottom: 25px; }
+    .agency-header h1 { font-family: 'Noto Serif Devanagari', serif; font-size: 26px; color: #38bdf8; margin: 0 0 8px 0; }
+    .agency-header p { font-size: 14px; color: #94a3b8; margin: 0; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-weight: 600; font-size: 13.5px; margin-bottom: 6px; color: #cbd5e1; }
+    .form-control { width: 100%; padding: 10px 14px; background: #0b1320; border: 1px solid #334155; border-radius: 6px; color: #fff; font-family: inherit; font-size: 14px; box-sizing: border-box; }
+    .form-control:focus { outline: none; border-color: #38bdf8; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media(max-width:600px) { .grid-2 { grid-template-columns: 1fr; } }
+    .btn-submit { width: 100%; padding: 12px; background: #0284c7; color: #fff; border: none; border-radius: 6px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.2s; }
+    .btn-submit:hover { background: #0369a1; }
+    .toast { position: fixed; bottom: 20px; right: 20px; background: #059669; color: #fff; padding: 12px 20px; border-radius: 8px; font-weight: 600; display: none; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+    .badge-wire { background: #0284c7; color: #fff; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <div class="agency-container">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+      <a href="/" style="color:#38bdf8;text-decoration:none;font-weight:600;font-size:13px;">← मुख्य वेबसाइट पर जाएं</a>
+      <span class="badge-wire">WIRE SYNDICATE DESK</span>
+    </div>
+
+    <div class="agency-card">
+      <div class="agency-header">
+        <h1>📡 समाचार एजेंसी व वायर सिंडिकेट पोर्टल (News Agency Portal)</h1>
+        <p>राष्ट्रीय, राज्य स्तरीय व स्वतंत्र समाचार एजेंसियों (PTI, UNI, ANI, भाषा, प्रेस विज्ञप्ति) के लिए विशेष वायर फीड सबमिशन डेस्क।</p>
+      </div>
+
+      <form id="agencyForm" onsubmit="handleAgencySubmit(event)">
+        <div class="grid-2">
+          <div class="form-group">
+            <label>एजेंसी का नाम (Agency / Wire Name) *</label>
+            <input type="text" id="agencyName" class="form-control" placeholder="उदा. PTI, UNI, वार्ता, राज्य सूचना विभाग..." required>
+          </div>
+          <div class="form-group">
+            <label>एजेंसी डेस्क / ब्यूरो संपर्क (Email / Phone) *</label>
+            <input type="text" id="agencyContact" class="form-control" placeholder="desk@agency.com या +91..." required>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label>समाचार श्रेणी (Category) *</label>
+            <select id="agencyCategory" class="form-control" required>
+              <option value="देश">देश (National)</option>
+              <option value="हरियाणा">हरियाणा (Haryana)</option>
+              <option value="दिल्ली">दिल्ली-NCR (Delhi)</option>
+              <option value="विदेश">विदेश (World)</option>
+              <option value="बिज़नेस">बिज़नेस व मार्केट (Business)</option>
+              <option value="राजनीति">राजनीति (Politics)</option>
+              <option value="शिक्षा">शिक्षा व बोर्ड (Education)</option>
+              <option value="करियर">सरकारी नौकरी व करियर (Jobs)</option>
+              <option value="खेल">खेल (Sports)</option>
+              <option value="मनोरंजन">मनोरंजन (Entertainment)</option>
+              <option value="स्वास्थ्य">स्वास्थ्य (Health)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>प्राथमिकता (Wire Priority)</label>
+            <select id="agencyPriority" class="form-control">
+              <option value="FLASH">⚡ फ्लैश / ब्रेकिंग (Flash Wire)</option>
+              <option value="URGENT">🔴 अति-आवश्यक (Urgent)</option>
+              <option value="ROUTINE" selected>📄 सामान्य वायर (Routine Wire)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>समाचार शीर्षक / हेडलाइन (Headline) *</label>
+          <input type="text" id="agencyTitle" class="form-control" placeholder="स्पष्ट व तथ्यपरक शीर्षक दर्ज करें..." required>
+        </div>
+
+        <div class="form-group">
+          <label>संक्षिप्त सार (Lead / Dateline) *</label>
+          <input type="text" id="agencyDesc" class="form-control" placeholder="उदा. नई दिल्ली, 18 अगस्त (भाषा): ...">
+        </div>
+
+        <div class="form-group">
+          <label>पूर्ण समाचार विवरण (Complete Story Body) *</label>
+          <textarea id="agencyContent" class="form-control" rows="8" placeholder="पूरा समाचार तथ्य, बयानों व विवरण सहित दर्ज करें..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>तस्वीर / फोटो URL (Official Media URL)</label>
+          <input type="url" id="agencyImage" class="form-control" placeholder="https://... मूल उच्च-गुणवत्ता वाली फोटो का लिंक">
+        </div>
+
+        <button type="submit" id="submitBtn" class="btn-submit">
+          📡 वार्ताप्राइम संपादकीय डेस्क को वायर भेजें (Submit Wire)
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    function showToast(msg, isError = false) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.background = isError ? '#dc2626' : '#059669';
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 4000);
+    }
+
+    async function handleAgencySubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.textContent = 'प्रक्रिया में है...';
+
+      const payload = {
+        title: document.getElementById('agencyTitle').value.trim(),
+        description: document.getElementById('agencyDesc').value.trim(),
+        content: document.getElementById('agencyContent').value.trim(),
+        category: document.getElementById('agencyCategory').value,
+        source: document.getElementById('agencyName').value.trim() + ' वायर',
+        reporterName: document.getElementById('agencyName').value.trim(),
+        reporterPhone: document.getElementById('agencyContact').value.trim(),
+        imageurl: document.getElementById('agencyImage').value.trim(),
+        isBreaking: document.getElementById('agencyPriority').value === 'FLASH'
+      };
+
+      try {
+        const res = await fetch('/api/reporter/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+        if (json.success) {
+          showToast('✅ वायर रिपोर्ट सफलतापूर्वक संपादकीय डेस्क को प्राप्त हो गई!');
+          document.getElementById('agencyForm').reset();
+        } else {
+          showToast('त्रुटि: ' + (json.message || 'सबमिट नहीं हो सका'), true);
+        }
+      } catch (err) {
+        showToast('तकनीकी समस्या: ' + err.message, true);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '📡 वार्ताप्राइम संपादकीय डेस्क को वायर भेजें (Submit Wire)';
+      }
+    }
+  </script>
+</body>
+</html>

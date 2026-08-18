@@ -506,6 +506,14 @@ app.get('/citizen-reporter', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'citizen-reporter.html'));
 });
 
+app.get('/news-agency', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'news-agency.html'));
+});
+
+app.get('/advt-agency', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'advt-agency.html'));
+});
+
 // Start Server
 app.listen(PORT, () => {
   console.log(`========================================================`);
