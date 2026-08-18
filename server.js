@@ -502,15 +502,15 @@ app.get('/reporter-bot', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'reporter-bot.html'));
 });
 
-app.get('/citizen-reporter', (req, res) => {
+app.get(['/citizen-reporter', '/citizen-reporter.html', '/citizen'], (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'citizen-reporter.html'));
 });
 
-app.get('/news-agency', (req, res) => {
+app.get(['/news-agency', '/news-agency.html', '/agency', '/agency.html', '/wire', '/wire.html'], (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'news-agency.html'));
 });
 
-app.get('/advt-agency', (req, res) => {
+app.get(['/advt-agency', '/advt-agency.html', '/advt', '/advt.html', '/advertise', '/advertise.html', '/ads'], (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'advt-agency.html'));
 });
 
