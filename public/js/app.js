@@ -83,8 +83,8 @@ function escapeHtml(text) {
 // Render Horizontal News Card: Small Pic on Left, Headline (Header Only) on Right
 function createCardHTML(item) {
   const imgHtml = item.imageurl
-    ? `<img src="${escapeHtml(item.imageurl)}" alt="${escapeHtml(item.title)}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&auto=format&fit=crop&q=80'">`
-    : `<div class="card-thumb-placeholder">वार्ताप्राइम</div>`;
+    ? `<img src="${escapeHtml(item.imageurl)}" alt="${escapeHtml(item.title)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'card-thumb-placeholder\\'>${escapeHtml(item.category || 'वार्ताप्राइम')}</div>'">`
+    : `<div class="card-thumb-placeholder">${escapeHtml(item.category || 'वार्ताप्राइम')}</div>`;
 
   const districtBadge = item.district && item.district !== 'मुख्य'
     ? `<span class="district-tag-badge">📍 ${escapeHtml(item.district)}</span>`
@@ -178,8 +178,8 @@ function renderPortal() {
     const imgContainer = heroLead.querySelector('.imgbox');
     if (imgContainer) {
       imgContainer.innerHTML = heroItem.imageurl 
-        ? `<img src="${escapeHtml(heroItem.imageurl)}" alt="${escapeHtml(heroItem.title)}" onerror="this.src='https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=900&auto=format&fit=crop&q=80'">`
-        : `<div style="display:flex;align-items:center;justify-content:center;height:100%;font-family:var(--font-display);font-size:28px;color:#fff;">वार्ताप्राइम विशेष</div>`;
+        ? `<img src="${escapeHtml(heroItem.imageurl)}" alt="${escapeHtml(heroItem.title)}" onerror="this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;font-family:var(--font-display);font-size:28px;color:#fff;background:#0F172A;\\'>वार्ताप्राइम विशेष</div>'">`
+        : `<div style="display:flex;align-items:center;justify-content:center;height:100%;font-family:var(--font-display);font-size:28px;color:#fff;background:#0F172A;">वार्ताप्राइम विशेष</div>`;
     }
     const h1 = heroLead.querySelector('h1');
     if (h1) h1.textContent = heroItem.title;

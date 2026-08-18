@@ -10,6 +10,7 @@ const { initScheduler, triggerNow } = require('./services/scheduler');
 const { rewriteTitle, rewriteContent, rewriteArticle } = require('./services/rewriter');
 const { getHaryanaWeather, getPanipatWeather } = require('./services/weatherService');
 const { HARYANA_DISTRICTS, STATES_DATA } = require('./services/locations');
+const { getContextualInternetImage, internetTopicPhotos } = require('./services/rssFetcher');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -307,6 +308,36 @@ app.post('/api/admin/rewrite', (req, res) => {
     const { title, description, content, source, category } = req.body;
     const rewritten = rewriteArticle({ title, description, content, source, category });
     res.json({ success: true, data: rewritten });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/admin/match-image - Get high-precision semantic image for headline
+app.post('/api/admin/match-image', (req, res) => {
+  try {
+    const { title, category } = req.body;
+    const imageUrl = getContextualInternetImage(title, category);
+    res.json({ success: true, imageUrl });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// GET /api/admin/topic-photos - List all specialized photo pools
+app.get('/api/admin/topic-photos', (req, res) => {
+  res.json({ success: true, data: internetTopicPhotos });
+});
+
+// POST /api/admin/fix-all-images - Re-scan and fix all mismatched generic images across DB
+app.post('/api/admin/fix-all-images', (req, res) => {
+  try {
+    const results = db.fixAllArticleImages((title, category) => getContextualInternetImage(title, category));
+    res.json({ 
+      success: true, 
+      message: `सफलतापूर्वक ${results.updatedApproved} लाइव और ${results.updatedPending} लंबित समाचारों की तस्वीरें सटीक विषय अनुसार अपडेट कर दी गईं!`,
+      data: results 
+    });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }

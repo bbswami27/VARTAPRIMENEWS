@@ -424,27 +424,75 @@ async function handleAdminPhotoUpload(e) {
   reader.readAsDataURL(file);
 }
 
-function setTopicImage() {
-  const cat = document.getElementById('editCategory').value;
-  const categoryImages = {
-    'हरियाणा': 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&auto=format&fit=crop&q=80',
-    'दिल्ली': 'https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800&auto=format&fit=crop&q=80',
-    'युवा': 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&auto=format&fit=crop&q=80',
-    'क्राइम': 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&auto=format&fit=crop&q=80',
-    'राजनीति': 'https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=800&auto=format&fit=crop&q=80',
-    'बिज़नेस': 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&auto=format&fit=crop&q=80',
-    'शिक्षा': 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&auto=format&fit=crop&q=80',
-    'करियर': 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&auto=format&fit=crop&q=80',
-    'स्वास्थ्य': 'https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?w=800&auto=format&fit=crop&q=80',
-    'खेल': 'https://images.unsplash.com/photo-1531415074868-036b1c57e329?w=800&auto=format&fit=crop&q=80',
-    'मनोरंजन': 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800&auto=format&fit=crop&q=80',
-    'धर्म': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=800&auto=format&fit=crop&q=80',
-    'लाइफस्टाइल': 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&auto=format&fit=crop&q=80'
-  };
-  const url = categoryImages[cat] || categoryImages['हरियाणा'];
-  document.getElementById('editImageUrl').value = url;
-  updateModalImagePreview(url);
-  showToast('🖼️ श्रेणी अनुसार मानक तस्वीर सेट की गई!');
+}
+
+async function autoMatchModalImage() {
+  const title = document.getElementById('editTitle').value.trim();
+  const category = document.getElementById('editCategory').value;
+
+  if (!title) {
+    showToast('कृपया पहले समाचार शीर्षक दर्ज करें!');
+    return;
+  }
+
+  showToast('🔍 AI द्वारा सटीक फोटो पहचानी जा रही है...');
+  try {
+    const res = await fetch('/api/admin/match-image', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, category })
+    });
+    const json = await res.json();
+    if (json.success && json.imageUrl) {
+      document.getElementById('editImageUrl').value = json.imageUrl;
+      updateModalImagePreview(json.imageUrl);
+      showToast('🎯 शीर्षक के अनुसार सटीक AI फोटो सेट कर दी गई!');
+    }
+  } catch (err) {
+    showToast('फोटो मैच करने में त्रुटि: ' + err.message);
+  }
+}
+
+let cachedTopicPhotos = null;
+async function applyTopicImage(topicKey) {
+  if (!topicKey) return;
+  try {
+    if (!cachedTopicPhotos) {
+      const res = await fetch('/api/admin/topic-photos');
+      const json = await res.json();
+      if (json.success) cachedTopicPhotos = json.data;
+    }
+    if (cachedTopicPhotos && cachedTopicPhotos[topicKey] && cachedTopicPhotos[topicKey].length > 0) {
+      const pool = cachedTopicPhotos[topicKey];
+      const randomIndex = Math.floor(Math.random() * pool.length);
+      const url = pool[randomIndex];
+      document.getElementById('editImageUrl').value = url;
+      updateModalImagePreview(url);
+      showToast(`🖼️ ${topicKey} विषय की फोटो सेट की गई!`);
+    }
+  } catch (e) {
+    showToast('फोटो लोड करने में समस्या: ' + e.message);
+  }
+}
+
+async function triggerFixAllImages() {
+  if (!confirm('क्या आप सभी लाइव व लंबित समाचारों की पुरानी/असंबंधित तस्वीरों को नए AI सेमेंटिक मैचिंग सिस्टम से ठीक करना चाहते हैं?')) return;
+
+  showToast('⏳ सभी समाचारों की तस्वीरें AI द्वारा अपडेट की जा रही हैं...');
+  try {
+    const res = await fetch('/api/admin/fix-all-images', { method: 'POST' });
+    const json = await res.json();
+    if (json.success) {
+      showToast(`🎉 ${json.message}`);
+      loadStats();
+      loadPending();
+      loadApproved();
+    } else {
+      showToast('त्रुटि: ' + json.message);
+    }
+  } catch (err) {
+    showToast('तस्वीरें अपडेट करने में समस्या: ' + err.message);
+  }
 }
 
 // --------------------------------------------------------------------------
@@ -479,7 +527,7 @@ function renderApprovedTable() {
   tbody.innerHTML = currentApprovedList.map(item => `
     <tr>
       <td style="width:70px;">
-        <img src="${escapeHtml(item.imageurl || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=100&auto=format&fit=crop&q=80')}" style="width:60px;height:42px;object-fit:cover;border-radius:4px;">
+        ${item.imageurl ? `<img src="${escapeHtml(item.imageurl)}" style="width:60px;height:42px;object-fit:cover;border-radius:4px;" onerror="this.parentElement.innerHTML='<div style=\\'width:60px;height:42px;background:#334155;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#94a3b8;\\'>तस्वीर नहीं</div>'">` : `<div style="width:60px;height:42px;background:#334155;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#94a3b8;">तस्वीर नहीं</div>`}
       </td>
       <td>
         <div style="font-weight:600;margin-bottom:4px;">${escapeHtml(item.title)}</div>

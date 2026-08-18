@@ -577,6 +577,39 @@ const db = {
     };
   },
 
+  // Batch update all articles with high-precision semantic matching images
+  fixAllArticleImages(matcherFn) {
+    if (typeof matcherFn !== 'function') return { updatedApproved: 0, updatedPending: 0 };
+    
+    const approved = readJSON(APPROVED_FILE, []);
+    let updatedApproved = 0;
+    for (const item of approved) {
+      if (!item.imageurl || item.imageurl.includes('unsplash.com') || item.imageurl.includes('googleusercontent.com')) {
+        const newImg = matcherFn(item.title, item.category);
+        if (newImg && newImg !== item.imageurl) {
+          item.imageurl = newImg;
+          updatedApproved++;
+        }
+      }
+    }
+    if (updatedApproved > 0) writeJSON(APPROVED_FILE, approved);
+
+    const pending = readJSON(PENDING_FILE, []);
+    let updatedPending = 0;
+    for (const item of pending) {
+      if (!item.imageurl || item.imageurl.includes('unsplash.com') || item.imageurl.includes('googleusercontent.com')) {
+        const newImg = matcherFn(item.title, item.category);
+        if (newImg && newImg !== item.imageurl) {
+          item.imageurl = newImg;
+          updatedPending++;
+        }
+      }
+    }
+    if (updatedPending > 0) writeJSON(PENDING_FILE, pending);
+
+    return { updatedApproved, updatedPending };
+  },
+
   updateStats(patch) {
     const stats = readJSON(STATS_FILE, {});
     const updated = { ...stats, ...patch };

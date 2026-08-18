@@ -134,7 +134,7 @@ function loadMySubmissions() {
 
   container.innerHTML = history.slice(0, 10).map(item => `
     <div class="submitted-item">
-      <img src="${item.imageurl || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=120&auto=format&fit=crop&q=80'}" alt="img">
+      ${item.imageurl ? `<img src="${item.imageurl}" alt="img">` : `<div style="width:60px;height:42px;background:#334155;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#94a3b8;">तस्वीर नहीं</div>`}
       <div class="submitted-info">
         <h4>${item.title}</h4>
         <div class="submitted-meta">
