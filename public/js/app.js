@@ -734,10 +734,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupNav();
   loadBreakingNews();
   loadCategoryCounts();
-  loadNews().then(() => {
-    const requestedArticle = new URLSearchParams(window.location.search).get('news');
-    if (requestedArticle) openArticleModal(requestedArticle);
-  });
+  loadNews();
   loadPanipatWeather();
   loadHaryanaWeather();
 
