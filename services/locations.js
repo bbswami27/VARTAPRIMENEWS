@@ -1,5 +1,5 @@
 // ==========================================================================
-// VartaPrime News - State & District Taxonomy & Auto-Tagger Service
+// VartaPrimeNews - State & District Taxonomy & Auto-Tagger Service
 // ==========================================================================
 
 const HARYANA_DISTRICTS = [

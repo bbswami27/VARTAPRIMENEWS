@@ -88,7 +88,7 @@ function generateDetailedReport(article) {
   }
 
   // Combine into a structured, readable 4-paragraph news article
-  const fullContent = `${leadPara}\n\n${contextPara}\n\n${impactPara}\n\n${conclusionPara}\n\n━━━━━━━━━━━━━━━━━━━━\n📌 स्रोत संदर्भ: ${source}\n🗞️ विशेष रिपोर्ट: वार्ताप्राइम न्यूज़ नेटवर्क (VartaPrime News Network)`;
+  const fullContent = `${leadPara}\n\n${contextPara}\n\n${impactPara}\n\n${conclusionPara}\n\n━━━━━━━━━━━━━━━━━━━━\n📌 स्रोत संदर्भ: ${source}\n🗞️ विशेष रिपोर्ट: वार्ताप्राइम न्यूज़ नेटवर्क (VartaPrimeNews Network)`;
 
   return {
     content: fullContent,

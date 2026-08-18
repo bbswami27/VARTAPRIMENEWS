@@ -1,5 +1,5 @@
 // ==========================================================================
-// VartaPrime News - Multi-City Haryana, Dedicated Delhi & National RSS Feeds
+// VartaPrimeNews - Multi-City Haryana, Dedicated Delhi & National RSS Feeds
 // ==========================================================================
 
 const defaultFeeds = [

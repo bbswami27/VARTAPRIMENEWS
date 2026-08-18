@@ -1,5 +1,5 @@
 // ==========================================================================
-// VartaPrime News - Advanced English to Hindi Translator & Cleaner
+// VartaPrimeNews - Advanced English to Hindi Translator & Cleaner
 // Ensures 100% Correct Hindi Titles, No Corrupted Fonts / Broken Matras
 // ==========================================================================
 

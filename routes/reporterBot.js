@@ -1,5 +1,5 @@
 // ==========================================================================
-// VartaPrime News - WhatsApp & Telegram Reporter AI Agent & Webhooks
+// VartaPrimeNews - WhatsApp & Telegram Reporter AI Agent & Webhooks
 // Allows reporters to submit live news + photos directly to Admin Pending Queue
 // ==========================================================================
 
@@ -12,6 +12,12 @@ const db = require('../db/database');
 const { translateToHindi, hasEnglishLetters } = require('../services/translator');
 const { cleanRawText, rewriteTitle } = require('../services/rewriter');
 
+function safeEqual(a, b) {
+  const left = Buffer.from(String(a || ''));
+  const right = Buffer.from(String(b || ''));
+  return left.length === right.length && crypto.timingSafeEqual(left, right);
+}
+
 // Ensure uploads dir exists for reporter photos
 const UPLOADS_DIR = path.join(__dirname, '..', 'public', 'uploads');
 if (!fs.existsSync(UPLOADS_DIR)) {
@@ -21,6 +27,9 @@ if (!fs.existsSync(UPLOADS_DIR)) {
 // 1. Direct Bot Submit Endpoint (Used by Web App Simulator & Bots)
 router.post('/bot-submit', async (req, res) => {
   try {
+    if (process.env.REPORTER_BOT_SECRET && !safeEqual(req.get('x-reporter-bot-secret'), process.env.REPORTER_BOT_SECRET)) {
+      return res.status(403).json({ success: false, message: 'अधिकृत bot key आवश्यक है।' });
+    }
     const {
       reporterName,
       reporterPhone,
@@ -123,6 +132,10 @@ router.post('/bot-submit', async (req, res) => {
 // 2. Telegram Bot Webhook Endpoint
 router.post('/telegram-webhook', async (req, res) => {
   try {
+    const expectedSecret = process.env.TELEGRAM_WEBHOOK_SECRET;
+    if (expectedSecret && !safeEqual(req.get('x-telegram-bot-api-secret-token'), expectedSecret)) {
+      return res.sendStatus(403);
+    }
     const update = req.body;
     if (!update || !update.message) {
       return res.sendStatus(200);
@@ -196,6 +209,11 @@ router.post('/telegram-webhook', async (req, res) => {
 // 3. WhatsApp Webhook Endpoint
 router.post('/whatsapp-webhook', async (req, res) => {
   try {
+    const appSecret = process.env.WHATSAPP_APP_SECRET;
+    if (appSecret) {
+      const expected = 'sha256=' + crypto.createHmac('sha256', appSecret).update(req.rawBody || Buffer.alloc(0)).digest('hex');
+      if (!safeEqual(req.get('x-hub-signature-256'), expected)) return res.sendStatus(403);
+    }
     const data = req.body;
     const sender = data.From || data.sender || 'WhatsApp Reporter';
     const text = data.Body || data.text || '';
@@ -234,6 +252,14 @@ router.post('/whatsapp-webhook', async (req, res) => {
     console.error('[WhatsApp Webhook Error]:', err);
     return res.sendStatus(200);
   }
+});
+
+// Meta webhook verification handshake.
+router.get('/whatsapp-webhook', (req, res) => {
+  if (req.query['hub.mode'] === 'subscribe' && safeEqual(req.query['hub.verify_token'], process.env.WHATSAPP_VERIFY_TOKEN)) {
+    return res.status(200).send(req.query['hub.challenge']);
+  }
+  return res.sendStatus(403);
 });
 
 // 4. Status endpoint

@@ -1,5 +1,5 @@
 // ==========================================================================
-// VartaPrime News - Google Apps Script (वैकल्पिक मुफ़्त Google Sheet ऑटोमेशन)
+// VartaPrimeNews - Google Apps Script (वैकल्पिक मुफ़्त Google Sheet ऑटोमेशन)
 // ==========================================================================
 // यदि आप बिना किसी सर्वर के Google Sheets और Apps Script से वेबसाइट चलाना चाहते हैं,
 // तो यह कोड Google Sheet के Extensions > Apps Script में पेस्ट करें।

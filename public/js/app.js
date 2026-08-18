@@ -1,5 +1,5 @@
 // ==========================================================================
-// VartaPrime News - Public Portal Client Logic
+// VartaPrimeNews - Public Portal Client Logic
 // ==========================================================================
 
 const API_BASE = '/api';
@@ -734,7 +734,10 @@ document.addEventListener('DOMContentLoaded', () => {
   setupNav();
   loadBreakingNews();
   loadCategoryCounts();
-  loadNews();
+  loadNews().then(() => {
+    const requestedArticle = new URLSearchParams(window.location.search).get('news');
+    if (requestedArticle) openArticleModal(requestedArticle);
+  });
   loadPanipatWeather();
   loadHaryanaWeather();
 

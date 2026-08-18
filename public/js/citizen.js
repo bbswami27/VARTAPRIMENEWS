@@ -1,0 +1,7 @@
+let locations={statesData:{हरियाणा:['पानीपत']}};
+const $=id=>document.getElementById(id);
+async function loadLocations(){try{const r=await fetch('/api/locations');const j=await r.json();if(j.success){locations=j;$('state').innerHTML=Object.keys(j.statesData).map(x=>`<option>${x}</option>`).join('');updateDistricts();}}catch(e){}}
+function updateDistricts(){const list=locations.statesData[$('state').value]||locations.haryanaDistricts||['पानीपत'];$('district').innerHTML=list.map(x=>`<option>${x}</option>`).join('')}
+$('state').addEventListener('change',updateDistricts);
+$('citizenForm').addEventListener('submit',async e=>{e.preventDefault();const btn=$('submitBtn'),msg=$('message');btn.disabled=true;msg.textContent='रिपोर्ट सुरक्षित रूप से भेजी जा रही है…';try{const payload={reporterName:$('name').value.trim(),reporterPhone:$('phone').value.trim(),state:$('state').value,district:$('district').value,category:$('category').value,title:$('title').value.trim(),content:$('content').value.trim(),description:$('content').value.trim().slice(0,240),imageurl:$('imageurl').value.trim(),consent:$('consent').checked};const r=await fetch('/api/citizen/submit',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(payload)});const j=await r.json();if(!r.ok)throw new Error(j.message||'रिपोर्ट नहीं भेजी जा सकी');msg.textContent=`✅ ${j.message} संदर्भ: ${j.data.id}`;$('citizenForm').reset();}catch(err){msg.textContent=`❌ ${err.message}`}finally{btn.disabled=false}});
+loadLocations();

@@ -1,5 +1,5 @@
 // ==========================================================================
-// VartaPrime News - Advanced RSS Ingestion & Intelligent Photo Collector
+// VartaPrimeNews - Advanced RSS Ingestion & Intelligent Photo Collector
 // ==========================================================================
 
 const Parser = require('rss-parser');
