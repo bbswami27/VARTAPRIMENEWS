@@ -2355,3 +2355,105 @@ footer li a:hover {
 .hiteshi-btn:hover {
   background: #047857;
 }
+
+/* ==========================================
+   DYNAMIC ADVERTISEMENT SLOTS (AD DEPTT)
+   ========================================== */
+.ad-slot-container {
+  width: 100%;
+  margin: 14px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.ad-slot-container:empty {
+  display: none;
+}
+
+.ad-banner-link {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid var(--line);
+  position: relative;
+  background: #f8fafc;
+}
+
+.ad-banner-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+.ad-banner-img {
+  width: 100%;
+  display: block;
+  max-height: 180px;
+  object-fit: cover;
+}
+
+.ad-label-tag {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  background: rgba(0,0,0,0.65);
+  color: #fff;
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  z-index: 2;
+}
+
+/* In-Feed Native Ad Card */
+.ad-native-card {
+  background: #fff;
+  border: 1.5px solid #f59e0b;
+  border-radius: 8px;
+  padding: 14px;
+  margin: 14px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.08);
+}
+
+.ad-native-card:hover {
+  border-color: #d97706;
+}
+
+/* Bottom Floating Sticky Ad */
+.ad-slot-sticky-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #0f172a;
+  color: #fff;
+  padding: 8px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+  box-shadow: 0 -4px 15px rgba(0,0,0,0.25);
+  border-top: 2px solid var(--press-gold);
+}
+
+.ad-sticky-close {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 8px;
+}
+

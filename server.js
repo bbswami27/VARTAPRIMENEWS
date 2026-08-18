@@ -486,19 +486,98 @@ app.post('/api/citizen/submit', (req, res) => {
   }
 });
 
+// --------------------------------------------------------------------------
+// ADVERTISEMENT DEPTT (AD MANAGEMENT) API ROUTES
+// --------------------------------------------------------------------------
+
+// GET /api/ads - Public active ads for website rendering
+app.get('/api/ads', (req, res) => {
+  try {
+    const ads = db.getPublicAds();
+    res.json({ success: true, data: ads });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// GET /api/admin/ads - All ads for Advertisement Deptt panel
+app.get('/api/admin/ads', (req, res) => {
+  try {
+    const ads = db.getAds();
+    res.json({ success: true, data: ads });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/admin/ads - Create or update ad placement
+app.post('/api/admin/ads', (req, res) => {
+  try {
+    const adData = req.body;
+    if (!adData.name || !adData.position) {
+      return res.status(400).json({ success: false, message: 'विज्ञापन का नाम व पोजीशन अनिवार्य हैं।' });
+    }
+    const saved = db.saveAd(adData);
+    res.json({ success: true, message: 'विज्ञापन स्लॉट सफलतापूर्वक सुरक्षित हो गया!', data: saved });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/admin/ads/toggle/:slotId - Toggle ad ON/OFF
+app.post('/api/admin/ads/toggle/:slotId', (req, res) => {
+  try {
+    const toggled = db.toggleAd(req.params.slotId);
+    if (!toggled) return res.status(404).json({ success: false, message: 'स्लॉट नहीं मिला।' });
+    res.json({ success: true, data: toggled });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// DELETE /api/admin/ads/:slotId - Delete ad placement
+app.delete('/api/admin/ads/:slotId', (req, res) => {
+  try {
+    db.deleteAd(req.params.slotId);
+    res.json({ success: true, message: 'विज्ञापन स्लॉट हटा दिया गया।' });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/ads/click/:slotId - Record ad click
+app.post('/api/ads/click/:slotId', (req, res) => {
+  try {
+    const clicks = db.recordAdClick(req.params.slotId);
+    res.json({ success: true, clicks });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/ads/view/:slotId - Record ad impression
+app.post('/api/ads/view/:slotId', (req, res) => {
+  try {
+    const impressions = db.recordAdImpression(req.params.slotId);
+    res.json({ success: true, impressions });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // Reporter AI Bot Webhooks & Submit
 app.use('/api/reporter', require('./routes/reporterBot'));
 
 // Fallback HTML routing
-app.get('/admin', (req, res) => {
+app.get(['/admin', '/admin.html'], (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });
 
-app.get('/reporter', (req, res) => {
+app.get(['/reporter', '/reporter.html'], (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'reporter.html'));
 });
 
-app.get('/reporter-bot', (req, res) => {
+app.get(['/reporter-bot', '/reporter-bot.html'], (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'reporter-bot.html'));
 });
 
@@ -514,12 +593,17 @@ app.get(['/advt-agency', '/advt-agency.html', '/advt', '/advt.html', '/advertise
   res.sendFile(path.join(__dirname, 'public', 'advt-agency.html'));
 });
 
+app.get(['/advt-dept', '/advt-dept.html', '/ad-manager', '/ad-manager.html', '/ad-management'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'ad-manager.html'));
+});
+
 // Start Server
 app.listen(PORT, () => {
   console.log(`========================================================`);
   console.log(`🗞️  VartaPrimeNews Server Live!`);
   console.log(`🌐 Public Portal:   http://localhost:${PORT}`);
   console.log(`🛡️  Admin Dashboard: http://localhost:${PORT}/admin.html`);
+  console.log(`📢 Advt Dept Panel: http://localhost:${PORT}/ad-manager.html`);
   console.log(`========================================================`);
   
   // Initialize Cron Scheduler

@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>विज्ञापन विभाग (Advertisement Deptt) | वार्ताप्राइम न्यूज़</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@600;700;800&family=Teko:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --primary: #f59e0b;
+      --primary-hover: #d97706;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --success: #10b981;
+      --danger: #ef4444;
+      --font-body: 'Hind', sans-serif;
+      --font-serif: 'Noto Serif Devanagari', serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-body); padding-bottom: 60px; }
+
+    /* Top Nav */
+    .top-nav { background: #0b1120; border-bottom: 1px solid var(--card-border); padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: #fff; }
+    .brand h2 { font-family: var(--font-serif); font-size: 20px; color: var(--primary); }
+    .brand span { font-size: 11px; background: rgba(245, 158, 11, 0.2); color: var(--primary); padding: 3px 8px; border-radius: 4px; font-weight: 700; }
+    .nav-links { display: flex; gap: 12px; }
+    .nav-btn { color: #cbd5e1; text-decoration: none; font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: 6px; background: #1e293b; transition: 0.2s; border: 1px solid #334155; }
+    .nav-btn:hover { background: var(--primary); color: #000; }
+
+    .container { max-width: 1200px; margin: 25px auto; padding: 0 20px; }
+
+    /* Header & Stats */
+    .dept-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px; flex-wrap: wrap; gap: 16px; }
+    .dept-title h1 { font-family: var(--font-serif); font-size: 26px; color: #fff; margin-bottom: 4px; display: flex; align-items: center; gap: 10px; }
+    .dept-title p { font-size: 14px; color: var(--text-muted); }
+    
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 25px; }
+    .stat-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 10px; padding: 18px; display: flex; align-items: center; gap: 15px; }
+    .stat-icon { width: 44px; height: 44px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 22px; background: rgba(245, 158, 11, 0.15); color: var(--primary); }
+    .stat-val { font-size: 22px; font-weight: 700; color: #fff; font-family: 'Teko', sans-serif; line-height: 1; }
+    .stat-lbl { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+    /* Visual Placement Diagram */
+    .visual-map-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 22px; margin-bottom: 30px; }
+    .visual-map-card h3 { font-size: 16px; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+    .layout-mockup { border: 2px dashed #475569; border-radius: 8px; padding: 16px; background: #0b1120; display: flex; flex-direction: column; gap: 12px; }
+    
+    .mock-slot { padding: 10px; border-radius: 6px; text-align: center; font-weight: 600; font-size: 12.5px; cursor: pointer; transition: 0.2s; display: flex; justify-content: space-between; align-items: center; }
+    .mock-slot:hover { transform: translateY(-2px); filter: brightness(1.1); }
+    .mock-slot.active { background: rgba(16, 185, 129, 0.15); border: 1px solid var(--success); color: #34d399; }
+    .mock-slot.inactive { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171; }
+    
+    .mock-middle-row { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; }
+    @media(max-width: 768px) { .mock-middle-row { grid-template-columns: 1fr; } }
+    .mock-news-area { background: #1e293b; border-radius: 6px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+
+    /* Ad Slots Grid */
+    .slots-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+    .slots-header h3 { font-size: 18px; font-family: var(--font-serif); }
+    
+    .ad-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px; }
+    @media(max-width: 600px) { .ad-card-grid { grid-template-columns: 1fr; } }
+
+    .ad-slot-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; transition: 0.2s; }
+    .ad-slot-card:hover { border-color: #64748b; }
+    .ad-slot-card.disabled { opacity: 0.65; }
+
+    .ad-card-head { padding: 16px; border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: flex-start; background: #151f30; }
+    .ad-card-head h4 { font-size: 15px; color: #fff; font-weight: 700; }
+    .ad-pos-tag { font-size: 11px; color: var(--primary); font-family: monospace; background: rgba(245, 158, 11, 0.1); padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 4px; }
+    
+    .switch-toggle { position: relative; display: inline-block; width: 44px; height: 24px; }
+    .switch-toggle input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #475569; transition: .3s; border-radius: 24px; }
+    .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
+    input:checked + .slider { background-color: var(--success); }
+    input:checked + .slider:before { transform: translateX(20px); }
+
+    .ad-card-body { padding: 16px; flex: 1; display: flex; flex-direction: column; gap: 12px; }
+    .ad-preview-box { height: 130px; background: #0b1120; border: 1px dashed var(--card-border); border-radius: 6px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+    .ad-preview-img { width: 100%; height: 100%; object-fit: cover; }
+    .ad-empty-txt { font-size: 12px; color: var(--text-muted); text-align: center; padding: 10px; }
+
+    .ad-meta-row { display: flex; justify-content: space-between; font-size: 12.5px; color: #cbd5e1; }
+    .ad-meta-row span:first-child { color: var(--text-muted); }
+    .ad-meta-row a { color: #38bdf8; text-decoration: none; word-break: break-all; max-width: 200px; }
+
+    .ad-card-foot { padding: 12px 16px; background: #151f30; border-top: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; }
+    .btn-edit { background: #334155; color: #fff; border: none; padding: 7px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+    .btn-edit:hover { background: var(--primary); color: #000; }
+    
+    .btn-add-slot { background: var(--primary); color: #000; border: none; padding: 10px 18px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px; }
+    .btn-add-slot:hover { background: var(--primary-hover); }
+
+    /* Modal */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+    .modal-box { background: #1e293b; border: 1px solid var(--card-border); border-radius: 12px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; padding: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+    .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--card-border); padding-bottom: 12px; }
+    .modal-head h3 { font-family: var(--font-serif); font-size: 20px; color: var(--primary); }
+    .modal-close { background: none; border: none; font-size: 24px; color: var(--text-muted); cursor: pointer; }
+    
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 13.5px; font-weight: 600; margin-bottom: 6px; color: #cbd5e1; }
+    .form-control { width: 100%; padding: 10px 14px; background: #0f172a; border: 1px solid #334155; border-radius: 6px; color: #fff; font-family: inherit; font-size: 14px; }
+    .form-control:focus { outline: none; border-color: var(--primary); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media(max-width:500px) { .form-row { grid-template-columns: 1fr; } }
+    .btn-save { width: 100%; padding: 12px; background: var(--primary); color: #000; border: none; border-radius: 6px; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 10px; }
+    .btn-save:hover { background: var(--primary-hover); }
+
+    .toast { position: fixed; bottom: 20px; right: 20px; background: var(--success); color: #fff; padding: 12px 20px; border-radius: 8px; font-weight: 600; display: none; z-index: 2000; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <nav class="top-nav">
+    <a href="/" class="brand">
+      <h2>VartaPrime <span>NEWS</span></h2>
+      <span>ADVT DEPTT</span>
+    </a>
+    <div class="nav-links">
+      <a href="/" class="nav-btn">🌐 लाइव पोर्टल</a>
+      <a href="/admin.html" class="nav-btn">👑 एडमिन डैशबोर्ड</a>
+      <a href="/advt-agency.html" class="nav-btn">📢 क्लाइंट बुकिंग फॉर्म</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Header -->
+    <div class="dept-header">
+      <div class="dept-title">
+        <h1>📢 विज्ञापन विभाग (Advertisement Deptt)</h1>
+        <p>वेबसाइट पर किसी भी स्थान (शीर्ष, मध्य, साइडबार, खबर के बीच व नीचे) पर विज्ञापनों को सेट, मैनेज व नियंत्रित करें।</p>
+      </div>
+      <button class="btn-add-slot" onclick="openAddSlotModal()">
+        ➕ नया विज्ञापन स्लॉट जोड़ें
+      </button>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">📌</div>
+        <div>
+          <div class="stat-val" id="statActiveSlots">0</div>
+          <div class="stat-lbl">सक्रिय विज्ञापन स्लॉट</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">👁️</div>
+        <div>
+          <div class="stat-val" id="statImpressions">0</div>
+          <div class="stat-lbl">कुल विज्ञापन व्यूज (Impressions)</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🖱️</div>
+        <div>
+          <div class="stat-val" id="statClicks">0</div>
+          <div class="stat-lbl">कुल विज्ञापन क्लिक (Clicks)</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⚡</div>
+        <div>
+          <div class="stat-val" id="statCtr">0%</div>
+          <div class="stat-lbl">औसत CTR (क्लिक दर)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visual Placement Map -->
+    <div class="visual-map-card">
+      <h3>🗺️ लाइव वेबसाइट लेआउट प्लेसमेंट मैप (क्लिक करके एडिट करें)</h3>
+      <div class="layout-mockup">
+        <!-- Top Header Slot -->
+        <div class="mock-slot" id="mock-top_header" onclick="editAdSlot('top_header')">
+          <span>🔝 शीर्ष हेडर बैनर (Top Header Leaderboard 728x90)</span>
+          <span id="badge-mock-top_header">चेक हो रहा है...</span>
+        </div>
+
+        <!-- Below Ticker Slot -->
+        <div class="mock-slot" id="mock-below_ticker" onclick="editAdSlot('below_ticker')">
+          <span>⚡ ब्रेकिंग टिकर के ठीक नीचे (Below Ticker Banner 970x90)</span>
+          <span id="badge-mock-below_ticker">चेक हो रहा है...</span>
+        </div>
+
+        <!-- Middle Columns -->
+        <div class="mock-middle-row">
+          <div class="mock-news-area">
+            <div style="font-size:12px;color:#94a3b8;">📰 मुख्य समाचार ग्रिड (News Cards)</div>
+            <!-- In-Feed Slot -->
+            <div class="mock-slot" id="mock-in_feed_1" onclick="editAdSlot('in_feed_1')" style="margin: 8px 0;">
+              <span>🎯 खबरों के बीच में - इन-फ़ीड (In-Feed Native Ad)</span>
+              <span id="badge-mock-in_feed_1">चेक हो रहा है...</span>
+            </div>
+            <!-- Inside Modal Slot -->
+            <div class="mock-slot" id="mock-inside_modal" onclick="editAdSlot('inside_modal')">
+              <span>📖 पूरी खबर पढ़ने के मोडल के अंदर (Inside Article Modal)</span>
+              <span id="badge-mock-inside_modal">चेक हो रहा है...</span>
+            </div>
+          </div>
+
+          <!-- Right Sidebar Slot -->
+          <div class="mock-slot" id="mock-sidebar_top" onclick="editAdSlot('sidebar_top')" style="height:100%;flex-direction:column;justify-content:center;gap:6px;">
+            <span>📐 राइट साइडबार टॉप</span>
+            <span style="font-size:11px;">(300x250 Medium Rect)</span>
+            <span id="badge-mock-sidebar_top">चेक हो रहा है...</span>
+          </div>
+        </div>
+
+        <!-- Bottom Sticky Slot -->
+        <div class="mock-slot" id="mock-bottom_sticky" onclick="editAdSlot('bottom_sticky')">
+          <span>⚓ स्क्रीन के नीचे स्टिकी फ्लोटिंग बैनर (Bottom Sticky Anchor)</span>
+          <span id="badge-mock-bottom_sticky">चेक हो रहा है...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Ad Placements Grid -->
+    <div class="slots-header">
+      <h3>📑 सभी विज्ञापन प्लेसमेंट्स व कंट्रोल्स</h3>
+    </div>
+
+    <div class="ad-card-grid" id="adCardsContainer">
+      <!-- Loaded dynamically via JS -->
+      <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted);">
+        विज्ञापन स्लॉट्स लोड हो रहे हैं...
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit / Add Slot Modal -->
+  <div class="modal-overlay" id="adModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="modalTitle">विज्ञापन स्लॉट संपादित करें</h3>
+        <button class="modal-close" onclick="closeAdModal()">&times;</button>
+      </div>
+
+      <form id="adForm" onsubmit="saveAdSlot(event)">
+        <input type="hidden" id="editSlotId">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>स्लॉट का नाम (Slot Title) *</label>
+            <input type="text" id="adName" class="form-control" placeholder="उदा. टॉप हेडर बैनर" required>
+          </div>
+          <div class="form-group">
+            <label>प्लेसमेंट लोकेशन (Position) *</label>
+            <select id="adPosition" class="form-control" required>
+              <option value="top_header">🔝 टॉप हेडर (Top Header)</option>
+              <option value="below_ticker">⚡ टिकर के नीचे (Below Ticker)</option>
+              <option value="sidebar_top">📐 राइट साइडबार टॉप (Sidebar Top 300x250)</option>
+              <option value="in_feed_1">📰 खबरों के बीच में (In-Feed Native)</option>
+              <option value="inside_modal">📖 पूरी खबर के अंदर (Inside Modal)</option>
+              <option value="bottom_sticky">⚓ नीचे स्टिकी फ्लोटिंग (Bottom Sticky)</option>
+              <option value="custom">⚙️ कस्टम पोजीशन (Custom Placement)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>ब्रांड / क्लाइंट का नाम (Brand Name)</label>
+            <input type="text" id="adBrand" class="form-control" placeholder="उदा. पिक्सेल मीडिया">
+          </div>
+          <div class="form-group">
+            <label>साइज / डायमेंशन (Size Spec)</label>
+            <input type="text" id="adSize" class="form-control" placeholder="उदा. 728x90 / Responsive">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>बैनर इमेज URL (Banner Image URL) *</label>
+          <input type="url" id="adImageUrl" class="form-control" placeholder="https://... इमेज का लिंक दर्ज करें" required>
+          <div style="font-size:11.5px;color:var(--text-muted);margin-top:4px;">
+            सीधे इमेज लिंक पेस्ट करें (JPG, PNG, GIF, WebP)।
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>टारगेट क्लिक लिंक (Target Click-through URL) *</label>
+          <input type="url" id="adTargetUrl" class="form-control" placeholder="https://... या /advt-agency.html" required>
+        </div>
+
+        <div class="form-group">
+          <label>Alt टेक्स्ट / विज्ञापन संदेश</label>
+          <input type="text" id="adAltText" class="form-control" placeholder="विज्ञापन पर होवर करने पर दिखने वाला टेक्स्ट">
+        </div>
+
+        <div class="form-group">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+            <input type="checkbox" id="adEnabled" style="width:18px;height:18px;accent-color:var(--primary);">
+            <span>इस विज्ञापन को तुरंत लाइव चालू रखें (Active)</span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn-save" id="saveBtn">💾 विज्ञापन सुरक्षित करें व लाइव करें</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    let currentAds = [];
+
+    function showToast(msg, isErr = false) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.background = isErr ? 'var(--danger)' : 'var(--success)';
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 3500);
+    }
+
+    async function loadAds() {
+      try {
+        const res = await fetch('/api/admin/ads');
+        const json = await res.json();
+        if (json.success) {
+          currentAds = json.data || [];
+          renderStats();
+          renderVisualMap();
+          renderAdCards();
+        }
+      } catch (err) {
+        showToast('लोड करने में समस्या: ' + err.message, true);
+      }
+    }
+
+    function renderStats() {
+      const active = currentAds.filter(a => a.enabled).length;
+      let totalImp = 0;
+      let totalClicks = 0;
+      currentAds.forEach(a => {
+        totalImp += (a.impressions || 0);
+        totalClicks += (a.clicks || 0);
+      });
+      const ctr = totalImp > 0 ? ((totalClicks / totalImp) * 100).toFixed(1) + '%' : '0%';
+
+      document.getElementById('statActiveSlots').textContent = active + ' / ' + currentAds.length;
+      document.getElementById('statImpressions').textContent = totalImp.toLocaleString();
+      document.getElementById('statClicks').textContent = totalClicks.toLocaleString();
+      document.getElementById('statCtr').textContent = ctr;
+    }
+
+    function renderVisualMap() {
+      const positions = ['top_header', 'below_ticker', 'in_feed_1', 'inside_modal', 'sidebar_top', 'bottom_sticky'];
+      positions.forEach(pos => {
+        const ad = currentAds.find(a => a.position === pos);
+        const slotEl = document.getElementById('mock-' + pos);
+        const badgeEl = document.getElementById('badge-mock-' + pos);
+        if (slotEl && badgeEl) {
+          if (ad && ad.enabled) {
+            slotEl.className = 'mock-slot active';
+            badgeEl.innerHTML = '<span style="color:#10b981;font-weight:700;">🟢 चालू (Live)</span>';
+          } else {
+            slotEl.className = 'mock-slot inactive';
+            badgeEl.innerHTML = '<span style="color:#ef4444;">🔴 बंद (Inactive)</span>';
+          }
+        }
+      });
+    }
+
+    function renderAdCards() {
+      const container = document.getElementById('adCardsContainer');
+      if (!currentAds.length) {
+        container.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;">कोई विज्ञापन स्लॉट नहीं मिला।</div>';
+        return;
+      }
+
+      container.innerHTML = currentAds.map(ad => `
+        <div class="ad-slot-card ${ad.enabled ? '' : 'disabled'}" id="card-${ad.slotId}">
+          <div class="ad-card-head">
+            <div>
+              <h4>${escapeHtml(ad.name)}</h4>
+              <span class="ad-pos-tag">📍 ${ad.position} | ${escapeHtml(ad.size || 'Responsive')}</span>
+            </div>
+            <label class="switch-toggle" title="ऑन/ऑफ करें">
+              <input type="checkbox" ${ad.enabled ? 'checked' : ''} onchange="toggleAdSlot('${ad.slotId}')">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="ad-card-body">
+            <div class="ad-preview-box">
+              ${ad.imageUrl ? `<img src="${ad.imageUrl}" class="ad-preview-img" alt="${escapeHtml(ad.brandName || 'Ad')}" onerror="this.src='';this.parentElement.innerHTML='<span class=ad-empty-txt>⚠️ इमेज लोड नहीं हुई</span>';">` : `<span class="ad-empty-txt">📷 कोई इमेज सेट नहीं है</span>`}
+            </div>
+
+            <div class="ad-meta-row">
+              <span>ब्रांड:</span>
+              <strong>${escapeHtml(ad.brandName || 'लागू नहीं')}</strong>
+            </div>
+
+            <div class="ad-meta-row">
+              <span>टारगेट लिंक:</span>
+              <a href="${ad.targetUrl}" target="_blank">${escapeHtml(ad.targetUrl || '#')}</a>
+            </div>
+
+            <div class="ad-meta-row">
+              <span>परफॉर्मेंस:</span>
+              <span>👁️ ${ad.impressions || 0} व्यूज &nbsp;•&nbsp; 🖱️ ${ad.clicks || 0} क्लिक्स</span>
+            </div>
+          </div>
+
+          <div class="ad-card-foot">
+            <button class="btn-edit" onclick="editAdSlot('${ad.slotId}')">✏️ विज्ञापन बदलें / एडिट</button>
+            <button class="btn-edit" style="background:#dc2626;" onclick="deleteAdSlot('${ad.slotId}')">🗑️ हटाएं</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function editAdSlot(slotId) {
+      const ad = currentAds.find(a => a.slotId === slotId);
+      if (!ad) return;
+
+      document.getElementById('modalTitle').textContent = 'विज्ञापन स्लॉट संपादित करें: ' + ad.name;
+      document.getElementById('editSlotId').value = ad.slotId;
+      document.getElementById('adName').value = ad.name || '';
+      document.getElementById('adPosition').value = ad.position || 'top_header';
+      document.getElementById('adBrand').value = ad.brandName || '';
+      document.getElementById('adSize').value = ad.size || '';
+      document.getElementById('adImageUrl').value = ad.imageUrl || '';
+      document.getElementById('adTargetUrl').value = ad.targetUrl || '';
+      document.getElementById('adAltText').value = ad.altText || '';
+      document.getElementById('adEnabled').checked = !!ad.enabled;
+
+      document.getElementById('adModal').style.display = 'flex';
+    }
+
+    function openAddSlotModal() {
+      document.getElementById('modalTitle').textContent = '➕ नया विज्ञापन स्लॉट जोड़ें';
+      document.getElementById('editSlotId').value = '';
+      document.getElementById('adForm').reset();
+      document.getElementById('adEnabled').checked = true;
+      document.getElementById('adModal').style.display = 'flex';
+    }
+
+    function closeAdModal() {
+      document.getElementById('adModal').style.display = 'none';
+    }
+
+    async function toggleAdSlot(slotId) {
+      try {
+        const res = await fetch('/api/admin/ads/toggle/' + slotId, { method: 'POST' });
+        const json = await res.json();
+        if (json.success) {
+          showToast('स्लॉट स्थिति अपडेट हो गई!');
+          loadAds();
+        }
+      } catch (err) {
+        showToast('त्रुटि: ' + err.message, true);
+      }
+    }
+
+    async function deleteAdSlot(slotId) {
+      if (!confirm('क्या आप वाकई इस विज्ञापन स्लॉट को हटाना चाहते हैं?')) return;
+      try {
+        const res = await fetch('/api/admin/ads/' + slotId, { method: 'DELETE' });
+        const json = await res.json();
+        if (json.success) {
+          showToast('स्लॉट हटा दिया गया!');
+          loadAds();
+        }
+      } catch (err) {
+        showToast('त्रुटि: ' + err.message, true);
+      }
+    }
+
+    async function saveAdSlot(e) {
+      e.preventDefault();
+      const btn = document.getElementById('saveBtn');
+      btn.disabled = true;
+      btn.textContent = 'सुरक्षित किया जा रहा है...';
+
+      const payload = {
+        slotId: document.getElementById('editSlotId').value || undefined,
+        name: document.getElementById('adName').value.trim(),
+        position: document.getElementById('adPosition').value,
+        brandName: document.getElementById('adBrand').value.trim(),
+        size: document.getElementById('adSize').value.trim(),
+        imageUrl: document.getElementById('adImageUrl').value.trim(),
+        targetUrl: document.getElementById('adTargetUrl').value.trim(),
+        altText: document.getElementById('adAltText').value.trim(),
+        enabled: document.getElementById('adEnabled').checked
+      };
+
+      try {
+        const res = await fetch('/api/admin/ads', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+        if (json.success) {
+          showToast('✅ विज्ञापन सफलतापूर्वक अपडेट और लाइव हो गया!');
+          closeAdModal();
+          loadAds();
+        } else {
+          showToast('त्रुटि: ' + (json.message || 'सुरक्षित नहीं हो सका'), true);
+        }
+      } catch (err) {
+        showToast('तकनीकी समस्या: ' + err.message, true);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '💾 विज्ञापन सुरक्षित करें व लाइव करें';
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // Init
+    loadAds();
+  </script>
+</body>
+</html>

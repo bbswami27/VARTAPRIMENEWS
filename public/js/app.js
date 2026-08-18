@@ -723,6 +723,98 @@ function filterDistricts(query) {
   renderDistrictsWeather(filtered);
 }
 
+// ==========================================
+// DYNAMIC ADVERTISEMENT ENGINE (AD DEPTT)
+// ==========================================
+let currentLoadedAds = [];
+
+async function loadAndRenderAds() {
+  try {
+    const res = await fetch('/api/ads');
+    const json = await res.json();
+    if (!json.success || !json.data) return;
+    currentLoadedAds = json.data;
+
+    // 1. Top Header Ad
+    const topAd = currentLoadedAds.find(a => a.position === 'top_header');
+    renderAdToSlot('ad-slot-top_header', topAd);
+
+    // 2. Below Ticker Ad
+    const belowTickerAd = currentLoadedAds.find(a => a.position === 'below_ticker');
+    renderAdToSlot('ad-slot-below_ticker', belowTickerAd);
+
+    // 3. Right Sidebar Top Ad
+    const sidebarAd = currentLoadedAds.find(a => a.position === 'sidebar_top');
+    renderAdToSlot('ad-slot-sidebar_top', sidebarAd);
+
+    // 4. Inside Article Modal Ad
+    const modalAd = currentLoadedAds.find(a => a.position === 'inside_modal');
+    renderAdToSlot('ad-slot-inside_modal', modalAd);
+
+    // 5. Bottom Sticky Floating Ad
+    const stickyAd = currentLoadedAds.find(a => a.position === 'bottom_sticky');
+    renderStickyBottomAd(stickyAd);
+
+  } catch (err) {
+    console.warn('[Ad Error] Failed loading ads:', err);
+  }
+}
+
+function renderAdToSlot(slotElementId, ad) {
+  const container = document.getElementById(slotElementId);
+  if (!container) return;
+  if (!ad || !ad.imageUrl) {
+    container.innerHTML = '';
+    container.style.display = 'none';
+    return;
+  }
+
+  container.style.display = 'flex';
+  container.innerHTML = `
+    <a href="${ad.targetUrl || '/advt-agency.html'}" target="_blank" rel="noopener sponsored" class="ad-banner-link" onclick="recordAdClick('${ad.slotId}')">
+      <span class="ad-label-tag">विज्ञापन • ${escapeHtml(ad.brandName || 'प्रायोजित')}</span>
+      <img src="${ad.imageUrl}" class="ad-banner-img" alt="${escapeHtml(ad.altText || ad.name || 'Ad Banner')}" loading="lazy" onerror="this.parentElement.style.display='none';">
+    </a>
+  `;
+
+  recordAdView(ad.slotId);
+}
+
+function renderStickyBottomAd(ad) {
+  const container = document.getElementById('ad-slot-bottom_sticky');
+  if (!container) return;
+  if (!ad || !ad.imageUrl) {
+    container.innerHTML = '';
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="ad-slot-sticky-bar" id="stickyBottomBar">
+      <div style="display:flex;align-items:center;gap:12px;overflow:hidden;">
+        <span class="ad-label-tag" style="position:static;">प्रायोजित</span>
+        <a href="${ad.targetUrl || '/advt-agency.html'}" target="_blank" rel="noopener sponsored" onclick="recordAdClick('${ad.slotId}')" style="color:#fff;text-decoration:none;font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:10px;">
+          <img src="${ad.imageUrl}" style="height:32px;border-radius:4px;object-fit:cover;" alt="Ad">
+          <span>${escapeHtml(ad.altText || ad.brandName || 'विशेष ऑफर')}</span>
+          <span style="background:var(--press-red);color:#fff;font-size:11px;padding:2px 8px;border-radius:3px;font-weight:700;">विवरण देखें ➔</span>
+        </a>
+      </div>
+      <button class="ad-sticky-close" onclick="document.getElementById('stickyBottomBar').style.display='none';" title="विज्ञापन बंद करें">&times;</button>
+    </div>
+  `;
+}
+
+function recordAdClick(slotId) {
+  try {
+    fetch('/api/ads/click/' + slotId, { method: 'POST' });
+  } catch (_) {}
+}
+
+function recordAdView(slotId) {
+  try {
+    fetch('/api/ads/view/' + slotId, { method: 'POST' });
+  } catch (_) {}
+}
+
 // Close modal on Escape key or outside click
 window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeArticleModal();
@@ -737,12 +829,14 @@ document.addEventListener('DOMContentLoaded', () => {
   loadNews();
   loadPanipatWeather();
   loadHaryanaWeather();
+  loadAndRenderAds();
 
   // Auto refresh news every 3 minutes
   setInterval(() => {
     loadNews();
     loadBreakingNews();
     loadCategoryCounts();
+    loadAndRenderAds();
   }, 180000);
 
   // Auto refresh weather every 10 minutes

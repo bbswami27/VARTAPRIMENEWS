@@ -14,6 +14,100 @@ const REJECTED_FILE = path.join(DATA_DIR, 'rejected.json');
 const FEEDS_FILE = path.join(DATA_DIR, 'feeds.json');
 const HISTORY_FILE = path.join(DATA_DIR, 'history.json');
 const STATS_FILE = path.join(DATA_DIR, 'stats.json');
+const ADS_FILE = path.join(DATA_DIR, 'ads.json');
+
+const defaultAds = [
+  {
+    slotId: "top_header",
+    name: "टॉप हेडर बैनर (Top Header Leaderboard)",
+    position: "top_header",
+    size: "728x90 / Full Width",
+    enabled: true,
+    type: "image",
+    imageUrl: "https://images.unsplash.com/photo-1542744094-3a31f272c490?w=1200&auto=format&fit=crop&q=80",
+    targetUrl: "/advt-agency.html",
+    brandName: "वार्ताप्राइम विज्ञापन नेटवर्क",
+    altText: "वार्ताप्राइम पर विज्ञापन दें - लाखों पाठकों तक पहुंचे",
+    customCode: "",
+    impressions: 120,
+    clicks: 14
+  },
+  {
+    slotId: "below_ticker",
+    name: "ब्रेकिंग टिकर के नीचे (Below Breaking Ticker)",
+    position: "below_ticker",
+    size: "970x90 Banner",
+    enabled: true,
+    type: "image",
+    imageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&auto=format&fit=crop&q=80",
+    targetUrl: "/advt-agency.html",
+    brandName: "ब्रांड प्रमोशन पार्टनर",
+    altText: "स्पेशल प्रमोशन बैनर",
+    customCode: "",
+    impressions: 95,
+    clicks: 8
+  },
+  {
+    slotId: "sidebar_top",
+    name: "राइट साइडबार टॉप (Right Sidebar 300x250)",
+    position: "sidebar_top",
+    size: "300x250 Medium Rectangle",
+    enabled: true,
+    type: "image",
+    imageUrl: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600&auto=format&fit=crop&q=80",
+    targetUrl: "/advt-agency.html",
+    brandName: "लोकल व्यापार पार्टनरशिप",
+    altText: "अपने व्यापार का विज्ञापन यहां लगाएं",
+    customCode: "",
+    impressions: 210,
+    clicks: 22
+  },
+  {
+    slotId: "in_feed_1",
+    name: "खबरों के बीच में (In-Feed Native Ad)",
+    position: "in_feed_1",
+    size: "Native Card Size",
+    enabled: true,
+    type: "image",
+    imageUrl: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800&auto=format&fit=crop&q=80",
+    targetUrl: "/advt-agency.html",
+    brandName: "एक्सक्लूसिव स्पॉन्सर",
+    altText: "स्थानीय व्यापार व शोरूम प्रमोशन",
+    customCode: "",
+    impressions: 180,
+    clicks: 19
+  },
+  {
+    slotId: "inside_modal",
+    name: "पूरी खबर के अंदर (Inside Article Modal)",
+    position: "inside_modal",
+    size: "650x120 Banner",
+    enabled: true,
+    type: "image",
+    imageUrl: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800&auto=format&fit=crop&q=80",
+    targetUrl: "/advt-agency.html",
+    brandName: "प्रायोजित पार्टनर",
+    altText: "वार्ताप्राइम विशेष पार्टनर",
+    customCode: "",
+    impressions: 340,
+    clicks: 41
+  },
+  {
+    slotId: "bottom_sticky",
+    name: "नीचे स्टिकी फ्लोटिंग बैनर (Bottom Floating Sticky)",
+    position: "bottom_sticky",
+    size: "Mobile & Desktop 100% Sticky",
+    enabled: false,
+    type: "image",
+    imageUrl: "",
+    targetUrl: "/advt-agency.html",
+    brandName: "फ्लैश ऑफर",
+    altText: "स्पेशल डिस्काउंट व ऑफर्स",
+    customCode: "",
+    impressions: 0,
+    clicks: 0
+  }
+];
 
 // Ensure directory and files exist
 function init() {
@@ -27,6 +121,7 @@ function init() {
     { file: REJECTED_FILE, def: [] },
     { file: FEEDS_FILE, def: defaultFeeds },
     { file: HISTORY_FILE, def: {} },
+    { file: ADS_FILE, def: defaultAds },
     { 
       file: STATS_FILE, 
       def: { 
@@ -624,6 +719,96 @@ const db = {
     if (updatedPending > 0) writeJSON(PENDING_FILE, pending);
 
     return { updatedApproved, updatedPending };
+  },
+
+  // ==========================================
+  // ADVERTISEMENT DEPTT (AD MANAGEMENT)
+  // ==========================================
+  getAds() {
+    return readJSON(ADS_FILE, defaultAds);
+  },
+
+  getPublicAds() {
+    const ads = readJSON(ADS_FILE, defaultAds);
+    return ads.filter(a => a.enabled);
+  },
+
+  saveAd(adData) {
+    const ads = readJSON(ADS_FILE, defaultAds);
+    let slotId = adData.slotId;
+    if (!slotId) {
+      slotId = 'custom_ad_' + Date.now();
+      adData.slotId = slotId;
+    }
+
+    const idx = ads.findIndex(a => a.slotId === slotId);
+    if (idx !== -1) {
+      ads[idx] = {
+        ...ads[idx],
+        ...adData,
+        updatedAt: new Date().toISOString()
+      };
+    } else {
+      ads.push({
+        slotId,
+        name: adData.name || 'कस्टम विज्ञापन स्लॉट',
+        position: adData.position || 'in_feed_custom',
+        size: adData.size || 'Responsive',
+        enabled: adData.enabled !== undefined ? !!adData.enabled : true,
+        type: adData.type || 'image',
+        imageUrl: adData.imageUrl || '',
+        targetUrl: adData.targetUrl || '/advt-agency.html',
+        brandName: adData.brandName || '',
+        altText: adData.altText || '',
+        customCode: adData.customCode || '',
+        impressions: 0,
+        clicks: 0,
+        createdAt: new Date().toISOString()
+      });
+    }
+
+    writeJSON(ADS_FILE, ads);
+    return ads.find(a => a.slotId === slotId);
+  },
+
+  toggleAd(slotId) {
+    const ads = readJSON(ADS_FILE, defaultAds);
+    const ad = ads.find(a => a.slotId === slotId);
+    if (ad) {
+      ad.enabled = !ad.enabled;
+      writeJSON(ADS_FILE, ads);
+      return ad;
+    }
+    return null;
+  },
+
+  deleteAd(slotId) {
+    const ads = readJSON(ADS_FILE, defaultAds);
+    const filtered = ads.filter(a => a.slotId !== slotId);
+    writeJSON(ADS_FILE, filtered);
+    return true;
+  },
+
+  recordAdImpression(slotId) {
+    const ads = readJSON(ADS_FILE, defaultAds);
+    const ad = ads.find(a => a.slotId === slotId);
+    if (ad) {
+      ad.impressions = (ad.impressions || 0) + 1;
+      writeJSON(ADS_FILE, ads);
+      return ad.impressions;
+    }
+    return 0;
+  },
+
+  recordAdClick(slotId) {
+    const ads = readJSON(ADS_FILE, defaultAds);
+    const ad = ads.find(a => a.slotId === slotId);
+    if (ad) {
+      ad.clicks = (ad.clicks || 0) + 1;
+      writeJSON(ADS_FILE, ads);
+      return ad.clicks;
+    }
+    return 0;
   },
 
   updateStats(patch) {
