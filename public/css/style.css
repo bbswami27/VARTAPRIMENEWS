@@ -199,6 +199,23 @@ img {
   color: #fff !important;
 }
 
+.citizen-report-btn {
+  background: linear-gradient(135deg, #B3261E 0%, #7F1B15 100%) !important;
+  color: #FFFFFF !important;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-weight: 700 !important;
+  opacity: 1 !important;
+  box-shadow: 0 1px 4px rgba(179,38,30,0.4);
+  letter-spacing: 0.02em;
+}
+
+.citizen-report-btn:hover {
+  background: linear-gradient(135deg, #7F1B15 0%, #5E1410 100%) !important;
+  color: #FFE259 !important;
+  transform: translateY(-1px);
+}
+
 /* ===== Masthead with Tricolor Flag & Sovereign Map ===== */
 .masthead {
   background: var(--paper);
@@ -388,6 +405,80 @@ img {
   height: 100%;
   object-fit: contain;
   background: #fff;
+}
+
+/* ===== Citizen Reporter Sidebar Card ===== */
+.citizen-reporter-card {
+  background: linear-gradient(145deg, #7F1B15 0%, #B3261E 60%, #991B1B 100%);
+  border-radius: var(--radius-sm);
+  padding: 18px 16px;
+  color: #FFFFFF;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 16px rgba(179, 38, 30, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  position: relative;
+  overflow: hidden;
+}
+
+.citizen-reporter-card::after {
+  content: '📢';
+  position: absolute;
+  right: -10px;
+  bottom: -15px;
+  font-size: 70px;
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+.citizen-card-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.22);
+  color: #FFE259;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  letter-spacing: 0.03em;
+}
+
+.citizen-card-title {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.35;
+  margin-bottom: 6px;
+}
+
+.citizen-card-desc {
+  font-size: 12.5px;
+  color: #FEE2E2;
+  line-height: 1.45;
+  margin-bottom: 14px;
+}
+
+.citizen-card-btn {
+  display: block;
+  width: 100%;
+  background: #FFFFFF;
+  color: #7F1B15;
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 700;
+  text-align: center;
+  padding: 8px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  transition: all 0.2s ease;
+}
+
+.citizen-card-btn:hover {
+  background: #FFE259;
+  color: #5E1410;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
 }
 
 /* ===== Static Sidebar ChatterPatter Sponsored Ad Card ===== */
