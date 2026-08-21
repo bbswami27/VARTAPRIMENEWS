@@ -9,7 +9,15 @@ const db = require('./db/database');
 const { initScheduler, triggerNow } = require('./services/scheduler');
 const { rewriteTitle, rewriteContent, rewriteArticle } = require('./services/rewriter');
 const { getHaryanaWeather, getPanipatWeather } = require('./services/weatherService');
-const { HARYANA_DISTRICTS, STATES_DATA } = require('./services/locations');
+const { 
+  HARYANA_DISTRICTS, 
+  STATES_DATA, 
+  DELHI_AREAS, 
+  LOCATION_DICTIONARY,
+  normalizeLocation, 
+  reverseGeocode, 
+  detectLocationFromIP 
+} = require('./services/locations');
 const { getContextualInternetImage, internetTopicPhotos } = require('./services/rssFetcher');
 
 const app = express();
@@ -66,12 +74,67 @@ app.get('/api/weather/haryana', async (req, res) => {
   }
 });
 
-// GET /api/news - List approved news (optional category, search, district, state, limit)
+// GET /api/news - List approved news (supports query-level location prioritization, search, category, pagination)
 app.get('/api/news', (req, res) => {
   try {
-    const { category, search, district, state, limit } = req.query;
-    const news = db.getApproved({ category, search, district, state, limit });
+    const { 
+      category, 
+      search, 
+      district, 
+      state, 
+      city, 
+      region, 
+      userCity, 
+      userRegion, 
+      ranked, 
+      limit, 
+      offset, 
+      page 
+    } = req.query;
+
+    const effectiveLimit = limit ? parseInt(limit) : undefined;
+    const effectiveOffset = offset ? parseInt(offset) : (page ? (parseInt(page) - 1) * (effectiveLimit || 20) : undefined);
+
+    const news = db.getApproved({ 
+      category, 
+      search, 
+      district: district || city, 
+      state: state || region,
+      city: city || district,
+      region: region || state,
+      userCity: userCity || city, 
+      userRegion: userRegion || region, 
+      ranked: ranked === 'true' || ranked === '1' || !!userCity || !!userRegion,
+      limit: effectiveLimit,
+      offset: effectiveOffset
+    });
+
     res.json({ success: true, count: news.length, data: news });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// GET /api/news/local - Dedicated local news feed for viewer's city/region
+app.get('/api/news/local', (req, res) => {
+  try {
+    const { userCity, userRegion, city, region, limit } = req.query;
+    const finalCity = userCity || city;
+    const finalRegion = userRegion || region;
+    const norm = normalizeLocation(finalCity, finalRegion);
+
+    const localNews = db.getLocalNews({
+      userCity: norm.cityHindi,
+      userRegion: norm.regionHindi,
+      limit: limit ? parseInt(limit) : 10
+    });
+
+    res.json({
+      success: true,
+      userLocation: norm,
+      count: localNews.length,
+      data: localNews
+    });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }

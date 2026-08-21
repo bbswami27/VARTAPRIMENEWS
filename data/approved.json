@@ -19,7 +19,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:26.947Z"
+    "approvedAt": "2026-08-18T12:13:26.947Z",
+    "city": "नई दिल्ली",
+    "region": "दिल्ली"
   },
   {
     "id": "news_1787054973392_lc1ede",
@@ -41,7 +43,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:26.878Z"
+    "approvedAt": "2026-08-18T12:13:26.878Z",
+    "city": "नई दिल्ली",
+    "region": "दिल्ली"
   },
   {
     "id": "news_1787054973392_uosluj",
@@ -63,7 +67,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:26.804Z"
+    "approvedAt": "2026-08-18T12:13:26.804Z",
+    "city": "नई दिल्ली",
+    "region": "दिल्ली"
   },
   {
     "id": "news_1787054973393_ultzf7",
@@ -85,7 +91,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:26.742Z"
+    "approvedAt": "2026-08-18T12:13:26.742Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973393_pqdnsn",
@@ -107,7 +115,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:26.677Z"
+    "approvedAt": "2026-08-18T12:13:26.677Z",
+    "city": "सभी जिले",
+    "region": "उत्तर प्रदेश"
   },
   {
     "id": "news_1787054973393_3i7z71",
@@ -129,7 +139,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:26.599Z"
+    "approvedAt": "2026-08-18T12:13:26.599Z",
+    "city": "नई दिल्ली",
+    "region": "दिल्ली"
   },
   {
     "id": "news_1787054973393_ek05wr",
@@ -151,7 +163,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:26.517Z"
+    "approvedAt": "2026-08-18T12:13:26.517Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973393_2hv2n4",
@@ -173,7 +187,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:26.444Z"
+    "approvedAt": "2026-08-18T12:13:26.444Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973393_afjaku",
@@ -195,7 +211,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:26.388Z"
+    "approvedAt": "2026-08-18T12:13:26.388Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973393_y7xlom",
@@ -217,7 +235,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:26.329Z"
+    "approvedAt": "2026-08-18T12:13:26.329Z",
+    "city": "नई दिल्ली",
+    "region": "दिल्ली"
   },
   {
     "id": "news_1787054973393_7lgi17",
@@ -239,7 +259,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:26.250Z"
+    "approvedAt": "2026-08-18T12:13:26.250Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973393_2mnn4p",
@@ -261,7 +283,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:26.174Z"
+    "approvedAt": "2026-08-18T12:13:26.174Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973393_19zngl",
@@ -283,7 +307,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:26.095Z"
+    "approvedAt": "2026-08-18T12:13:26.095Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973393_hz4l03",
@@ -305,7 +331,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:26.024Z"
+    "approvedAt": "2026-08-18T12:13:26.024Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973393_olt9dx",
@@ -327,7 +355,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:25.939Z"
+    "approvedAt": "2026-08-18T12:13:25.939Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973393_pguvh3",
@@ -349,7 +379,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:25.883Z"
+    "approvedAt": "2026-08-18T12:13:25.883Z",
+    "city": "नई दिल्ली",
+    "region": "दिल्ली"
   },
   {
     "id": "news_1787054973393_e4df03",
@@ -371,7 +403,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:25.829Z"
+    "approvedAt": "2026-08-18T12:13:25.829Z",
+    "city": "नोएडा",
+    "region": "उत्तर प्रदेश"
   },
   {
     "id": "news_1787054973393_lgl3d9",
@@ -393,7 +427,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:25.777Z"
+    "approvedAt": "2026-08-18T12:13:25.777Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973393_6gtohm",
@@ -415,7 +451,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:25.715Z"
+    "approvedAt": "2026-08-18T12:13:25.715Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973393_w8g9j0",
@@ -437,7 +475,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:25.655Z"
+    "approvedAt": "2026-08-18T12:13:25.655Z",
+    "city": "पाली",
+    "region": "राजस्थान"
   },
   {
     "id": "news_1787054973393_rzl9u4",
@@ -459,7 +499,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:25.587Z"
+    "approvedAt": "2026-08-18T12:13:25.587Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973393_s0vthr",
@@ -481,7 +523,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:25.533Z"
+    "approvedAt": "2026-08-18T12:13:25.533Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973393_60sl4l",
@@ -503,7 +547,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:25.472Z"
+    "approvedAt": "2026-08-18T12:13:25.472Z",
+    "city": "नई दिल्ली",
+    "region": "दिल्ली"
   },
   {
     "id": "news_1787054973393_l4uruy",
@@ -525,7 +571,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:25.417Z"
+    "approvedAt": "2026-08-18T12:13:25.417Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973393_xh30rp",
@@ -547,7 +595,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:25.361Z"
+    "approvedAt": "2026-08-18T12:13:25.361Z",
+    "city": "नई दिल्ली",
+    "region": "दिल्ली"
   },
   {
     "id": "news_1787054973393_kf73ua",
@@ -569,7 +619,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:25.308Z"
+    "approvedAt": "2026-08-18T12:13:25.308Z",
+    "city": "नई दिल्ली",
+    "region": "दिल्ली"
   },
   {
     "id": "news_1787054973393_kk6exa",
@@ -591,7 +643,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:25.249Z"
+    "approvedAt": "2026-08-18T12:13:25.249Z",
+    "city": "लखनऊ",
+    "region": "उत्तर प्रदेश"
   },
   {
     "id": "news_1787054973393_rb612o",
@@ -613,7 +667,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:25.197Z"
+    "approvedAt": "2026-08-18T12:13:25.197Z",
+    "city": "सभी जिले",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973393_ijjrc9",
@@ -635,7 +691,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:25.146Z"
+    "approvedAt": "2026-08-18T12:13:25.146Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973393_c64eu1",
@@ -657,7 +715,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:25.095Z"
+    "approvedAt": "2026-08-18T12:13:25.095Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973393_8u28i5",
@@ -679,7 +739,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:25.036Z"
+    "approvedAt": "2026-08-18T12:13:25.036Z",
+    "city": "पटना",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973393_hx4e7l",
@@ -701,7 +763,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:24.983Z"
+    "approvedAt": "2026-08-18T12:13:24.983Z",
+    "city": "साकेत",
+    "region": "दिल्ली"
   },
   {
     "id": "news_1787054973393_v16dqd",
@@ -723,7 +787,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:24.930Z"
+    "approvedAt": "2026-08-18T12:13:24.930Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973393_kbmdve",
@@ -745,7 +811,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:24.875Z"
+    "approvedAt": "2026-08-18T12:13:24.875Z",
+    "city": "सभी जिले",
+    "region": "पंजाब"
   },
   {
     "id": "news_1787054973393_dogww4",
@@ -767,7 +835,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:24.812Z"
+    "approvedAt": "2026-08-18T12:13:24.812Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973393_9k3gii",
@@ -789,7 +859,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:24.757Z"
+    "approvedAt": "2026-08-18T12:13:24.757Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973393_46okb0",
@@ -811,7 +883,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:24.703Z"
+    "approvedAt": "2026-08-18T12:13:24.703Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973393_jnu4mr",
@@ -833,7 +907,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:24.649Z"
+    "approvedAt": "2026-08-18T12:13:24.649Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973393_udw6fp",
@@ -855,7 +931,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:24.585Z"
+    "approvedAt": "2026-08-18T12:13:24.585Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973393_gj0js3",
@@ -877,7 +955,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:24.530Z"
+    "approvedAt": "2026-08-18T12:13:24.530Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973393_08oc7s",
@@ -899,7 +979,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:24.476Z"
+    "approvedAt": "2026-08-18T12:13:24.476Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973393_s9cju2",
@@ -921,7 +1003,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:24.419Z"
+    "approvedAt": "2026-08-18T12:13:24.419Z",
+    "city": "जयपुर",
+    "region": "राजस्थान"
   },
   {
     "id": "news_1787054973393_pae98w",
@@ -943,7 +1027,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:24.352Z"
+    "approvedAt": "2026-08-18T12:13:24.352Z",
+    "city": "सभी जिले",
+    "region": "उत्तर प्रदेश"
   },
   {
     "id": "news_1787054973393_nqieil",
@@ -965,7 +1051,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:24.291Z"
+    "approvedAt": "2026-08-18T12:13:24.291Z",
+    "city": "नई दिल्ली",
+    "region": "दिल्ली"
   },
   {
     "id": "news_1787054973393_r20lnf",
@@ -987,7 +1075,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:24.232Z"
+    "approvedAt": "2026-08-18T12:13:24.232Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973393_wrnafa",
@@ -1009,7 +1099,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:24.176Z"
+    "approvedAt": "2026-08-18T12:13:24.176Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973393_zmlikp",
@@ -1031,7 +1123,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:24.089Z"
+    "approvedAt": "2026-08-18T12:13:24.089Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973393_lt4urk",
@@ -1053,7 +1147,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:23.980Z"
+    "approvedAt": "2026-08-18T12:13:23.980Z",
+    "city": "नई दिल्ली",
+    "region": "दिल्ली"
   },
   {
     "id": "news_1787054973394_s0kt6y",
@@ -1075,7 +1171,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:23.855Z"
+    "approvedAt": "2026-08-18T12:13:23.855Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973394_crowjs",
@@ -1097,7 +1195,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:23.737Z"
+    "approvedAt": "2026-08-18T12:13:23.737Z",
+    "city": "सभी जिले",
+    "region": "उत्तर प्रदेश"
   },
   {
     "id": "news_1787054973394_3qr9on",
@@ -1119,7 +1219,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:23.624Z"
+    "approvedAt": "2026-08-18T12:13:23.624Z",
+    "city": "लखनऊ",
+    "region": "उत्तर प्रदेश"
   },
   {
     "id": "news_1787054973394_9fib9s",
@@ -1141,7 +1243,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:23.511Z"
+    "approvedAt": "2026-08-18T12:13:23.511Z",
+    "city": "नई दिल्ली",
+    "region": "दिल्ली"
   },
   {
     "id": "news_1787054973394_djdzoa",
@@ -1163,7 +1267,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:23.424Z"
+    "approvedAt": "2026-08-18T12:13:23.424Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973394_rt30hq",
@@ -1185,7 +1291,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:23.333Z"
+    "approvedAt": "2026-08-18T12:13:23.333Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973394_ltklcb",
@@ -1207,7 +1315,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:23.271Z"
+    "approvedAt": "2026-08-18T12:13:23.271Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973394_vj5nfu",
@@ -1229,7 +1339,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:23.216Z"
+    "approvedAt": "2026-08-18T12:13:23.216Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973394_46i0o5",
@@ -1251,7 +1363,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:23.163Z"
+    "approvedAt": "2026-08-18T12:13:23.163Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973394_mijm2i",
@@ -1273,7 +1387,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:23.110Z"
+    "approvedAt": "2026-08-18T12:13:23.110Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973394_8z9c0o",
@@ -1295,7 +1411,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:23.047Z"
+    "approvedAt": "2026-08-18T12:13:23.047Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973394_7ov314",
@@ -1317,7 +1435,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:22.993Z"
+    "approvedAt": "2026-08-18T12:13:22.993Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973394_l6vr1u",
@@ -1339,7 +1459,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:22.938Z"
+    "approvedAt": "2026-08-18T12:13:22.938Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973394_laoebf",
@@ -1361,7 +1483,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:22.883Z"
+    "approvedAt": "2026-08-18T12:13:22.883Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973394_5cre71",
@@ -1383,7 +1507,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:22.816Z"
+    "approvedAt": "2026-08-18T12:13:22.816Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973394_gojjl4",
@@ -1405,7 +1531,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:22.757Z"
+    "approvedAt": "2026-08-18T12:13:22.757Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973394_e4b896",
@@ -1427,7 +1555,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:22.702Z"
+    "approvedAt": "2026-08-18T12:13:22.702Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973394_0z6mg1",
@@ -1449,7 +1579,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:22.651Z"
+    "approvedAt": "2026-08-18T12:13:22.651Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973394_2rt06d",
@@ -1471,7 +1603,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:22.591Z"
+    "approvedAt": "2026-08-18T12:13:22.591Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973394_edblvi",
@@ -1493,7 +1627,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:22.532Z"
+    "approvedAt": "2026-08-18T12:13:22.532Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973394_2pucwf",
@@ -1515,7 +1651,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:22.476Z"
+    "approvedAt": "2026-08-18T12:13:22.476Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973394_xhyx4e",
@@ -1537,7 +1675,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:22.418Z"
+    "approvedAt": "2026-08-18T12:13:22.418Z",
+    "city": "पाली",
+    "region": "राजस्थान"
   },
   {
     "id": "news_1787054973394_7409z5",
@@ -1559,7 +1699,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:22.349Z"
+    "approvedAt": "2026-08-18T12:13:22.349Z",
+    "city": "नई दिल्ली",
+    "region": "दिल्ली"
   },
   {
     "id": "news_1787054973394_k5s0yf",
@@ -1581,7 +1723,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:22.285Z"
+    "approvedAt": "2026-08-18T12:13:22.285Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973394_swz6n2",
@@ -1603,7 +1747,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:22.229Z"
+    "approvedAt": "2026-08-18T12:13:22.229Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973394_zhluhf",
@@ -1625,7 +1771,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:22.175Z"
+    "approvedAt": "2026-08-18T12:13:22.175Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973394_uhr97d",
@@ -1647,7 +1795,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:22.112Z"
+    "approvedAt": "2026-08-18T12:13:22.112Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973394_rlj2uh",
@@ -1669,7 +1819,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:22.052Z"
+    "approvedAt": "2026-08-18T12:13:22.052Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973395_1sb47e",
@@ -1691,7 +1843,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:21.997Z"
+    "approvedAt": "2026-08-18T12:13:21.997Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973395_7k6xsc",
@@ -1713,7 +1867,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:21.947Z"
+    "approvedAt": "2026-08-18T12:13:21.947Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973395_juzc8z",
@@ -1735,7 +1891,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:21.886Z"
+    "approvedAt": "2026-08-18T12:13:21.886Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973395_uzgvsh",
@@ -1757,7 +1915,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:21.833Z"
+    "approvedAt": "2026-08-18T12:13:21.833Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973395_4e3zkq",
@@ -1779,7 +1939,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:21.779Z"
+    "approvedAt": "2026-08-18T12:13:21.779Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973395_b9q2df",
@@ -1801,7 +1963,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:21.727Z"
+    "approvedAt": "2026-08-18T12:13:21.727Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973395_1imu45",
@@ -1823,7 +1987,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:21.666Z"
+    "approvedAt": "2026-08-18T12:13:21.666Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973395_zeg00m",
@@ -1845,7 +2011,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:21.611Z"
+    "approvedAt": "2026-08-18T12:13:21.611Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973395_yfegvf",
@@ -1867,7 +2035,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:21.554Z"
+    "approvedAt": "2026-08-18T12:13:21.554Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973395_3v00zw",
@@ -1889,7 +2059,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:21.495Z"
+    "approvedAt": "2026-08-18T12:13:21.495Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973395_ik06xd",
@@ -1911,7 +2083,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:21.420Z"
+    "approvedAt": "2026-08-18T12:13:21.420Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973395_9g1hmb",
@@ -1933,7 +2107,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:21.364Z"
+    "approvedAt": "2026-08-18T12:13:21.364Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973395_ztiz6q",
@@ -1955,7 +2131,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:21.309Z"
+    "approvedAt": "2026-08-18T12:13:21.309Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973395_codqab",
@@ -1977,7 +2155,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:21.252Z"
+    "approvedAt": "2026-08-18T12:13:21.252Z",
+    "city": "नई दिल्ली",
+    "region": "दिल्ली"
   },
   {
     "id": "news_1787054973395_658mi5",
@@ -1999,7 +2179,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:21.191Z"
+    "approvedAt": "2026-08-18T12:13:21.191Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973395_nupukx",
@@ -2021,7 +2203,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:21.134Z"
+    "approvedAt": "2026-08-18T12:13:21.134Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973395_qczq0h",
@@ -2043,7 +2227,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:21.083Z"
+    "approvedAt": "2026-08-18T12:13:21.083Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973395_j3564t",
@@ -2065,7 +2251,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:21.031Z"
+    "approvedAt": "2026-08-18T12:13:21.031Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973395_s8rdf1",
@@ -2087,7 +2275,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:20.972Z"
+    "approvedAt": "2026-08-18T12:13:20.972Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973395_ef8im5",
@@ -2109,7 +2299,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:20.914Z"
+    "approvedAt": "2026-08-18T12:13:20.914Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973396_fntwin",
@@ -2131,7 +2323,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:20.858Z"
+    "approvedAt": "2026-08-18T12:13:20.858Z",
+    "city": "नई दिल्ली",
+    "region": "दिल्ली"
   },
   {
     "id": "news_1787054973396_6f14fy",
@@ -2153,7 +2347,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:20.805Z"
+    "approvedAt": "2026-08-18T12:13:20.805Z",
+    "city": "पाली",
+    "region": "राजस्थान"
   },
   {
     "id": "news_1787054973396_dbe1d8",
@@ -2175,7 +2371,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:20.742Z"
+    "approvedAt": "2026-08-18T12:13:20.742Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973396_hch6f7",
@@ -2197,7 +2395,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:20.686Z"
+    "approvedAt": "2026-08-18T12:13:20.686Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973396_cnkw14",
@@ -2219,7 +2419,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:20.633Z"
+    "approvedAt": "2026-08-18T12:13:20.633Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973396_weybx7",
@@ -2241,7 +2443,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:20.581Z"
+    "approvedAt": "2026-08-18T12:13:20.581Z",
+    "city": "मुंबई",
+    "region": "महाराष्ट्र"
   },
   {
     "id": "news_1787054973396_f1kfla",
@@ -2263,7 +2467,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:20.515Z"
+    "approvedAt": "2026-08-18T12:13:20.515Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973396_ajvqn0",
@@ -2285,7 +2491,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:20.458Z"
+    "approvedAt": "2026-08-18T12:13:20.458Z",
+    "city": "पाली",
+    "region": "राजस्थान"
   },
   {
     "id": "news_1787054973396_tn1vbv",
@@ -2307,7 +2515,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:20.401Z"
+    "approvedAt": "2026-08-18T12:13:20.401Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973396_uzf13b",
@@ -2329,7 +2539,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:20.348Z"
+    "approvedAt": "2026-08-18T12:13:20.348Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973396_ryt9fy",
@@ -2351,7 +2563,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:20.283Z"
+    "approvedAt": "2026-08-18T12:13:20.283Z",
+    "city": "नई दिल्ली",
+    "region": "दिल्ली"
   },
   {
     "id": "news_1787054973396_f7wiz8",
@@ -2373,7 +2587,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:20.223Z"
+    "approvedAt": "2026-08-18T12:13:20.223Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973396_37o40v",
@@ -2395,7 +2611,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:20.168Z"
+    "approvedAt": "2026-08-18T12:13:20.168Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973396_1m6sy1",
@@ -2417,7 +2635,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:20.118Z"
+    "approvedAt": "2026-08-18T12:13:20.118Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973396_nm8dye",
@@ -2439,7 +2659,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:20.061Z"
+    "approvedAt": "2026-08-18T12:13:20.061Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973396_oy3klm",
@@ -2461,7 +2683,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:20.009Z"
+    "approvedAt": "2026-08-18T12:13:20.009Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973396_77vhw9",
@@ -2483,7 +2707,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:19.956Z"
+    "approvedAt": "2026-08-18T12:13:19.956Z",
+    "city": "सभी जिले",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973396_1g2f7q",
@@ -2505,7 +2731,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:19.904Z"
+    "approvedAt": "2026-08-18T12:13:19.904Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973396_t2fvt0",
@@ -2527,7 +2755,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:19.846Z"
+    "approvedAt": "2026-08-18T12:13:19.846Z",
+    "city": "सभी जिले",
+    "region": "उत्तर प्रदेश"
   },
   {
     "id": "news_1787054973396_ntdy5i",
@@ -2549,7 +2779,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:19.787Z"
+    "approvedAt": "2026-08-18T12:13:19.787Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973396_zncjts",
@@ -2571,7 +2803,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:19.725Z"
+    "approvedAt": "2026-08-18T12:13:19.725Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973396_gzrdv1",
@@ -2593,7 +2827,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:19.670Z"
+    "approvedAt": "2026-08-18T12:13:19.670Z",
+    "city": "नई दिल्ली",
+    "region": "दिल्ली"
   },
   {
     "id": "news_1787054973396_4b1p5p",
@@ -2615,7 +2851,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:19.612Z"
+    "approvedAt": "2026-08-18T12:13:19.612Z",
+    "city": "पंचकूला",
+    "region": "हरियाणा"
   },
   {
     "id": "news_1787054973396_4j2m80",
@@ -2637,7 +2875,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:19.557Z"
+    "approvedAt": "2026-08-18T12:13:19.557Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973396_q6l13s",
@@ -2659,7 +2899,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:19.493Z"
+    "approvedAt": "2026-08-18T12:13:19.493Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973396_b3n4c1",
@@ -2681,7 +2923,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:19.434Z"
+    "approvedAt": "2026-08-18T12:13:19.434Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973396_idih8t",
@@ -2703,7 +2947,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:19.375Z"
+    "approvedAt": "2026-08-18T12:13:19.375Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973396_jd9ko1",
@@ -2725,7 +2971,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:19.318Z"
+    "approvedAt": "2026-08-18T12:13:19.318Z",
+    "city": "सभी जिले",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973396_u04mmm",
@@ -2747,7 +2995,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:19.254Z"
+    "approvedAt": "2026-08-18T12:13:19.254Z",
+    "city": "सभी जिले",
+    "region": "हरियाणा"
   },
   {
     "id": "news_1787054973396_6bkvjp",
@@ -2769,7 +3019,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:19.199Z"
+    "approvedAt": "2026-08-18T12:13:19.199Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973396_25zxlr",
@@ -2791,7 +3043,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:19.137Z"
+    "approvedAt": "2026-08-18T12:13:19.137Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973396_jsjqae",
@@ -2813,7 +3067,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:19.081Z"
+    "approvedAt": "2026-08-18T12:13:19.081Z",
+    "city": "सभी जिले",
+    "region": "राजस्थान"
   },
   {
     "id": "news_1787054973396_o127x1",
@@ -2835,7 +3091,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:19.020Z"
+    "approvedAt": "2026-08-18T12:13:19.020Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973396_1ew9fi",
@@ -2857,7 +3115,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:18.962Z"
+    "approvedAt": "2026-08-18T12:13:18.962Z",
+    "city": "सागर",
+    "region": "मध्य प्रदेश"
   },
   {
     "id": "news_1787054973396_kxlt09",
@@ -2879,7 +3139,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:18.903Z"
+    "approvedAt": "2026-08-18T12:13:18.903Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973396_i4k0he",
@@ -2901,7 +3163,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:18.833Z"
+    "approvedAt": "2026-08-18T12:13:18.833Z",
+    "city": "गया",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973396_jsyj9s",
@@ -2923,7 +3187,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:18.778Z"
+    "approvedAt": "2026-08-18T12:13:18.778Z",
+    "city": "सभी जिले",
+    "region": "राजस्थान"
   },
   {
     "id": "news_1787054973396_tqndz1",
@@ -2945,7 +3211,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:18.720Z"
+    "approvedAt": "2026-08-18T12:13:18.720Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973396_xq0pwl",
@@ -2967,7 +3235,9 @@
     "isHero": true,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:13:18.660Z"
+    "approvedAt": "2026-08-18T12:13:18.660Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973396_0lqcdb",
@@ -2989,7 +3259,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:12:13.442Z"
+    "approvedAt": "2026-08-18T12:12:13.442Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973396_3nvo05",
@@ -3011,7 +3283,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:12:13.384Z"
+    "approvedAt": "2026-08-18T12:12:13.384Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973396_c30vcg",
@@ -3033,7 +3307,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:12:13.325Z"
+    "approvedAt": "2026-08-18T12:12:13.325Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973397_j2j2od",
@@ -3055,7 +3331,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:12:13.272Z"
+    "approvedAt": "2026-08-18T12:12:13.272Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973397_egnwer",
@@ -3077,7 +3355,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:12:13.219Z"
+    "approvedAt": "2026-08-18T12:12:13.219Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973397_hdirnv",
@@ -3099,7 +3379,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:12:13.154Z"
+    "approvedAt": "2026-08-18T12:12:13.154Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973397_ikaj6j",
@@ -3121,7 +3403,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:12:13.096Z"
+    "approvedAt": "2026-08-18T12:12:13.096Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973397_8htiz8",
@@ -3143,7 +3427,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:12:13.038Z"
+    "approvedAt": "2026-08-18T12:12:13.038Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973397_8dit8w",
@@ -3165,7 +3451,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:12:12.983Z"
+    "approvedAt": "2026-08-18T12:12:12.983Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973397_8o25lb",
@@ -3187,7 +3475,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:12:12.920Z"
+    "approvedAt": "2026-08-18T12:12:12.920Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973397_5imzdq",
@@ -3209,7 +3499,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:12:12.863Z"
+    "approvedAt": "2026-08-18T12:12:12.863Z",
+    "city": "सभी जिले",
+    "region": "महाराष्ट्र"
   },
   {
     "id": "news_1787054973397_y584rx",
@@ -3231,7 +3523,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:12:12.807Z"
+    "approvedAt": "2026-08-18T12:12:12.807Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973397_83ibho",
@@ -3253,7 +3547,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:12:12.749Z"
+    "approvedAt": "2026-08-18T12:12:12.749Z",
+    "city": "सभी जिले",
+    "region": "बिहार"
   },
   {
     "id": "news_1787054973397_nubtpx",
@@ -3275,7 +3571,9 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:12:12.686Z"
+    "approvedAt": "2026-08-18T12:12:12.686Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   },
   {
     "id": "news_1787054973397_12arp8",
@@ -3297,6 +3595,8 @@
     "isHero": false,
     "isRewritten": true,
     "views": 0,
-    "approvedAt": "2026-08-18T12:12:12.601Z"
+    "approvedAt": "2026-08-18T12:12:12.601Z",
+    "city": "मुख्य",
+    "region": "राष्ट्रीय / देश"
   }
 ]

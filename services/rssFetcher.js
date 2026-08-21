@@ -528,8 +528,10 @@ async function fetchFeed(feed) {
         description: description || (contentText ? contentText.slice(0, 300) : ''),
         content: contentText,
         category: feed.category,
-        state: loc.state,
-        district: loc.district,
+        state: loc.state || loc.region || 'हरियाणा',
+        district: loc.district || loc.city || 'पानीपत',
+        region: loc.region || loc.state || 'हरियाणा',
+        city: loc.city || loc.district || 'पानीपत',
         source: sourceName,
         link: link,
         imageurl: imageUrl || '',
@@ -538,8 +540,10 @@ async function fetchFeed(feed) {
 
       // 4. Paraphrase and Structure into Clean Journalistic Hindi
       const rewritten = rewriteArticle(rawArticle);
-      rewritten.state = loc.state;
-      rewritten.district = loc.district;
+      rewritten.state = loc.state || loc.region || 'हरियाणा';
+      rewritten.district = loc.district || loc.city || 'पानीपत';
+      rewritten.region = loc.region || loc.state || 'हरियाणा';
+      rewritten.city = loc.city || loc.district || 'पानीपत';
       articles.push(rewritten);
     }
 

@@ -1,11 +1,12 @@
 // ==========================================================================
-// VartaPrimeNews - Persistent JSON Database Layer
+// VartaPrimeNews - Persistent JSON Database Layer with Location Prioritization
 // ==========================================================================
 
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const defaultFeeds = require('../services/defaultFeeds');
+const { normalizeLocation, isMatchingCity, isMatchingRegion } = require('../services/locations');
 
 const DATA_DIR = path.join(__dirname, '..', 'data');
 const PENDING_FILE = path.join(DATA_DIR, 'pending.json');
@@ -109,7 +110,20 @@ const defaultAds = [
   }
 ];
 
-// Ensure directory and files exist
+// Helper to normalize location fields on any article object
+function normalizeArticleLocation(article) {
+  const norm = normalizeLocation(article.city || article.district, article.region || article.state);
+  return {
+    ...article,
+    city: norm.cityHindi,
+    region: norm.regionHindi,
+    district: norm.cityHindi,
+    state: norm.regionHindi,
+    publishedAt: article.publishedAt || article.approvedAt || article.fetchedAt || new Date().toISOString()
+  };
+}
+
+// Ensure directory, files exist, and migrate schema
 function init() {
   if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -139,6 +153,40 @@ function init() {
     if (!fs.existsSync(item.file)) {
       fs.writeFileSync(item.file, JSON.stringify(item.def, null, 2), 'utf8');
     }
+  }
+
+  // Schema Migration: Ensure all existing articles have city, region, publishedAt
+  migrateLocationSchema();
+}
+
+function migrateLocationSchema() {
+  try {
+    let changed = false;
+    
+    // 1. Approved articles
+    const approved = readJSON(APPROVED_FILE, []);
+    const updatedApproved = approved.map(item => {
+      if (!item.city || !item.region || !item.publishedAt) {
+        changed = true;
+        return normalizeArticleLocation(item);
+      }
+      return item;
+    });
+    if (changed) writeJSON(APPROVED_FILE, updatedApproved);
+
+    // 2. Pending articles
+    let pendingChanged = false;
+    const pending = readJSON(PENDING_FILE, []);
+    const updatedPending = pending.map(item => {
+      if (!item.city || !item.region || !item.publishedAt) {
+        pendingChanged = true;
+        return normalizeArticleLocation(item);
+      }
+      return item;
+    });
+    if (pendingChanged) writeJSON(PENDING_FILE, updatedPending);
+  } catch (err) {
+    console.error('Error during location schema migration:', err);
   }
 }
 
@@ -180,7 +228,7 @@ function generateHash(str) {
   return crypto.createHash('md5').update(str || '').digest('hex');
 }
 
-// Initial placeholder approved news so site looks alive on first boot
+// Initial placeholder approved news
 function getInitialApprovedNews() {
   const now = new Date().toISOString();
   return [
@@ -190,6 +238,10 @@ function getInitialApprovedNews() {
       description: "हरियाणा सरकार ने राज्य में उद्योगों को बढ़ावा देने और स्थानीय युवाओं के लिए रोजगार के नए अवसर पैदा करने हेतु नई व्यापक औद्योगिक नीति को हरी झंडी दे दी है। इसके तहत आगामी 3 वर्षों में भारी निवेश आकर्षित करने का लक्ष्य रखा गया है।",
       content: "हरियाणा सरकार ने राज्य में उद्योगों को बढ़ावा देने और स्थानीय युवाओं के लिए रोजगार के नए अवसर पैदा करने हेतु नई व्यापक औद्योगिक नीति को हरी झंडी दे दी है। इसके तहत आगामी 3 वर्षों में भारी निवेश आकर्षित करने का लक्ष्य रखा गया है। सरकार ने विभिन्न जिलों में इंडस्ट्रियल हब और विशेष आर्थिक क्षेत्रों (SEZ) के बुनियादी ढांचे को मजबूत करने की योजना भी बनाई है।",
       category: "हरियाणा",
+      state: "हरियाणा",
+      district: "पानीपत",
+      region: "हरियाणा",
+      city: "पानीपत",
       source: "वार्ताप्राइम डेस्क",
       link: "#",
       imageurl: "https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=900&auto=format&fit=crop&q=80",
@@ -206,6 +258,10 @@ function getInitialApprovedNews() {
       description: "संसद के वर्तमान सत्र में आज कई महत्वपूर्ण प्रस्तावों और राष्ट्रीय विकास योजनाओं पर गहन चर्चा हुई। जनहित की योजनाओं को समयबद्ध तरीके से पूरा करने का संकल्प दोहराया गया।",
       content: "संसद के वर्तमान सत्र में आज कई महत्वपूर्ण प्रस्तावों और राष्ट्रीय विकास योजनाओं पर गहन चर्चा हुई। जनहित की योजनाओं को समयबद्ध तरीके से पूरा करने का संकल्प दोहराया गया।",
       category: "राजनीति",
+      state: "राष्ट्रीय / देश",
+      district: "नई दिल्ली",
+      region: "राष्ट्रीय / देश",
+      city: "नई दिल्ली",
       source: "राष्ट्रीय संवाद",
       link: "#",
       imageurl: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&auto=format&fit=crop&q=80",
@@ -221,6 +277,10 @@ function getInitialApprovedNews() {
       description: "भारतीय खिलाड़ियों ने शानदार खेल भावना और दृढ़ संकल्प का परिचय देते हुए अंतरराष्ट्रीय प्रतियोगिता में ऐतिहासिक जीत दर्ज की।",
       content: "भारतीय खिलाड़ियों ने शानदार खेल भावना और दृढ़ संकल्प का परिचय देते हुए अंतरराष्ट्रीय प्रतियोगिता में ऐतिहासिक जीत दर्ज की। देशभर में खेल प्रेमियों में भारी उत्साह देखने को मिला।",
       category: "खेल",
+      state: "राष्ट्रीय / देश",
+      district: "मुख्य",
+      region: "राष्ट्रीय / देश",
+      city: "मुख्य",
       source: "खेल डेस्क",
       link: "#",
       imageurl: "https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=600&auto=format&fit=crop&q=80",
@@ -236,6 +296,10 @@ function getInitialApprovedNews() {
       description: "भारतीय वित्तीय बाजारों में निवेशकों का भरोसा लगातार बढ़ रहा है। प्रमुख सूचकांकों में आज मजबूती के साथ कारोबार हुआ।",
       content: "भारतीय वित्तीय बाजारों में निवेशकों का भरोसा लगातार बढ़ रहा है। प्रमुख सूचकांकों में आज मजबूती के साथ कारोबार हुआ।",
       category: "बिज़नेस",
+      state: "महाराष्ट्र",
+      district: "मुंबई",
+      region: "महाराष्ट्र",
+      city: "मुंबई",
       source: "मार्केट रिपोर्ट",
       link: "#",
       imageurl: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&auto=format&fit=crop&q=80",
@@ -251,6 +315,10 @@ function getInitialApprovedNews() {
       description: "क्षेत्र में कनेक्टिविटी को तेज और सुगम बनाने के लिए नए एलिवेटेड कॉरिडोर और बाईपास परियोजनाओं का काम तेजी से आगे बढ़ रहा है।",
       content: "क्षेत्र में कनेक्टिविटी को तेज और सुगम बनाने के लिए नए एलिवेटेड कॉरिडोर और बाईपास परियोजनाओं का काम तेजी से आगे बढ़ रहा है। इससे दैनिक यात्रियों को भारी राहत मिलेगी।",
       category: "हरियाणा",
+      state: "हरियाणा",
+      district: "पानीपत",
+      region: "हरियाणा",
+      city: "पानीपत",
       source: "हरियाणा वार्ता",
       link: "#",
       imageurl: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=600&auto=format&fit=crop&q=80",
@@ -263,10 +331,74 @@ function getInitialApprovedNews() {
   ];
 }
 
+// --------------------------------------------------------------------------
+// RANKING LOGIC: Tier 1 (City) -> Tier 2 (Region) -> Tier 3 (General)
+// Within each tier: publishedAt DESC
+// --------------------------------------------------------------------------
+function rankArticles(articles = [], options = {}) {
+  if (!Array.isArray(articles) || !articles.length) return [];
+  const { userCity, userRegion } = options;
+
+  // Pure date sort helper
+  const sortByDateDesc = (a, b) => {
+    const timeA = new Date(a.publishedAt || a.approvedAt || a.fetchedAt || 0).getTime();
+    const timeB = new Date(b.publishedAt || b.approvedAt || b.fetchedAt || 0).getTime();
+    return timeB - timeA;
+  };
+
+  // If no location provided, fallback to pure date ordering
+  if (!userCity && !userRegion) {
+    return [...articles].sort(sortByDateDesc);
+  }
+
+  const norm = normalizeLocation(userCity, userRegion);
+  const targetCity = norm.cityHindi;
+  const targetRegion = norm.regionHindi;
+
+  const tier1 = []; // Exact City Match
+  const tier2 = []; // Same Region / State Match
+  const tier3 = []; // Other / National / General
+
+  for (const article of articles) {
+    const artCity = article.city || article.district || '';
+    const artRegion = article.region || article.state || '';
+    const text = ((article.title || '') + ' ' + (article.description || '')).toLowerCase();
+
+    // Check Tier 1: City match
+    const isCityMatch = isMatchingCity(artCity, targetCity) ||
+      (targetCity && text.includes(targetCity.toLowerCase()));
+
+    if (isCityMatch) {
+      tier1.push({ ...article, _rankTier: 1, _matchedLocation: targetCity });
+      continue;
+    }
+
+    // Check Tier 2: Region / State match
+    const isRegionMatch = isMatchingRegion(artRegion, targetRegion) ||
+      (targetRegion && targetRegion !== 'राष्ट्रीय / देश' && text.includes(targetRegion.toLowerCase()));
+
+    if (isRegionMatch) {
+      tier2.push({ ...article, _rankTier: 2, _matchedLocation: targetRegion });
+      continue;
+    }
+
+    // Tier 3: Everything else
+    tier3.push({ ...article, _rankTier: 3, _matchedLocation: 'General' });
+  }
+
+  // Sort each tier by publishedAt DESC
+  tier1.sort(sortByDateDesc);
+  tier2.sort(sortByDateDesc);
+  tier3.sort(sortByDateDesc);
+
+  return [...tier1, ...tier2, ...tier3];
+}
+
 // ---------------- Database Methods ----------------
 
 const db = {
   init,
+  rankArticles,
 
   // Check if article was already ingested before
   isDuplicate(url, title) {
@@ -297,14 +429,18 @@ const db = {
       if (history[hash]) continue; // Skip duplicate
 
       history[hash] = Date.now();
+      const normLoc = normalizeLocation(article.city || article.district, article.region || article.state);
+
       const newsItem = {
         id: 'news_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
         title: article.title ? article.title.trim() : 'ताज़ा समाचार',
         description: article.description ? article.description.trim() : '',
         content: article.content || article.description || '',
         category: article.category || 'देश',
-        state: article.state || 'हरियाणा',
-        district: article.district || 'पानीपत',
+        state: normLoc.regionHindi,
+        district: normLoc.cityHindi,
+        region: normLoc.regionHindi,
+        city: normLoc.cityHindi,
         source: article.source || 'RSS Feed',
         sourceType: article.sourceType || 'rss',
         reporterName: article.reporterName || '',
@@ -344,15 +480,19 @@ const db = {
   // Add submission from field reporter to PENDING
   addReporterSubmission(data) {
     const pending = readJSON(PENDING_FILE, []);
+    const normLoc = normalizeLocation(data.city || data.district, data.region || data.state);
+
     const newsItem = {
       id: 'rep_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
       title: data.title ? data.title.trim() : 'विशेष ग्राउंड रिपोर्ट',
       description: data.description ? data.description.trim() : (data.content || '').slice(0, 240),
       content: data.content || data.description || '',
       category: data.category || 'हरियाणा',
-      state: data.state || 'हरियाणा',
-      district: data.district || 'पानीपत',
-      source: data.reporterName ? `${data.reporterName} (${data.district || 'ब्यूरो'})` : 'VartaPrimeNews संवाददाता',
+      state: normLoc.regionHindi,
+      district: normLoc.cityHindi,
+      region: normLoc.regionHindi,
+      city: normLoc.cityHindi,
+      source: data.reporterName ? `${data.reporterName} (${normLoc.cityHindi || 'ब्यूरो'})` : 'VartaPrimeNews संवाददाता',
       sourceType: data.sourceType || 'reporter',
       submissionPlatform: data.submissionPlatform || 'web',
       reporterName: data.reporterName || 'फील्ड रिपोर्टर',
@@ -380,10 +520,10 @@ const db = {
       list = list.filter(item => item.category === filter.category);
     }
     if (filter.district && filter.district !== 'all') {
-      list = list.filter(item => item.district === filter.district);
+      list = list.filter(item => isMatchingCity(item.city || item.district, filter.district));
     }
     if (filter.state && filter.state !== 'all') {
-      list = list.filter(item => item.state === filter.state);
+      list = list.filter(item => isMatchingRegion(item.region || item.state, filter.state));
     }
     if (filter.search) {
       const q = filter.search.toLowerCase();
@@ -392,26 +532,73 @@ const db = {
     return list;
   },
 
-  // Get Approved (Public Live) News with State & District Filters
+  // Get Approved (Public Live) News with Query-Level Location Ranking and Filtering
   getApproved(filter = {}) {
     let list = readJSON(APPROVED_FILE, []);
+
+    // Filter by Category
     if (filter.category && filter.category !== 'all' && filter.category !== 'home') {
       list = list.filter(item => item.category === filter.category);
     }
+
+    // Filter by Explicit District/City
     if (filter.district && filter.district !== 'all') {
-      list = list.filter(item => item.district === filter.district);
+      list = list.filter(item => isMatchingCity(item.city || item.district, filter.district));
+    } else if (filter.city && filter.city !== 'all') {
+      list = list.filter(item => isMatchingCity(item.city || item.district, filter.city));
     }
+
+    // Filter by Explicit State/Region
     if (filter.state && filter.state !== 'all') {
-      list = list.filter(item => item.state === filter.state);
+      list = list.filter(item => isMatchingRegion(item.region || item.state, filter.state));
+    } else if (filter.region && filter.region !== 'all') {
+      list = list.filter(item => isMatchingRegion(item.region || item.state, filter.region));
     }
+
+    // Search filter
     if (filter.search) {
       const q = filter.search.toLowerCase();
       list = list.filter(item => (item.title && item.title.toLowerCase().includes(q)) || (item.description && item.description.toLowerCase().includes(q)));
     }
+
+    // Query-Level Tiered Ranking by User Location
+    if (filter.userCity || filter.userRegion || filter.ranked) {
+      list = rankArticles(list, {
+        userCity: filter.userCity || filter.city,
+        userRegion: filter.userRegion || filter.region
+      });
+    } else {
+      // Default: Sort by publishedAt DESC
+      list.sort((a, b) => {
+        const timeA = new Date(a.publishedAt || a.approvedAt || 0).getTime();
+        const timeB = new Date(b.publishedAt || b.approvedAt || 0).getTime();
+        return timeB - timeA;
+      });
+    }
+
+    // Pagination: Offset & Limit
+    const offset = parseInt(filter.offset) || 0;
+    if (offset > 0) {
+      list = list.slice(offset);
+    }
+
     if (filter.limit) {
       list = list.slice(0, parseInt(filter.limit));
     }
+
     return list;
+  },
+
+  // Dedicated query to fetch only local/regional stories for a user
+  getLocalNews(options = {}) {
+    const { userCity, userRegion, limit = 10 } = options;
+    const all = readJSON(APPROVED_FILE, []);
+    const ranked = rankArticles(all, { userCity, userRegion });
+    // Filter tier 1 (city) and tier 2 (region)
+    const localOnly = ranked.filter(item => item._rankTier === 1 || item._rankTier === 2);
+    // If local stories are fewer than limit, include top tier 3 stories so feed is never empty
+    const result = localOnly.length >= 3 ? localOnly : ranked;
+    return result.slice(0, limit);
   },
 
   // Get single news by ID
@@ -433,11 +620,12 @@ const db = {
       const approved = readJSON(APPROVED_FILE, []);
       const approvedIndex = approved.findIndex(item => item.id === id);
       if (approvedIndex !== -1) {
-        approved[approvedIndex] = {
+        const merged = {
           ...approved[approvedIndex],
           ...overrides,
           updatedAt: new Date().toISOString()
         };
+        approved[approvedIndex] = normalizeArticleLocation(merged);
         writeJSON(APPROVED_FILE, approved);
         return approved[approvedIndex];
       }
@@ -445,12 +633,12 @@ const db = {
     }
 
     const [item] = pending.splice(index, 1);
-    const approvedItem = {
+    const approvedItem = normalizeArticleLocation({
       ...item,
       ...overrides,
       status: 'approved',
       approvedAt: new Date().toISOString()
-    };
+    });
 
     const approved = readJSON(APPROVED_FILE, []);
     approved.unshift(approvedItem);
@@ -490,11 +678,11 @@ const db = {
 
     for (const item of pending) {
       if (idSet.has(item.id)) {
-        newlyApproved.push({
+        newlyApproved.push(normalizeArticleLocation({
           ...item,
           status: 'approved',
           approvedAt: new Date().toISOString()
-        });
+        }));
       } else {
         remainingPending.push(item);
       }
@@ -537,20 +725,24 @@ const db = {
   // Create manual news written by admin
   createManualArticle(data) {
     const approved = readJSON(APPROVED_FILE, []);
+    const normLoc = normalizeLocation(data.city || data.district, data.region || data.state);
+
     const newsItem = {
       id: 'manual_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
       title: data.title ? data.title.trim() : 'विशेष समाचार',
       description: data.description ? data.description.trim() : '',
       content: data.content || data.description || '',
       category: data.category || 'हरियाणा',
-      state: data.state || 'हरियाणा',
-      district: data.district || 'पानीपत',
+      state: normLoc.regionHindi,
+      district: normLoc.cityHindi,
+      region: normLoc.regionHindi,
+      city: normLoc.cityHindi,
       source: data.source || 'वार्ताप्राइम एक्सक्लूसिव',
       sourceType: 'manual',
       reporterName: data.reporterName || '',
       link: data.link || '#',
       imageurl: data.imageurl || '',
-      publishedAt: new Date().toISOString(),
+      publishedAt: data.publishedAt || new Date().toISOString(),
       approvedAt: new Date().toISOString(),
       status: 'approved',
       isBreaking: !!data.isBreaking,
@@ -564,7 +756,7 @@ const db = {
     return newsItem;
   },
 
-  // Delete an article (from approved or pending)
+  // Delete an article
   deleteArticle(id) {
     const approved = readJSON(APPROVED_FILE, []);
     const appIdx = approved.findIndex(item => item.id === id);
@@ -602,7 +794,6 @@ const db = {
     const approved = readJSON(APPROVED_FILE, []);
     const item = approved.find(i => i.id === id);
     if (item) {
-      // remove isHero from others if setting this one to hero
       const nextState = !item.isHero;
       if (nextState) {
         approved.forEach(i => i.isHero = false);
@@ -721,9 +912,7 @@ const db = {
     return { updatedApproved, updatedPending };
   },
 
-  // ==========================================
-  // ADVERTISEMENT DEPTT (AD MANAGEMENT)
-  // ==========================================
+  // AD MANAGEMENT
   getAds() {
     return readJSON(ADS_FILE, defaultAds);
   },
