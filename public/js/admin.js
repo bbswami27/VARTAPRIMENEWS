@@ -145,11 +145,13 @@ async function loadPending() {
 
       // Filter by source type if requested
       if (srcType === 'reporter') {
-        list = list.filter(item => item.sourceType === 'reporter' || String(item.sourceType || '').endsWith('_reporter'));
+        list = list.filter(item => item.sourceType === 'reporter');
       } else if (srcType === 'citizen') {
         list = list.filter(item => item.sourceType === 'citizen_reporter');
+      } else if (srcType === 'wire') {
+        list = list.filter(item => item.sourceType === 'news_agency' || String(item.source || '').includes('वायर'));
       } else if (srcType === 'rss') {
-        list = list.filter(item => item.sourceType !== 'reporter');
+        list = list.filter(item => item.sourceType === 'rss' || (!item.sourceType && !item.reporterName));
       }
 
       currentPendingList = list;
@@ -181,9 +183,18 @@ function renderPendingGrid() {
       ? `<img src="${escapeHtml(item.imageurl)}" alt="thumbnail" onerror="this.style.display='none'">`
       : '';
 
-    const reporterBadge = item.sourceType === 'reporter'
-      ? `<span style="background:#256D4A;color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:12px;margin-right:6px;">🎤 रिपोर्टर: ${escapeHtml(item.reporterName || 'ग्राउंड')}</span>`
-      : '';
+    let sourceBadge = '';
+    if (item.sourceType === 'reporter') {
+      sourceBadge = `<span style="background:#059669;color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:12px;margin-right:6px;">🎤 अधिकृत रिपोर्टर: ${escapeHtml(item.reporterName || 'ग्राउंड')}</span>`;
+    } else if (item.sourceType === 'citizen_reporter') {
+      sourceBadge = `<span style="background:#D97706;color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:12px;margin-right:6px;">📱 नागरिक रिपोर्टर: ${escapeHtml(item.reporterName || 'नागरिक')}</span>`;
+    } else if (item.sourceType === 'news_agency' || String(item.source || '').includes('वायर')) {
+      sourceBadge = `<span style="background:#0284C7;color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:12px;margin-right:6px;">📡 एजेंसी वायर: ${escapeHtml(item.source || 'Wire')}</span>`;
+    } else if (item.sourceType === 'advt_agency') {
+      sourceBadge = `<span style="background:#B45309;color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:12px;margin-right:6px;">📢 विज्ञापन बुकिंग: ${escapeHtml(item.source || 'Ad')}</span>`;
+    } else {
+      sourceBadge = `<span style="background:#475569;color:#fff;font-size:11px;font-weight:600;padding:2px 8px;border-radius:12px;margin-right:6px;">📰 RSS फीड: ${escapeHtml(item.source || 'RSS')}</span>`;
+    }
 
     const districtTag = item.district
       ? `<span style="background:rgba(224,141,60,0.15);color:#E08D3C;font-size:11px;font-weight:600;padding:2px 7px;border-radius:4px;margin-right:6px;">📍 ${escapeHtml(item.district)}</span>`
@@ -200,9 +211,8 @@ function renderPendingGrid() {
 
         <div class="pending-body">
           <div class="pending-source-line">
-            ${reporterBadge}
+            ${sourceBadge}
             ${districtTag}
-            <span>🏷️ ${escapeHtml(item.source)}</span>
             <span style="color:#10B981;font-size:11px;font-weight:600;">🛡️ कॉपीराइट सुरक्षित</span>
             <span>⏱️ ${timeAgo(item.publishedAt || item.fetchedAt)}</span>
           </div>

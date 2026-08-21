@@ -866,6 +866,13 @@ const db = {
     const feeds = readJSON(FEEDS_FILE, defaultFeeds);
     const stats = readJSON(STATS_FILE, {});
 
+    let nextFetchTime = stats.nextFetchTime;
+    if (!nextFetchTime || new Date(nextFetchTime).getTime() <= Date.now()) {
+      nextFetchTime = new Date(Date.now() + 30 * 60 * 1000).toISOString();
+      stats.nextFetchTime = nextFetchTime;
+      writeJSON(STATS_FILE, stats);
+    }
+
     return {
       pendingCount: pending.length,
       approvedCount: approved.length,
@@ -874,8 +881,8 @@ const db = {
       totalFeedsCount: feeds.length,
       lastFetchTime: stats.lastFetchTime,
       lastFetchStatus: stats.lastFetchStatus,
-      nextFetchTime: stats.nextFetchTime,
-      autoApproveEnabled: !!stats.autoApproveEnabled
+      nextFetchTime: nextFetchTime,
+      autoApproveEnabled: stats.autoApproveEnabled !== undefined ? !!stats.autoApproveEnabled : false
     };
   },
 
