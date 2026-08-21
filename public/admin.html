@@ -100,13 +100,13 @@
           🎯 सभी समाचारों की तस्वीरें AI से ठीक करें
         </button>
       </div>
-      <div style="display:flex;align-items:center;gap:10px;font-size:13.5px;">
-        <span>ऑटो-अप्रूवल मोड:</span>
-        <label style="position:relative;display:inline-block;width:40px;height:22px;">
-          <input type="checkbox" id="autoApproveToggle" style="opacity:0;width:0;height:0;">
-          <span style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#334155;transition:.3s;border-radius:22px;" id="sliderSpan"></span>
+      <div style="display:flex;align-items:center;gap:10px;font-size:13.5px;background:#0F172A;padding:6px 12px;border-radius:6px;border:1px solid #334155;">
+        <span style="font-weight:600;color:#F8FAFC;">⚡ ऑटो-अप्रूवल मोड:</span>
+        <label class="toggle-switch-label" title="ऑटो-अप्रूवल ऑन या ऑफ करें">
+          <input type="checkbox" id="autoApproveToggle" onchange="toggleAutoApprove(this.checked)">
+          <span class="toggle-slider" id="sliderSpan"></span>
         </label>
-        <span style="font-size:12px;color:var(--admin-muted);">(बिना अप्रूवल सीधे लाइव)</span>
+        <span id="autoApproveLabel" style="font-size:12px;color:#94A3B8;">(बिना अप्रूवल सीधे लाइव)</span>
       </div>
     </div>
 

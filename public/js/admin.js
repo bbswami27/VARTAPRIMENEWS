@@ -57,7 +57,10 @@ async function loadStats() {
       document.getElementById('tabApprovedBadge').textContent = stats.approvedCount || 0;
 
       const autoSwitch = document.getElementById('autoApproveToggle');
-      if (autoSwitch) autoSwitch.checked = stats.autoApproveEnabled;
+      if (autoSwitch) {
+        autoSwitch.checked = !!stats.autoApproveEnabled;
+        updateAutoApproveLabel(!!stats.autoApproveEnabled);
+      }
 
       if (stats.nextFetchTime) {
         startCountdown(new Date(stats.nextFetchTime));
@@ -761,12 +764,26 @@ function setupAddFeedForm() {
 // 7. Auto Approve Toggle
 // --------------------------------------------------------------------------
 
+function updateAutoApproveLabel(enabled) {
+  const lbl = document.getElementById('autoApproveLabel');
+  if (lbl) {
+    lbl.innerHTML = enabled
+      ? '<strong style="color:#10B981;">[ 🟢 ऑन - बिना अप्रूवल सीधे लाइव ]</strong>'
+      : '<strong style="color:#F59E0B;">[ 🔴 ऑफ - आपके 1-क्लिक अप्रूवल के लिए रुकेंगी ]</strong>';
+  }
+}
+
+function toggleAutoApprove(enabled) {
+  updateAutoApproveLabel(enabled);
+}
+
 function setupAutoApproveToggle() {
   const toggle = document.getElementById('autoApproveToggle');
   if (!toggle) return;
 
   toggle.addEventListener('change', async (e) => {
     const enabled = e.target.checked;
+    updateAutoApproveLabel(enabled);
     try {
       const res = await fetch(`${API_BASE}/auto-approve`, {
         method: 'POST',
@@ -775,9 +792,13 @@ function setupAutoApproveToggle() {
       });
       const json = await res.json();
       if (json.success) {
-        showToast(enabled ? '⚡ ऑटो-अप्रूवल चालू किया गया (खबरें बिना अप्रूवल तुरंत लाइव होंगी)' : '🛡️ ऑटो-अप्रूवल बंद किया गया (सभी खबरें आपके अप्रूवल के लिए रुकेंगी)');
+        showToast(enabled ? '⚡ ऑटो-अप्रूवल ऑन (खबरें बिना अप्रूवल सीधे लाइव होंगी)' : '🛡️ ऑटो-अप्रूवल ऑफ (खबरें आपके 1-क्लिक अप्रूवल के लिए रुकेंगी)');
       }
     } catch (err) {
+      showToast('त्रुटि हुई।');
+    }
+  });
+}
       showToast('सेटिंग बदलने में त्रुटि।');
     }
   });
