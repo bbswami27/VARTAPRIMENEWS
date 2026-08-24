@@ -2548,3 +2548,79 @@ footer li a:hover {
   padding: 0 8px;
 }
 
+
+.ai-anchor-card{
+  background:#0f172a;
+  color:#fff;
+  border-radius:12px;
+  overflow:hidden;
+  margin-bottom:18px;
+  box-shadow:0 8px 24px rgba(0,0,0,.18);
+}
+
+.ai-anchor-head{
+  padding:14px 16px 8px;
+}
+
+.ai-anchor-head h3{
+  margin:3px 0;
+  font-size:20px;
+}
+
+.ai-anchor-head p{
+  margin:0;
+  color:#cbd5e1;
+  font-size:13px;
+}
+
+.ai-live-badge{
+  display:inline-block;
+  background:#dc2626;
+  color:#fff;
+  font-size:11px;
+  padding:3px 8px;
+  border-radius:20px;
+  font-weight:700;
+}
+
+.ai-anchor-screen{
+  min-height:190px;
+  background:linear-gradient(160deg,#1e293b,#020617);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+  text-align:center;
+}
+
+.ai-anchor-avatar{
+  font-size:70px;
+  margin-bottom:12px;
+}
+
+#aiAnchorHeadline{
+  font-size:17px;
+  line-height:1.45;
+  font-weight:700;
+}
+
+.ai-anchor-controls{
+  display:flex;
+  gap:7px;
+  padding:10px;
+}
+
+.ai-anchor-controls button{
+  flex:1;
+  border:0;
+  border-radius:6px;
+  padding:9px 4px;
+  cursor:pointer;
+  font-weight:700;
+}
+
+.ai-anchor-controls button:first-child{
+  background:#dc2626;
+  color:#fff;
+}
