@@ -378,7 +378,14 @@ app.post('/api/admin/toggle-hero/:id', (req, res) => {
 });
 
 app.get('/api/admin/integrations', (req, res) => {
-  res.json({ success: true, data: integrationStatus() });
+  res.json({
+    success: true,
+    data: {
+      gitpit: false,
+      whatsapp: false,
+      telegram: false
+    }
+  });
 });
 
 // POST /api/admin/fetch-now - Trigger immediate RSS ingestion
