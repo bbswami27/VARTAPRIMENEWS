@@ -858,3 +858,98 @@ if ('serviceWorker' in navigator) {
     });
   });
 }
+
+let aiAnchorNews = [];
+let aiAnchorIndex = 0;
+let aiAnchorSpeaking = false;
+
+function prepareAIAnchorNews() {
+  aiAnchorNews = allLiveNews
+    .filter(n => n.isHero === true || n.isBreaking === true)
+    .slice(0, 10);
+
+  aiAnchorIndex = 0;
+}
+
+function speakCurrentAnchorNews() {
+  if (!aiAnchorNews.length) {
+    prepareAIAnchorNews();
+  }
+
+  if (!aiAnchorNews.length) return;
+
+  window.speechSynthesis.cancel();
+
+  const article = aiAnchorNews[aiAnchorIndex];
+
+  const headlineBox =
+    document.getElementById('aiAnchorHeadline');
+
+  if (headlineBox) {
+    headlineBox.textContent = article.title;
+  }
+
+  const text =
+    `${article.title}. ${article.description || ''}`;
+
+  const speech =
+    new SpeechSynthesisUtterance(text);
+
+  speech.lang = 'hi-IN';
+  speech.rate = 0.9;
+  speech.pitch = 1;
+
+  const voices =
+    window.speechSynthesis.getVoices();
+
+  const hindiVoice = voices.find(v =>
+    String(v.lang).toLowerCase().includes('hi')
+  );
+
+  if (hindiVoice) {
+    speech.voice = hindiVoice;
+  }
+
+  speech.onend = () => {
+    if (!aiAnchorSpeaking) return;
+
+    aiAnchorIndex =
+      (aiAnchorIndex + 1) % aiAnchorNews.length;
+
+    setTimeout(
+      speakCurrentAnchorNews,
+      1200
+    );
+  };
+
+  window.speechSynthesis.speak(speech);
+}
+
+function startAIAnchor() {
+  prepareAIAnchorNews();
+
+  aiAnchorSpeaking = true;
+
+  speakCurrentAnchorNews();
+}
+
+function pauseAIAnchor() {
+  aiAnchorSpeaking = false;
+
+  window.speechSynthesis.cancel();
+}
+
+function nextAIAnchor() {
+  window.speechSynthesis.cancel();
+
+  prepareAIAnchorNews();
+
+  if (!aiAnchorNews.length) return;
+
+  aiAnchorIndex =
+    (aiAnchorIndex + 1) % aiAnchorNews.length;
+
+  aiAnchorSpeaking = true;
+
+  speakCurrentAnchorNews();
+}
