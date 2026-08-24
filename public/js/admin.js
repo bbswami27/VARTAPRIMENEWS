@@ -439,8 +439,6 @@ async function handleAdminPhotoUpload(e) {
   reader.readAsDataURL(file);
 }
 
-}
-
 async function autoMatchModalImage() {
   const title = document.getElementById('editTitle').value.trim();
   const category = document.getElementById('editCategory').value;
