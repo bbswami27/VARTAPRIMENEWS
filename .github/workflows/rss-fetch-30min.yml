@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Wake VartaPrime and trigger RSS ingestion
         env:
-          VARTAPRIME_URL: https://vartaprime-news-1.onrender.com
+          VARTAPRIME_URL: https://vartaprimenews.onrender.com
           ADMIN_USERNAME: ${{ secrets.VARTAPRIME_ADMIN_USERNAME }}
           ADMIN_PASSWORD: ${{ secrets.VARTAPRIME_ADMIN_PASSWORD }}
         shell: bash
