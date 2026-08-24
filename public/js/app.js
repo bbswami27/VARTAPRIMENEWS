@@ -258,8 +258,12 @@ function renderPortal() {
     }
 
     // Limit feed to exactly 25 news (so 5 Hero + 25 Feed = 30 total news on main page)
-    const finalMainFeed = curatedArticles.slice(0, 25);
-    mainDenseGrid.innerHTML = finalMainFeed.map(createCardHTML).join('');
+    const finalMainFeed = allLiveNews
+  .filter(n => n.isHero === true || n.isBreaking === true)
+  .filter(n => n.id !== heroItem?.id)
+  .slice(0, 10);
+
+mainDenseGrid.innerHTML = finalMainFeed.map(createCardHTML).join('');
   }
 
   // 4. Trending in Sidebar (top 6 by views - exclude crime)
