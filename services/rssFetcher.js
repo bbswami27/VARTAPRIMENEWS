@@ -719,3 +719,11 @@ async function fetchAllFeeds() {
     duration
   };
 }
+
+module.exports = {
+  fetchAllFeeds,
+  fetchFeed,
+  getContextualInternetImage,
+  internetTopicPhotos,
+  keywordMap
+};
