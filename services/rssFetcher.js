@@ -557,39 +557,165 @@ async function fetchFeed(feed) {
 // Fetch all active feeds
 async function fetchAllFeeds() {
   const feeds = db.getFeeds().filter(f => f.enabled);
-  console.log(`[RSS Fetcher] Fetching news and internet photos from ${feeds.length} active feeds...`);
+
+  console.log(
+    `[RSS Fetcher] Fetching from ${feeds.length} active feeds...`
+  );
 
   const startTime = Date.now();
-  db.updateStats({ lastFetchStatus: 'इन प्रोसेस... (Fetching...)' });
+
+  db.updateStats({
+    lastFetchStatus: 'इन प्रोसेस... (Fetching...)'
+  });
 
   let allArticles = [];
-  const batchSize = 2; // Lightweight batching for 512MB RAM environments (Render Free Tier)
+
+  const batchSize = 2;
+
   for (let i = 0; i < feeds.length; i += batchSize) {
     const batch = feeds.slice(i, i + batchSize);
-    const results = await Promise.all(batch.map(fetchFeed));
+
+    const results = await Promise.all(
+      batch.map(fetchFeed)
+    );
+
     for (const res of results) {
       allArticles.push(...res);
     }
   }
 
-  const addedCount = db.addPending(allArticles);
-  const duration = ((Date.now() - startTime) / 1000).toFixed(1);
+  // ==================================================
+  // SMART RSS FILTER
+  // Maximum 100 fresh + unique stories
+  // ==================================================
 
-  const nextTime = new Date(Date.now() + 30 * 60 * 1000).toISOString();
+  const MAX_NEWS = 100;
+  const MAX_AGE_MS = 24 * 60 * 60 * 1000;
+  const now = Date.now();
+
+  function normalizeTitle(title = '') {
+    return String(title)
+      .toLowerCase()
+      .replace(/[^\p{L}\p{N}\s]/gu, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function isSimilarTitle(titleA, titleB) {
+    const wordsA = new Set(
+      normalizeTitle(titleA)
+        .split(' ')
+        .filter(w => w.length > 2)
+    );
+
+    const wordsB = new Set(
+      normalizeTitle(titleB)
+        .split(' ')
+        .filter(w => w.length > 2)
+    );
+
+    if (!wordsA.size || !wordsB.size) return false;
+
+    let common = 0;
+
+    for (const word of wordsA) {
+      if (wordsB.has(word)) common++;
+    }
+
+    const score =
+      common / Math.min(wordsA.size, wordsB.size);
+
+    return score >= 0.72;
+  }
+
+  // Latest first
+  allArticles.sort((a, b) => {
+    const timeA = new Date(
+      a.publishedAt || 0
+    ).getTime();
+
+    const timeB = new Date(
+      b.publishedAt || 0
+    ).getTime();
+
+    return timeB - timeA;
+  });
+
+  const selected = [];
+
+  for (const article of allArticles) {
+
+    if (selected.length >= MAX_NEWS) break;
+
+    const title =
+      String(article.title || '').trim();
+
+    // Bad/empty headline
+    if (title.length < 15) continue;
+
+    // Old news reject
+    const publishedTime =
+      new Date(article.publishedAt || 0).getTime();
+
+    if (
+      !Number.isFinite(publishedTime) ||
+      now - publishedTime > MAX_AGE_MS
+    ) {
+      continue;
+    }
+
+    // Already fetched earlier
+    if (
+      db.isDuplicate(
+        article.link,
+        article.title
+      )
+    ) {
+      continue;
+    }
+
+    // Same story from another RSS/source
+    const duplicateStory =
+      selected.some(existing =>
+        isSimilarTitle(
+          existing.title,
+          article.title
+        )
+      );
+
+    if (duplicateStory) continue;
+
+    selected.push(article);
+  }
+
+  const addedCount =
+    db.addPending(selected);
+
+  const duration =
+    ((Date.now() - startTime) / 1000).toFixed(1);
+
+  const nextTime =
+    new Date(
+      Date.now() + 30 * 60 * 1000
+    ).toISOString();
+
   db.updateStats({
     lastFetchTime: new Date().toISOString(),
-    lastFetchStatus: `सफल: ${addedCount} नई खबरें प्राप्त हुईं (${duration}s)`,
+
+    lastFetchStatus:
+      `सफल: ${addedCount} नई unique खबरें प्राप्त हुईं (${duration}s)`,
+
     nextFetchTime: nextTime
   });
 
-  console.log(`[RSS Fetcher] Done! Added ${addedCount} new pending news items with diverse photos in ${duration}s.`);
-  return { addedCount, totalScraped: allArticles.length, duration };
-}
+  console.log(
+    `[RSS Fetcher] Filter: ${allArticles.length} received -> ${selected.length} fresh unique selected -> ${addedCount} added.`
+  );
 
-module.exports = {
-  fetchAllFeeds,
-  fetchFeed,
-  getContextualInternetImage,
-  internetTopicPhotos,
-  keywordMap
-};
+  return {
+    addedCount,
+    totalScraped: allArticles.length,
+    selected: selected.length,
+    duration
+  };
+}
