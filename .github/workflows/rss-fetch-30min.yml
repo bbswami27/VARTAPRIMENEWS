@@ -1,0 +1,55 @@
+name: VartaPrime RSS Fetch Every 30 Minutes
+
+on:
+  schedule:
+    - cron: "0,30 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: vartaprime-rss-fetch
+  cancel-in-progress: false
+
+jobs:
+  fetch-rss:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Wake VartaPrime and trigger RSS ingestion
+        env:
+          VARTAPRIME_URL: https://vartaprime-news-1.onrender.com
+          ADMIN_USERNAME: ${{ secrets.VARTAPRIME_ADMIN_USERNAME }}
+          ADMIN_PASSWORD: ${{ secrets.VARTAPRIME_ADMIN_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          endpoint="${VARTAPRIME_URL%/}/api/admin/fetch-now"
+
+          auth=()
+          if [[ -n "${ADMIN_PASSWORD:-}" ]]; then
+            auth=(-u "${ADMIN_USERNAME:-admin}:${ADMIN_PASSWORD}")
+          fi
+
+          echo "Triggering VartaPrime RSS fetch..."
+          response="$(curl \
+            --fail-with-body \
+            --silent \
+            --show-error \
+            --retry 5 \
+            --retry-all-errors \
+            --retry-delay 20 \
+            --connect-timeout 60 \
+            --max-time 300 \
+            -X POST \
+            "${auth[@]}" \
+            "$endpoint")"
+
+          echo "$response"
+
+          # Treat an already-running fetch as success because either the startup
+          # fetch or the internal scheduler is already doing the same job.
+          if echo "$response" | grep -qiE '"success"[[:space:]]*:[[:space:]]*true|पहले से जारी|already'; then
+            exit 0
+          fi
+
+          echo "RSS trigger did not report success."
+          exit 1
