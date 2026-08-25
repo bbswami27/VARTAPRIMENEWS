@@ -511,6 +511,7 @@ function showToast(msg) {
 // Setup Navigation switching & Dedicated Category Views
 function setupNav() {
   const navButtons = document.querySelectorAll('nav button.nav-btn');
+
   const homeView = document.getElementById('home-view');
   const haryanaView = document.getElementById('haryana-view');
   const deshView = document.getElementById('desh-view');
@@ -518,6 +519,9 @@ function setupNav() {
   const currentaffairsView = document.getElementById('currentaffairs-view');
   const genericView = document.getElementById('generic-view');
 
+  // ------------------------------------------------
+  // Hide all page views
+  // ------------------------------------------------
   const hideAllViews = () => {
     if (homeView) homeView.style.display = 'none';
     if (haryanaView) haryanaView.style.display = 'none';
@@ -527,134 +531,618 @@ function setupNav() {
     if (genericView) genericView.style.display = 'none';
   };
 
+  // ------------------------------------------------
+  // Category aliases
+  // Old + new category names दोनों support होंगे
+  // ------------------------------------------------
+  const categoryAliases = {
+    'दिल्ली NCR': ['दिल्ली NCR', 'दिल्ली', 'Delhi NCR', 'Delhi'],
+    'टेक्नोलॉजी': ['टेक्नोलॉजी', 'Technology', 'तकनीक'],
+    'बिज़नेस': ['बिज़नेस', 'Business', 'व्यापार'],
+    'शिक्षा': ['शिक्षा', 'Education'],
+    'खेल': ['खेल', 'Sports'],
+    'विदेश': ['विदेश', 'World', 'International'],
+    'राजनीति': ['राजनीति', 'Politics'],
+    'स्वास्थ्य': ['स्वास्थ्य', 'Health'],
+    'मनोरंजन': ['मनोरंजन', 'Entertainment'],
+    'धर्म': ['धर्म', 'Religion'],
+    'संपादकीय': ['संपादकीय', 'Editorial']
+  };
+
+  function matchesCategory(article, catName, cat) {
+    const articleCategory = String(article.category || '').trim();
+
+    const aliases =
+      categoryAliases[catName] ||
+      [catName, cat];
+
+    return aliases.some(alias =>
+      String(alias || '').toLowerCase() ===
+      articleCategory.toLowerCase()
+    );
+  }
+
+  // ------------------------------------------------
+  // NAVIGATION
+  // ------------------------------------------------
   navButtons.forEach(btn => {
+
     btn.addEventListener('click', () => {
-      navButtons.forEach(b => b.classList.remove('active'));
+
+      navButtons.forEach(b =>
+        b.classList.remove('active')
+      );
+
       btn.classList.add('active');
-      const cat = btn.dataset.cat;
+
+      const cat = btn.dataset.cat || '';
       const catName = btn.dataset.name || '';
+
       currentCategory = cat;
 
       hideAllViews();
 
+      // HOME
       if (cat === 'home') {
-        if (homeView) homeView.style.display = 'block';
-        renderPortal();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (cat === 'haryana') {
-        if (haryanaView) haryanaView.style.display = 'block';
-        filterHaryanaDistrict('all');
-        haryanaView.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } else if (cat === 'desh') {
-        if (deshView) deshView.style.display = 'block';
-        filterDeshNews();
-        deshView.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } else if (cat === 'yuva') {
-        if (yuvaView) yuvaView.style.display = 'block';
-        const yuvaArticles = allLiveNews.filter(n => 
-          n.category === 'युवा' || 
-          n.category === 'करियर' || 
-          n.title.includes('स्टार्टअप') || 
-          n.title.includes('रोजगार') || 
-          n.title.includes('कौशल') ||
-          n.title.includes('युवा')
-        );
-        const yuvaGrid = document.getElementById('yuvaGrid');
-        if (yuvaGrid) {
-          yuvaGrid.innerHTML = yuvaArticles.length > 0 
-            ? yuvaArticles.map(createCardHTML).join('') 
-            : `<div style="grid-column:1/-1;padding:40px;text-align:center;color:var(--ink-muted);">युवा व करियर संबंधी समाचार लोड हो रहे हैं...</div>`;
-        }
-        yuvaView.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } else if (cat === 'currentaffairs') {
-        if (currentaffairsView) currentaffairsView.style.display = 'block';
-        const caArticles = allLiveNews.filter(n => 
-          n.category === 'समसामयिकी' || 
-          n.category === 'शिक्षा' || 
-          n.title.includes('परीक्षा') || 
-          n.title.includes('नीति') || 
-          n.title.includes('योजना') ||
-          n.title.includes('GK')
-        );
-        const caGrid = document.getElementById('currentAffairsGrid');
-        if (caGrid) {
-          caGrid.innerHTML = caArticles.length > 0 
-            ? caArticles.map(createCardHTML).join('') 
-            : `<div style="grid-column:1/-1;padding:40px;text-align:center;color:var(--ink-muted);">करंट अफेयर्स समाचार लोड हो रहे हैं...</div>`;
-        }
-        currentaffairsView.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } else {
-        // Generic View for other categories (Videsh, Delhi, Business, Shiksha, Khel, Rajniti, Swasthya, Manoranjan, Dharm)
-        if (genericView) {
-          genericView.style.display = 'block';
-          const titleEl = document.getElementById('genericCatTitle');
-          const countEl = document.getElementById('genericCatCount');
-          const gridEl = document.getElementById('genericCatGrid');
 
-          if (titleEl) titleEl.textContent = catName || cat;
-          const filtered = allLiveNews.filter(n => n.category === catName || n.category === cat);
-          if (countEl) countEl.textContent = `${filtered.length} खबरें`;
-          if (gridEl) {
-            gridEl.innerHTML = filtered.length > 0 
-              ? filtered.map(createCardHTML).join('') 
-              : `<div style="grid-column:1/-1;padding:40px;text-align:center;color:var(--ink-muted);background:#fff;border:1px dashed var(--line);">${catName} में अभी कोई समाचार उपलब्ध नहीं है।</div>`;
-          }
-          genericView.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (homeView) {
+          homeView.style.display = 'block';
         }
+
+        renderPortal();
+
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+
+        return;
+      }
+
+      // HARYANA
+      if (cat === 'haryana') {
+
+        if (haryanaView) {
+          haryanaView.style.display = 'block';
+        }
+
+        filterHaryanaDistrict('all');
+
+        if (haryanaView) {
+          haryanaView.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+
+        return;
+      }
+
+      // DESH
+      if (cat === 'desh') {
+
+        if (deshView) {
+          deshView.style.display = 'block';
+        }
+
+        filterDeshNews();
+
+        if (deshView) {
+          deshView.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+
+        return;
+      }
+
+      // YOUTH + CAREER
+      if (cat === 'yuva') {
+
+        if (yuvaView) {
+          yuvaView.style.display = 'block';
+        }
+
+        const yuvaArticles =
+          allLiveNews.filter(n => {
+
+            const text = [
+              n.title,
+              n.description,
+              n.content,
+              n.category
+            ]
+              .filter(Boolean)
+              .join(' ')
+              .toLowerCase();
+
+            return (
+              n.category === 'युवा' ||
+              n.category === 'करियर' ||
+              n.category === 'Career' ||
+              text.includes('युवा') ||
+              text.includes('career') ||
+              text.includes('करियर') ||
+              text.includes('रोजगार') ||
+              text.includes('नौकरी') ||
+              text.includes('भर्ती') ||
+              text.includes('स्टार्टअप') ||
+              text.includes('कौशल')
+            );
+          });
+
+        const yuvaGrid =
+          document.getElementById('yuvaGrid');
+
+        if (yuvaGrid) {
+
+          yuvaGrid.innerHTML =
+            yuvaArticles.length
+              ? yuvaArticles
+                  .map(createCardHTML)
+                  .join('')
+              : `
+                <div style="
+                  grid-column:1/-1;
+                  padding:40px;
+                  text-align:center;
+                  color:var(--ink-muted);
+                ">
+                  युवा व करियर संबंधी समाचार उपलब्ध नहीं हैं।
+                </div>
+              `;
+        }
+
+        if (yuvaView) {
+          yuvaView.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+
+        return;
+      }
+
+      // CURRENT AFFAIRS
+      if (cat === 'currentaffairs') {
+
+        if (currentaffairsView) {
+          currentaffairsView.style.display = 'block';
+        }
+
+        const caArticles =
+          allLiveNews.filter(n => {
+
+            const text = [
+              n.title,
+              n.description,
+              n.content,
+              n.category
+            ]
+              .filter(Boolean)
+              .join(' ')
+              .toLowerCase();
+
+            return (
+              n.category === 'समसामयिकी' ||
+              n.category === 'Current Affairs' ||
+              text.includes('करंट अफेयर्स') ||
+              text.includes('current affairs') ||
+              text.includes('नीति') ||
+              text.includes('योजना') ||
+              text.includes('संसद') ||
+              text.includes('कैबिनेट') ||
+              text.includes('gk')
+            );
+          });
+
+        const caGrid =
+          document.getElementById(
+            'currentAffairsGrid'
+          );
+
+        if (caGrid) {
+
+          caGrid.innerHTML =
+            caArticles.length
+              ? caArticles
+                  .map(createCardHTML)
+                  .join('')
+              : `
+                <div style="
+                  grid-column:1/-1;
+                  padding:40px;
+                  text-align:center;
+                  color:var(--ink-muted);
+                ">
+                  करंट अफेयर्स समाचार उपलब्ध नहीं हैं।
+                </div>
+              `;
+        }
+
+        if (currentaffairsView) {
+          currentaffairsView.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+
+        return;
+      }
+
+      // ------------------------------------------------
+      // ALL OTHER CATEGORIES
+      // ------------------------------------------------
+
+      if (genericView) {
+
+        genericView.style.display = 'block';
+
+        const titleEl =
+          document.getElementById(
+            'genericCatTitle'
+          );
+
+        const countEl =
+          document.getElementById(
+            'genericCatCount'
+          );
+
+        const gridEl =
+          document.getElementById(
+            'genericCatGrid'
+          );
+
+        const filtered =
+          allLiveNews.filter(article =>
+            matchesCategory(
+              article,
+              catName,
+              cat
+            )
+          );
+
+        if (titleEl) {
+          titleEl.textContent =
+            catName || cat;
+        }
+
+        if (countEl) {
+          countEl.textContent =
+            `${filtered.length} खबरें`;
+        }
+
+        if (gridEl) {
+
+          gridEl.innerHTML =
+            filtered.length
+              ? filtered
+                  .map(createCardHTML)
+                  .join('')
+              : `
+                <div style="
+                  grid-column:1/-1;
+                  padding:40px;
+                  text-align:center;
+                  color:var(--ink-muted);
+                  background:#fff;
+                  border:1px dashed var(--line);
+                ">
+                  ${catName} में अभी कोई समाचार उपलब्ध नहीं है।
+                </div>
+              `;
+        }
+
+        genericView.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
       }
     });
   });
 
-  // Search Toggle and Execution
-  const searchBtn = document.getElementById('navSearchBtn');
-  const searchOverlay = document.getElementById('searchOverlay');
-  const searchInput = document.getElementById('searchInput');
-  const searchSubmit = document.getElementById('searchSubmit');
+  // ==================================================
+  // SEARCH
+  // ==================================================
+
+  const searchBtn =
+    document.getElementById('navSearchBtn');
+
+  const searchOverlay =
+    document.getElementById('searchOverlay');
+
+  const searchInput =
+    document.getElementById('searchInput');
+
+  const searchSubmit =
+    document.getElementById('searchSubmit');
 
   if (searchBtn && searchOverlay) {
-    searchBtn.addEventListener('click', () => {
-      searchOverlay.classList.toggle('active');
-      if (searchOverlay.classList.contains('active') && searchInput) {
-        searchInput.focus();
+
+    searchBtn.addEventListener(
+      'click',
+      () => {
+
+        searchOverlay.classList.toggle(
+          'active'
+        );
+
+        if (
+          searchOverlay.classList.contains(
+            'active'
+          ) &&
+          searchInput
+        ) {
+          searchInput.focus();
+        }
       }
-    });
+    );
   }
 
-  const performSearch = () => {
-    const q = (searchInput ? searchInput.value : '').trim().toLowerCase();
+  // ------------------------------------------------
+  // Hindi-English City aliases
+  // ------------------------------------------------
+
+  const cityAliases = {
+
+    'panipat': ['panipat', 'पानीपत'],
+    'पानीपत': ['panipat', 'पानीपत'],
+
+    'gurugram': [
+      'gurugram',
+      'gurgaon',
+      'गुरुग्राम',
+      'गुड़गांव'
+    ],
+
+    'gurgaon': [
+      'gurugram',
+      'gurgaon',
+      'गुरुग्राम',
+      'गुड़गांव'
+    ],
+
+    'गुरुग्राम': [
+      'gurugram',
+      'gurgaon',
+      'गुरुग्राम',
+      'गुड़गांव'
+    ],
+
+    'faridabad': [
+      'faridabad',
+      'फरीदाबाद'
+    ],
+
+    'फरीदाबाद': [
+      'faridabad',
+      'फरीदाबाद'
+    ],
+
+    'rohtak': [
+      'rohtak',
+      'रोहतक'
+    ],
+
+    'रोहतक': [
+      'rohtak',
+      'रोहतक'
+    ],
+
+    'hisar': [
+      'hisar',
+      'हिसार'
+    ],
+
+    'हिसार': [
+      'hisar',
+      'हिसार'
+    ],
+
+    'ambala': [
+      'ambala',
+      'अंबाला',
+      'अम्बाला'
+    ],
+
+    'अंबाला': [
+      'ambala',
+      'अंबाला',
+      'अम्बाला'
+    ],
+
+    'karnal': [
+      'karnal',
+      'करनाल'
+    ],
+
+    'करनाल': [
+      'karnal',
+      'करनाल'
+    ],
+
+    'sonipat': [
+      'sonipat',
+      'सोनीपत'
+    ],
+
+    'सोनीपत': [
+      'sonipat',
+      'सोनीपत'
+    ],
+
+    'rewari': [
+      'rewari',
+      'रेवाड़ी'
+    ],
+
+    'रेवाड़ी': [
+      'rewari',
+      'रेवाड़ी'
+    ],
+
+    'delhi': [
+      'delhi',
+      'दिल्ली',
+      'new delhi',
+      'नई दिल्ली'
+    ],
+
+    'दिल्ली': [
+      'delhi',
+      'दिल्ली',
+      'new delhi',
+      'नई दिल्ली'
+    ],
+
+    'noida': [
+      'noida',
+      'नोएडा'
+    ],
+
+    'नोएडा': [
+      'noida',
+      'नोएडा'
+    ]
+  };
+
+  function performSearch() {
+
+    const originalQuery =
+      (searchInput
+        ? searchInput.value
+        : ''
+      ).trim();
+
+    const q =
+      originalQuery.toLowerCase();
+
     if (!q) {
-      document.querySelector('nav button.nav-btn[data-cat="home"]').click();
+
+      const homeButton =
+        document.querySelector(
+          'nav button.nav-btn[data-cat="home"]'
+        );
+
+      if (homeButton) {
+        homeButton.click();
+      }
+
       return;
     }
 
-    const filtered = allLiveNews.filter(n => 
-      (n.title && n.title.toLowerCase().includes(q)) || 
-      (n.description && n.description.toLowerCase().includes(q))
-    );
+    const searchTerms =
+      cityAliases[q] || [q];
+
+    const filtered =
+      allLiveNews.filter(article => {
+
+        const searchableText = [
+          article.title,
+          article.description,
+          article.content,
+          article.category,
+          article.district,
+          article.city,
+          article.state,
+          article.region,
+          article.source
+        ]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase();
+
+        return searchTerms.some(term =>
+          searchableText.includes(
+            String(term).toLowerCase()
+          )
+        );
+      });
 
     hideAllViews();
+
     if (genericView) {
-      genericView.style.display = 'block';
-      const titleEl = document.getElementById('genericCatTitle');
-      const countEl = document.getElementById('genericCatCount');
-      const gridEl = document.getElementById('genericCatGrid');
 
-      if (titleEl) titleEl.textContent = `खोज परिणाम: "${q}"`;
-      if (countEl) countEl.textContent = `${filtered.length} परिणाम`;
-      if (gridEl) {
-        gridEl.innerHTML = filtered.length > 0 
-          ? filtered.map(createCardHTML).join('') 
-          : `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--ink-muted);background:#fff;border:1px dashed var(--line);border-radius:4px;"><h3>"${q}" से संबंधित कोई समाचार नहीं मिला।</h3></div>`;
+      genericView.style.display =
+        'block';
+
+      const titleEl =
+        document.getElementById(
+          'genericCatTitle'
+        );
+
+      const countEl =
+        document.getElementById(
+          'genericCatCount'
+        );
+
+      const gridEl =
+        document.getElementById(
+          'genericCatGrid'
+        );
+
+      if (titleEl) {
+        titleEl.textContent =
+          `खोज परिणाम: "${originalQuery}"`;
       }
-      genericView.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
 
-  if (searchSubmit) searchSubmit.addEventListener('click', performSearch);
+      if (countEl) {
+        countEl.textContent =
+          `${filtered.length} परिणाम`;
+      }
+
+      if (gridEl) {
+
+        gridEl.innerHTML =
+          filtered.length
+            ? filtered
+                .map(createCardHTML)
+                .join('')
+            : `
+              <div style="
+                grid-column:1/-1;
+                text-align:center;
+                padding:40px;
+                color:var(--ink-muted);
+                background:#fff;
+                border:1px dashed var(--line);
+                border-radius:4px;
+              ">
+                <h3>
+                  "${originalQuery}" से संबंधित
+                  कोई समाचार नहीं मिला।
+                </h3>
+              </div>
+            `;
+      }
+
+      genericView.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  }
+
+  if (searchSubmit) {
+    searchSubmit.addEventListener(
+      'click',
+      performSearch
+    );
+  }
+
   if (searchInput) {
-    searchInput.addEventListener('keyup', (e) => {
-      if (e.key === 'Enter') performSearch();
-    });
+
+    searchInput.addEventListener(
+      'keydown',
+      e => {
+
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          performSearch();
+        }
+      }
+    );
   }
 }
 
