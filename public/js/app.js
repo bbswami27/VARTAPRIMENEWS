@@ -259,12 +259,36 @@ function renderPortal() {
 
     // Limit feed to exactly 25 news (so 5 Hero + 25 Feed = 30 total news on main page)
     const finalMainFeed = allLiveNews
-  .filter(n => n.isHero === true || n.isBreaking === true)
-  .filter(n => n.id !== heroItem?.id)
+  .filter(n =>
+    n.category !== 'क्राइम' &&
+    n.id !== heroItem?.id &&
+    !sideItems.some(s => s.id === n.id)
+  )
+  .sort((a, b) => {
+    // Hero/Breaking को priority
+    const priorityA =
+      (a.isHero ? 2 : 0) +
+      (a.isBreaking ? 1 : 0);
+
+    const priorityB =
+      (b.isHero ? 2 : 0) +
+      (b.isBreaking ? 1 : 0);
+
+    if (priorityB !== priorityA) {
+      return priorityB - priorityA;
+    }
+
+    // बाकी में latest approved news पहले
+    return new Date(
+      b.approvedAt || b.publishedAt || 0
+    ) - new Date(
+      a.approvedAt || a.publishedAt || 0
+    );
+  })
   .slice(0, 10);
 
-mainDenseGrid.innerHTML = finalMainFeed.map(createCardHTML).join('');
-  }
+mainDenseGrid.innerHTML =
+  finalMainFeed.map(createCardHTML).join('');
 
   // 4. Trending in Sidebar (top 6 by views - exclude crime)
   const sortedByViews = [...allLiveNews].filter(n => n.category !== 'क्राइम').sort((a, b) => (b.views || 0) - (a.views || 0));
