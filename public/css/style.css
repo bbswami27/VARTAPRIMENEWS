@@ -2986,3 +2986,23 @@ footer li a:hover {
     font-size: 16px;
   }
 }
+
+.home-mid-ad-area {
+  width: 100%;
+  min-height: 105px;
+  max-height: 140px;
+  margin: 22px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-mid-ad-area:empty {
+  display: none;
+}
+
+#home-view #ad-slot-home_mid {
+  width: 100%;
+  max-height: 140px;
+  overflow: hidden;
+}
