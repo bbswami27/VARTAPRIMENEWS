@@ -354,7 +354,36 @@ if (epaperHeadlineSize !== undefined) {
   overrides.epaperHeadlineSize =
     epaperHeadlineSize || 'medium';
 }
-    
+// Same Edition + Page + Position पर पुरानी खबर हटाएँ
+if (
+  epaperEnabled === true &&
+  epaperEdition &&
+  epaperPage &&
+  epaperPosition
+) {
+
+  const approvedNews = db.getApproved();
+
+  const occupiedArticle =
+    approvedNews.find(item =>
+      item.id !== req.params.id &&
+      item.epaperEnabled === true &&
+      item.epaperEdition === epaperEdition &&
+      Number(item.epaperPage) === Number(epaperPage) &&
+      item.epaperPosition === epaperPosition
+    );
+
+  if (occupiedArticle) {
+
+    db.approveArticle(
+      occupiedArticle.id,
+      {
+        epaperEnabled: false,
+        epaperPosition: ''
+      }
+    );
+  }
+}    
     const updated = db.approveArticle(req.params.id, overrides);
     if (!updated) {
       return res.status(404).json({ success: false, message: 'समाचार नहीं मिला।' });
