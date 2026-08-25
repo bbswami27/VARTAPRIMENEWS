@@ -125,21 +125,21 @@ const defaultFeeds = [
   {
     id: "feed-dilli-amarujala",
     name: "अमर उजाला - दिल्ली NCR",
-    category: "दिल्ली",
+   category: "दिल्ली NCR",
     url: "https://www.amarujala.com/rss/delhi-ncr.xml",
     enabled: true
   },
   {
     id: "feed-dilli-abp",
     name: "ABP Live - दिल्ली NCR",
-    category: "दिल्ली",
+    category: "दिल्ली NCR",
     url: "https://www.abplive.com/states/delhi-ncr/feed",
     enabled: true
   },
   {
     id: "feed-dilli-gnews",
     name: "Google News - दिल्ली लाइव",
-    category: "दिल्ली",
+    category: "दिल्ली NCR",
     url: "https://news.google.com/rss/search?q=%E0%A4%A6%E0%A4%BF%E0%A4%B2%E0%A5%8D%E0%A4%B2%E0%A5%80+when:2d&hl=hi&gl=IN&ceid=IN:hi",
     enabled: true
   },
