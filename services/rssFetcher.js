@@ -589,7 +589,7 @@ async function fetchAllFeeds() {
   // Maximum 100 fresh + unique stories
   // ==================================================
 
-  const MAX_NEWS = 100;
+  const MAX_NEWS = 200;
   const MAX_AGE_MS = 24 * 60 * 60 * 1000;
   const now = Date.now();
 
@@ -642,6 +642,253 @@ async function fetchAllFeeds() {
   });
 
   const selected = [];
+
+// ==================================================
+// SMART PAN-INDIA + TOPIC COVERAGE SELECTOR
+// ==================================================
+
+const MINIMUM_CATEGORY_QUOTA = {
+  'देश': 10,
+  'करियर': 8,
+  'युवा': 8,
+  'टेक्नोलॉजी': 8,
+  'समसामयिकी': 10
+};
+
+const priorityStates = [
+  'कर्नाटक',
+  'तेलंगाना',
+  'आंध्र प्रदेश',
+  'तमिलनाडु',
+  'केरल',
+  'महाराष्ट्र',
+  'गुजरात',
+  'राजस्थान',
+  'पंजाब',
+  'उत्तर प्रदेश',
+  'बिहार',
+  'पश्चिम बंगाल',
+  'मध्य प्रदेश',
+  'ओडिशा',
+  'असम',
+  'झारखंड',
+  'छत्तीसगढ़',
+  'उत्तराखंड',
+  'हिमाचल प्रदेश'
+];
+
+function articleMatchesState(article, state) {
+  const haystack = [
+    article.state,
+    article.region,
+    article.district,
+    article.city,
+    article.title,
+    article.description,
+    article.content
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
+
+  return haystack.includes(state.toLowerCase());
+}
+
+function detectSmartCategory(article) {
+  const text = [
+    article.title,
+    article.description,
+    article.content
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
+
+  // Career
+  if (
+    /(नौकरी|भर्ती|vacancy|recruitment|hssc|ssc|upsc|रेलवे भर्ती|सरकारी नौकरी|रोजगार|इंटरव्यू|जॉब)/i.test(text)
+  ) {
+    return 'करियर';
+  }
+
+  // Youth
+  if (
+    /(युवा|स्टार्टअप|कौशल|skill|entrepreneur|उद्यमिता|इंटर्नशिप|छात्र नेतृत्व|युवा योजना)/i.test(text)
+  ) {
+    return 'युवा';
+  }
+
+  // Technology
+  if (
+    /(technology|टेक्नोलॉजी|तकनीक|ai|artificial intelligence|मोबाइल|स्मार्टफोन|ऐप|software|सॉफ्टवेयर|cyber|साइबर|robot|रोबोट|digital|डिजिटल|internet|इंटरनेट)/i.test(text)
+  ) {
+    return 'टेक्नोलॉजी';
+  }
+
+  // Current Affairs
+  if (
+    /(current affairs|करंट अफेयर्स|समसामयिकी|नीति|योजना|सरकारी योजना|कैबिनेट|संसद|सुप्रीम कोर्ट|राष्ट्रीय पुरस्कार|अंतरराष्ट्रीय समझौता|रिपोर्ट जारी|सूचकांक|index|gk)/i.test(text)
+  ) {
+    return 'समसामयिकी';
+  }
+
+  return article.category || 'देश';
+}
+
+function canSelectArticle(article) {
+  if (selected.length >= MAX_NEWS) return false;
+
+  const title = String(article.title || '').trim();
+
+  if (title.length < 15) return false;
+
+  const publishedTime =
+    new Date(article.publishedAt || 0).getTime();
+
+  if (
+    !Number.isFinite(publishedTime) ||
+    now - publishedTime > MAX_AGE_MS
+  ) {
+    return false;
+  }
+
+  if (
+    db.isDuplicate(
+      article.link,
+      article.title
+    )
+  ) {
+    return false;
+  }
+
+  const duplicateStory =
+    selected.some(existing =>
+      isSimilarTitle(
+        existing.title,
+        article.title
+      )
+    );
+
+  if (duplicateStory) return false;
+
+  return true;
+}
+
+function addArticle(article, forcedCategory = null) {
+  if (!article) return false;
+  if (!canSelectArticle(article)) return false;
+
+  if (forcedCategory) {
+    article.category = forcedCategory;
+  }
+
+  selected.push(article);
+  return true;
+}
+
+// ==================================================
+// 1. NATIONAL NEWS - MINIMUM 10
+// ==================================================
+
+for (const article of allArticles) {
+  const count =
+    selected.filter(x => x.category === 'देश').length;
+
+  if (count >= MINIMUM_CATEGORY_QUOTA['देश']) break;
+
+  if (
+    article.category === 'देश'
+  ) {
+    addArticle(article, 'देश');
+  }
+}
+
+// ==================================================
+// 2. CAREER / YOUTH / TECH / CURRENT AFFAIRS QUOTAS
+// ==================================================
+
+const smartTopics = [
+  'करियर',
+  'युवा',
+  'टेक्नोलॉजी',
+  'समसामयिकी'
+];
+
+for (const topic of smartTopics) {
+
+  for (const article of allArticles) {
+
+    const currentCount =
+      selected.filter(x => x.category === topic).length;
+
+    if (
+      currentCount >=
+      MINIMUM_CATEGORY_QUOTA[topic]
+    ) {
+      break;
+    }
+
+    const detected =
+      detectSmartCategory(article);
+
+    if (detected === topic) {
+      addArticle(article, topic);
+    }
+  }
+}
+
+// ==================================================
+// 3. MAJOR INDIA STATES - MINIMUM 1 EACH IF AVAILABLE
+// ==================================================
+
+for (const state of priorityStates) {
+
+  if (selected.length >= MAX_NEWS) break;
+
+  const alreadySelected =
+    selected.some(article =>
+      articleMatchesState(article, state)
+    );
+
+  if (alreadySelected) continue;
+
+  const stateArticle =
+    allArticles.find(article =>
+      articleMatchesState(article, state) &&
+      canSelectArticle(article)
+    );
+
+  if (stateArticle) {
+    addArticle(stateArticle, 'देश');
+  }
+}
+
+// ==================================================
+// 4. FILL REMAINING SLOTS UP TO 200
+// ==================================================
+
+for (const article of allArticles) {
+
+  if (selected.length >= MAX_NEWS) break;
+
+  if (!canSelectArticle(article)) continue;
+
+  const smartCategory =
+    detectSmartCategory(article);
+
+  // Preserve existing strong categories
+  if (
+    ['हरियाणा', 'विदेश', 'बिज़नेस', 'खेल',
+     'मनोरंजन', 'स्वास्थ्य', 'धर्म',
+     'राजनीति', 'शिक्षा', 'क्राइम', 'दिल्ली']
+      .includes(article.category)
+  ) {
+    selected.push(article);
+  } else {
+    article.category = smartCategory;
+    selected.push(article);
+  }
+}
 
   for (const article of allArticles) {
 
