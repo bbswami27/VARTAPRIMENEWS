@@ -575,27 +575,65 @@ function renderApprovedTable() {
 
 async function toggleBreaking(id) {
   try {
-    const res = await fetch(`${API_BASE}/toggle-breaking/${id}`, { method: 'POST' });
+    const res = await fetch(`${API_BASE}/toggle-breaking/${id}`, {
+      method: 'POST'
+    });
+
     const json = await res.json();
-    if (json.success) {
-      showToast('स्थिति अपडेट हो गई!');
-      loadApproved();
+
+    if (!res.ok || !json.success) {
+      throw new Error(
+        json.message || json.error || `HTTP ${res.status}`
+      );
     }
+
+    showToast(
+      json.isBreaking
+        ? '⚡ Breaking News चालू हो गई'
+        : '⚡ Breaking News हटा दी गई'
+    );
+
+    await loadApproved();
+    await loadStats();
+
   } catch (err) {
-    showToast('त्रुटि हुई।');
+    console.error('Breaking toggle error:', err);
+
+    showToast(
+      '❌ Breaking update failed: ' + err.message
+    );
   }
 }
 
 async function toggleHero(id) {
   try {
-    const res = await fetch(`${API_BASE}/toggle-hero/${id}`, { method: 'POST' });
+    const res = await fetch(`${API_BASE}/toggle-hero/${id}`, {
+      method: 'POST'
+    });
+
     const json = await res.json();
-    if (json.success) {
-      showToast('मुख्य लीड अपडेट हो गई!');
-      loadApproved();
+
+    if (!res.ok || !json.success) {
+      throw new Error(
+        json.message || json.error || `HTTP ${res.status}`
+      );
     }
+
+    showToast(
+      json.isHero
+        ? '⭐ यह खबर Main Lead बन गई'
+        : '⭐ Main Lead हट गई'
+    );
+
+    await loadApproved();
+    await loadStats();
+
   } catch (err) {
-    showToast('त्रुटि हुई।');
+    console.error('Hero toggle error:', err);
+
+    showToast(
+      '❌ Lead update failed: ' + err.message
+    );
   }
 }
 
