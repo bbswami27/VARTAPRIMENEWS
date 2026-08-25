@@ -89,6 +89,12 @@
         <button class="nav-btn" data-cat="yuva" data-name="युवा">🚀 युवा व करियर</button>
         <button class="nav-btn" data-cat="videsh" data-name="विदेश">🌍 विदेश</button>
         <button class="nav-btn" data-cat="currentaffairs" data-name="समसामयिकी">📚 करंट अफेयर्स (GK)</button>
+        <button
+  class="nav-btn"
+  data-cat="editorial"
+  data-name="संपादकीय">
+  ✍️ संपादकीय
+</button>
         <button class="nav-btn" data-cat="dilli" data-name="दिल्ली NCR">🏙️ दिल्ली NCR</button>
         <button class="nav-btn" data-cat="business" data-name="बिज़नेस">📈 बिज़नेस</button>
       
@@ -194,12 +200,135 @@
           <div class="dense-news-grid" id="mainDenseGrid">
             <!-- Dynamically injected top 5 news from every category -->
           </div>
-     <!-- Trending List -->
-<div class="trending-box">
-  <h3 class="trending-title">🔥 सबसे ज्यादा पढ़ी गई खबरें</h3>
-  <div id="trendingList">
-    <!-- Dynamic Trending List -->
-  </div>
+   <!-- ==================================================
+     LEFT BOTTOM ZONE
+     ================================================== -->
+<div class="left-bottom-zone">
+
+  <!-- Haryana District Quick News -->
+  <section class="home-district-box">
+    <div class="home-bottom-heading">
+      <div>
+        <span class="home-bottom-kicker">📍 LOCAL NEWS</span>
+        <h3>हरियाणा जिला समाचार</h3>
+      </div>
+
+      <button
+        class="home-bottom-link"
+        onclick="openHaryanaDistrict('all')">
+        सभी जिले →
+      </button>
+    </div>
+
+    <div class="home-district-links">
+
+      <button onclick="openHaryanaDistrict('पानीपत')">
+        पानीपत
+      </button>
+
+      <button onclick="openHaryanaDistrict('करनाल')">
+        करनाल
+      </button>
+
+      <button onclick="openHaryanaDistrict('सोनीपत')">
+        सोनीपत
+      </button>
+
+      <button onclick="openHaryanaDistrict('रोहतक')">
+        रोहतक
+      </button>
+
+      <button onclick="openHaryanaDistrict('हिसार')">
+        हिसार
+      </button>
+
+      <button onclick="openHaryanaDistrict('गुरुग्राम')">
+        गुरुग्राम
+      </button>
+
+      <button onclick="openHaryanaDistrict('फरीदाबाद')">
+        फरीदाबाद
+      </button>
+
+      <button onclick="openHaryanaDistrict('अंबाला')">
+        अंबाला
+      </button>
+
+      <button onclick="openHaryanaDistrict('कुरुक्षेत्र')">
+        कुरुक्षेत्र
+      </button>
+
+      <button onclick="openHaryanaDistrict('रेवाड़ी')">
+        रेवाड़ी
+      </button>
+
+      <button onclick="openHaryanaDistrict('सिरसा')">
+        सिरसा
+      </button>
+
+      <button onclick="openHaryanaDistrict('जींद')">
+        जींद
+      </button>
+
+    </div>
+  </section>
+
+
+  <!-- Today's Editorial -->
+  <section class="home-editorial-box">
+
+    <div class="home-bottom-heading">
+
+      <div>
+        <span class="home-bottom-kicker">
+          ✍️ OPINION
+        </span>
+
+        <h3>आज का संपादकीय</h3>
+      </div>
+
+      <button
+        class="home-bottom-link"
+        onclick="openEditorialSection()">
+        सभी लेख →
+      </button>
+
+    </div>
+
+    <div id="homeEditorialCard">
+
+      <div class="home-editorial-empty">
+        संपादकीय लेख लोड हो रहा है...
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- Most Read -->
+  <section class="trending-box most-read-left">
+
+    <div class="home-bottom-heading">
+
+      <div>
+        <span class="home-bottom-kicker">
+          🔥 TRENDING
+        </span>
+
+        <h3>
+          सबसे ज्यादा पढ़ी गई खबरें
+        </h3>
+      </div>
+
+    </div>
+
+    <div id="trendingList">
+      <!-- Dynamic Trending -->
+    </div>
+
+  </section>
+
 </div>
           </div>
 
