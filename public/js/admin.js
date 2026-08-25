@@ -558,19 +558,546 @@ function renderApprovedTable() {
         ${item.isBreaking ? '<span class="badge-tag breaking">⚡ ब्रेकिंग</span>' : ''}
       </td>
       <td style="white-space:nowrap;">
-        <button class="btn btn-outline btn-sm" onclick="toggleBreaking('${item.id}')" title="ब्रेकिंग न्यूज़ टॉगल">
-          ${item.isBreaking ? '⚡ ब्रेकिंग हटाएं' : '⚡ ब्रेकिंग बनाएं'}
-        </button>
-        <button class="btn btn-outline btn-sm" onclick="toggleHero('${item.id}')" title="मुख्य लीड टॉगल">
-          ${item.isHero ? '⭐ लीड हटाएं' : '⭐ लीड बनाएं'}
-        </button>
-      </td>
+
+  <button
+    class="btn btn-outline btn-sm"
+    onclick="openEpaperPositioner('${item.id}')"
+    title="ई-पेपर में स्थान तय करें">
+    📰
+  </button>
+
+  <button
+    class="btn btn-primary btn-sm"
+    onclick="openEditModal('${item.id}')">
+    ✏️
+  </button>
+
+  <button
+    class="btn btn-danger btn-sm"
+    onclick="deleteArticle('${item.id}')">
+    🗑️
+  </button>
+
+</td>
       <td style="white-space:nowrap;">
         <button class="btn btn-primary btn-sm" onclick="openEditModal('${item.id}')">✏️</button>
         <button class="btn btn-danger btn-sm" onclick="deleteArticle('${item.id}')">🗑️</button>
       </td>
     </tr>
   `).join('');
+}
+// ==================================================
+// E-PAPER POSITIONING MANAGER
+// ==================================================
+
+function openEpaperPositioner(id) {
+
+  const article =
+    currentApprovedList.find(
+      item => item.id === id
+    );
+
+  if (!article) {
+    showToast('समाचार नहीं मिला।');
+    return;
+  }
+
+  let modal =
+    document.getElementById(
+      'epaperPositionModal'
+    );
+
+  if (!modal) {
+
+    modal = document.createElement('div');
+
+    modal.id = 'epaperPositionModal';
+
+    modal.style.cssText = `
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.72);
+      z-index:99999;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    `;
+
+    document.body.appendChild(modal);
+  }
+
+
+  const enabled =
+    article.epaperEnabled === true;
+
+  const edition =
+    article.epaperEdition || 'हरियाणा';
+
+  const page =
+    article.epaperPage || 1;
+
+  const position =
+    article.epaperPosition || 'main_lead';
+
+  const showImage =
+    article.epaperShowImage !== false;
+
+  const headlineSize =
+    article.epaperHeadlineSize || 'large';
+
+
+  modal.innerHTML = `
+
+    <div style="
+      width:min(620px,95vw);
+      max-height:90vh;
+      overflow:auto;
+      background:#0f172a;
+      border:1px solid #334155;
+      border-radius:10px;
+      padding:22px;
+      color:#fff;
+      box-shadow:0 20px 60px rgba(0,0,0,.5);
+    ">
+
+      <div style="
+        display:flex;
+        justify-content:space-between;
+        gap:15px;
+        align-items:start;
+        margin-bottom:20px;
+      ">
+
+        <div>
+
+          <div style="
+            font-size:12px;
+            color:#f59e0b;
+            font-weight:700;
+            margin-bottom:4px;
+          ">
+            📰 VARTAPRIME E-PAPER
+          </div>
+
+          <h2 style="
+            margin:0;
+            font-size:20px;
+            color:#fff;
+          ">
+            ई-पेपर पोजिशनिंग
+          </h2>
+
+        </div>
+
+        <button
+          onclick="closeEpaperPositioner()"
+          style="
+            border:0;
+            background:#334155;
+            color:#fff;
+            width:34px;
+            height:34px;
+            border-radius:50%;
+            cursor:pointer;
+            font-size:20px;
+          ">
+          ×
+        </button>
+
+      </div>
+
+
+      <div style="
+        background:#111827;
+        border:1px solid #334155;
+        padding:12px;
+        margin-bottom:18px;
+        border-radius:6px;
+        font-weight:600;
+        line-height:1.5;
+      ">
+        ${escapeHtml(article.title)}
+      </div>
+
+
+      <label style="
+        display:flex;
+        gap:10px;
+        align-items:center;
+        margin-bottom:18px;
+        cursor:pointer;
+        font-weight:700;
+      ">
+
+        <input
+          type="checkbox"
+          id="epaperEnabled"
+          ${enabled ? 'checked' : ''}
+          style="width:19px;height:19px;">
+
+        ई-पेपर में यह खबर शामिल करें
+
+      </label>
+
+
+      <div style="
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:14px;
+      ">
+
+
+        <div>
+
+          <label style="
+            display:block;
+            margin-bottom:5px;
+            font-size:13px;
+          ">
+            Edition
+          </label>
+
+          <select
+            id="epaperEdition"
+            style="width:100%;padding:10px;">
+
+            ${[
+              'हरियाणा',
+              'पानीपत',
+              'रोहतक',
+              'हिसार',
+              'गुरुग्राम',
+              'करनाल',
+              'अंबाला'
+            ].map(x => `
+              <option
+                value="${x}"
+                ${edition === x ? 'selected' : ''}>
+                ${x} संस्करण
+              </option>
+            `).join('')}
+
+          </select>
+
+        </div>
+
+
+        <div>
+
+          <label style="
+            display:block;
+            margin-bottom:5px;
+            font-size:13px;
+          ">
+            Page
+          </label>
+
+          <select
+            id="epaperPage"
+            style="width:100%;padding:10px;">
+
+            ${[1,2,3,4,5,6,7,8].map(x => `
+              <option
+                value="${x}"
+                ${Number(page) === x ? 'selected' : ''}>
+                Page ${x}
+              </option>
+            `).join('')}
+
+          </select>
+
+        </div>
+
+
+        <div style="grid-column:1/-1;">
+
+          <label style="
+            display:block;
+            margin-bottom:5px;
+            font-size:13px;
+          ">
+            Newspaper Position
+          </label>
+
+          <select
+            id="epaperPosition"
+            style="width:100%;padding:10px;">
+
+            <option value="main_lead"
+              ${position === 'main_lead' ? 'selected' : ''}>
+              ⭐ Main Lead
+            </option>
+
+            <option value="top_right_1"
+              ${position === 'top_right_1' ? 'selected' : ''}>
+              Top Right 1
+            </option>
+
+            <option value="top_right_2"
+              ${position === 'top_right_2' ? 'selected' : ''}>
+              Top Right 2
+            </option>
+
+            <option value="top_right_3"
+              ${position === 'top_right_3' ? 'selected' : ''}>
+              Top Right 3
+            </option>
+
+            <option value="middle_left"
+              ${position === 'middle_left' ? 'selected' : ''}>
+              Middle Left
+            </option>
+
+            <option value="middle_center"
+              ${position === 'middle_center' ? 'selected' : ''}>
+              Middle Center
+            </option>
+
+            <option value="middle_right"
+              ${position === 'middle_right' ? 'selected' : ''}>
+              Middle Right
+            </option>
+
+            <option value="bottom_left"
+              ${position === 'bottom_left' ? 'selected' : ''}>
+              Bottom Left
+            </option>
+
+            <option value="bottom_center"
+              ${position === 'bottom_center' ? 'selected' : ''}>
+              Bottom Center
+            </option>
+
+            <option value="bottom_right"
+              ${position === 'bottom_right' ? 'selected' : ''}>
+              Bottom Right
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div>
+
+          <label style="
+            display:block;
+            margin-bottom:5px;
+            font-size:13px;
+          ">
+            Headline Size
+          </label>
+
+          <select
+            id="epaperHeadlineSize"
+            style="width:100%;padding:10px;">
+
+            <option value="large"
+              ${headlineSize === 'large' ? 'selected' : ''}>
+              Large
+            </option>
+
+            <option value="medium"
+              ${headlineSize === 'medium' ? 'selected' : ''}>
+              Medium
+            </option>
+
+            <option value="small"
+              ${headlineSize === 'small' ? 'selected' : ''}>
+              Small
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <label style="
+          display:flex;
+          align-items:center;
+          gap:8px;
+          margin-top:25px;
+          cursor:pointer;
+        ">
+
+          <input
+            type="checkbox"
+            id="epaperShowImage"
+            ${showImage ? 'checked' : ''}
+            style="width:18px;height:18px;">
+
+          Photo दिखाएँ
+
+        </label>
+
+      </div>
+
+
+      <div style="
+        display:flex;
+        gap:10px;
+        justify-content:flex-end;
+        margin-top:22px;
+      ">
+
+        <button
+          onclick="removeFromEpaper('${article.id}')"
+          class="btn btn-outline">
+          ई-पेपर से हटाएँ
+        </button>
+
+        <button
+          onclick="saveEpaperPosition('${article.id}')"
+          class="btn btn-success">
+          💾 Position Save
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+}
+
+
+function closeEpaperPositioner() {
+
+  const modal =
+    document.getElementById(
+      'epaperPositionModal'
+    );
+
+  if (modal) {
+    modal.remove();
+  }
+}
+
+
+async function saveEpaperPosition(id) {
+
+  const payload = {
+
+    epaperEnabled:
+      document.getElementById(
+        'epaperEnabled'
+      ).checked,
+
+    epaperEdition:
+      document.getElementById(
+        'epaperEdition'
+      ).value,
+
+    epaperPage:
+      Number(
+        document.getElementById(
+          'epaperPage'
+        ).value
+      ),
+
+    epaperPosition:
+      document.getElementById(
+        'epaperPosition'
+      ).value,
+
+    epaperShowImage:
+      document.getElementById(
+        'epaperShowImage'
+      ).checked,
+
+    epaperHeadlineSize:
+      document.getElementById(
+        'epaperHeadlineSize'
+      ).value
+
+  };
+
+
+  try {
+
+    const res = await fetch(
+      `${API_BASE}/news/${id}`,
+      {
+        method:'PUT',
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify(payload)
+      }
+    );
+
+    const json = await res.json();
+
+    if (!res.ok || !json.success) {
+      throw new Error(
+        json.message ||
+        json.error ||
+        `HTTP ${res.status}`
+      );
+    }
+
+    showToast(
+      '📰 E-Paper position सुरक्षित हो गई!'
+    );
+
+    closeEpaperPositioner();
+
+    await loadApproved();
+
+  } catch(err) {
+
+    console.error(err);
+
+    showToast(
+      '❌ E-Paper position save नहीं हुई: ' +
+      err.message
+    );
+  }
+}
+
+
+async function removeFromEpaper(id) {
+
+  try {
+
+    const res = await fetch(
+      `${API_BASE}/news/${id}`,
+      {
+        method:'PUT',
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify({
+          epaperEnabled:false,
+          epaperPosition:''
+        })
+      }
+    );
+
+    const json = await res.json();
+
+    if (!res.ok || !json.success) {
+      throw new Error(
+        json.message ||
+        json.error ||
+        `HTTP ${res.status}`
+      );
+    }
+
+    showToast(
+      'ई-पेपर से खबर हटा दी गई।'
+    );
+
+    closeEpaperPositioner();
+
+    await loadApproved();
+
+  } catch(err) {
+
+    showToast(
+      '❌ ' + err.message
+    );
+  }
 }
 
 async function toggleBreaking(id) {
