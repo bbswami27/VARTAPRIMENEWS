@@ -880,7 +880,7 @@ for (const article of allArticles) {
   if (
     ['हरियाणा', 'विदेश', 'बिज़नेस', 'खेल',
      'मनोरंजन', 'स्वास्थ्य', 'धर्म',
-     'राजनीति', 'शिक्षा', 'क्राइम', 'दिल्ली']
+     'राजनीति', 'शिक्षा', 'क्राइम', 'दिल्ली NCR']
       .includes(article.category)
   ) {
     selected.push(article);
