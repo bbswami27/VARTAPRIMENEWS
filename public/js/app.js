@@ -789,6 +789,11 @@ renderAdToSlot(
   bottomAd
 );
 
+  } catch (err) {
+    console.error('Error loading advertisements:', err);
+  }
+}
+
 function renderAdToSlot(slotElementId, ad) {
   const container = document.getElementById(slotElementId);
   if (!container) return;
