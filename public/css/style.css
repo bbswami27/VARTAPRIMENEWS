@@ -2914,3 +2914,75 @@ footer li a:hover {
   }
 
 }
+
+/* ==================================================
+   HOME TOP 10 - LARGER CARDS
+   ================================================== */
+
+#mainDenseGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+#mainDenseGrid .horizontal-card {
+  min-height: 155px;
+  padding: 12px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+#mainDenseGrid .card-thumb {
+  width: 145px;
+  min-width: 145px;
+  height: 125px;
+}
+
+#mainDenseGrid .card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#mainDenseGrid .card-headline {
+  font-size: 18px;
+  line-height: 1.45;
+  font-weight: 800;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+#mainDenseGrid .card-content-wrap {
+  padding-left: 5px;
+}
+
+#mainDenseGrid .card-bottom-meta {
+  margin-top: 9px;
+  font-size: 11px;
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+
+  #mainDenseGrid {
+    grid-template-columns: 1fr;
+  }
+
+  #mainDenseGrid .horizontal-card {
+    min-height: 135px;
+  }
+
+  #mainDenseGrid .card-thumb {
+    width: 125px;
+    min-width: 125px;
+    height: 110px;
+  }
+
+  #mainDenseGrid .card-headline {
+    font-size: 16px;
+  }
+}
