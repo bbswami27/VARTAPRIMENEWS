@@ -207,7 +207,7 @@ function writeJSON(filePath, data) {
     if (filePath === APPROVED_FILE && Array.isArray(data)) {
       toWrite = data.slice(0, 150);
     } else if (filePath === PENDING_FILE && Array.isArray(data)) {
-      toWrite = data.slice(0, 100);
+  toWrite = data.slice(0, 200);
     } else if (filePath === REJECTED_FILE && Array.isArray(data)) {
       toWrite = data.slice(0, 50);
     } else if (filePath === HISTORY_FILE && typeof data === 'object' && data !== null) {
