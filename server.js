@@ -294,7 +294,25 @@ app.post('/api/admin/create', (req, res) => {
 // PUT /api/admin/news/:id - Edit news with photo edit/remove authority
 app.put('/api/admin/news/:id', (req, res) => {
   try {
-    const { title, description, content, category, district, state, imageurl, isBreaking, isHero } = req.body;
+   const {
+  title,
+  description,
+  content,
+  category,
+  district,
+  state,
+  imageurl,
+  isBreaking,
+  isHero,
+
+  // E-Paper
+  epaperEnabled,
+  epaperEdition,
+  epaperPage,
+  epaperPosition,
+  epaperShowImage,
+  epaperHeadlineSize
+} = req.body;
     const overrides = {};
     if (title !== undefined) overrides.title = title;
     if (description !== undefined) overrides.description = description;
@@ -305,7 +323,38 @@ app.put('/api/admin/news/:id', (req, res) => {
     if (imageurl !== undefined) overrides.imageurl = imageurl; // Can be null or empty string to remove
     if (isBreaking !== undefined) overrides.isBreaking = isBreaking;
     if (isHero !== undefined) overrides.isHero = isHero;
+// --------------------------------------------------
+// E-PAPER POSITIONING
+// --------------------------------------------------
 
+if (epaperEnabled !== undefined) {
+  overrides.epaperEnabled = !!epaperEnabled;
+}
+
+if (epaperEdition !== undefined) {
+  overrides.epaperEdition = epaperEdition || 'हरियाणा';
+}
+
+if (epaperPage !== undefined) {
+  overrides.epaperPage = Math.max(
+    1,
+    parseInt(epaperPage) || 1
+  );
+}
+
+if (epaperPosition !== undefined) {
+  overrides.epaperPosition = epaperPosition || '';
+}
+
+if (epaperShowImage !== undefined) {
+  overrides.epaperShowImage = !!epaperShowImage;
+}
+
+if (epaperHeadlineSize !== undefined) {
+  overrides.epaperHeadlineSize =
+    epaperHeadlineSize || 'medium';
+}
+    
     const updated = db.approveArticle(req.params.id, overrides);
     if (!updated) {
       return res.status(404).json({ success: false, message: 'समाचार नहीं मिला।' });
