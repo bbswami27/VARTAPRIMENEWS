@@ -451,17 +451,35 @@
     }
 
     async function toggleAdSlot(slotId) {
-      try {
-        const res = await fetch('/api/admin/ads/toggle/' + slotId, { method: 'POST' });
-        const json = await res.json();
-        if (json.success) {
-          showToast('स्लॉट स्थिति अपडेट हो गई!');
-          loadAds();
-        }
-      } catch (err) {
-        showToast('त्रुटि: ' + err.message, true);
-      }
+  try {
+    showToast('⏳ विज्ञापन स्थिति सुरक्षित की जा रही है...');
+
+    const res = await fetch(
+      '/api/admin/ads/toggle/' + slotId,
+      { method: 'POST' }
+    );
+
+    const json = await res.json();
+
+    if (json.success) {
+      showToast('✅ विज्ञापन ON/OFF स्थिति सुरक्षित हो गई');
+      await loadAds();
+    } else {
+      showToast(
+        '❌ स्थिति सुरक्षित नहीं हुई',
+        true
+      );
     }
+
+  } catch (err) {
+    showToast(
+      '❌ त्रुटि: ' + err.message,
+      true
+    );
+
+    await loadAds();
+  }
+}
 
     async function deleteAdSlot(slotId) {
       if (!confirm('क्या आप वाकई इस विज्ञापन स्लॉट को हटाना चाहते हैं?')) return;
