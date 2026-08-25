@@ -289,7 +289,8 @@ function renderPortal() {
 
 mainDenseGrid.innerHTML =
   finalMainFeed.map(createCardHTML).join('');
-
+}
+  
   // 4. Trending in Sidebar (top 6 by views - exclude crime)
   const sortedByViews = [...allLiveNews].filter(n => n.category !== 'क्राइम').sort((a, b) => (b.views || 0) - (a.views || 0));
   const trendList = document.getElementById('trendingList');
