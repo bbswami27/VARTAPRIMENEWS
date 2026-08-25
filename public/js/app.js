@@ -755,14 +755,15 @@ async function loadAndRenderAds() {
     const modalAd = currentLoadedAds.find(a => a.position === 'inside_modal');
     renderAdToSlot('ad-slot-inside_modal', modalAd);
 
-    // 5. Bottom Sticky Floating Ad
-    const stickyAd = currentLoadedAds.find(a => a.position === 'bottom_sticky');
-    renderStickyBottomAd(stickyAd);
+   // 5. Bottom Advertisement - Normal Footer Placement
+const bottomAd = currentLoadedAds.find(
+  a => a.position === 'bottom_sticky'
+);
 
-  } catch (err) {
-    console.warn('[Ad Error] Failed loading ads:', err);
-  }
-}
+renderAdToSlot(
+  'ad-slot-bottom_sticky',
+  bottomAd
+);
 
 function renderAdToSlot(slotElementId, ad) {
   const container = document.getElementById(slotElementId);
