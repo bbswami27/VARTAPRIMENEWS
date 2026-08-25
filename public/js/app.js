@@ -302,6 +302,225 @@ mainDenseGrid.innerHTML =
       </div>
     `).join('');
   }
+renderHomeEditorial();
+}
+// ==================================================
+// HOME LEFT-BOTTOM HELPERS
+// ==================================================
+
+function openHaryanaDistrict(district) {
+
+  const haryanaBtn =
+    document.querySelector(
+      'nav button.nav-btn[data-cat="haryana"]'
+    );
+
+  if (haryanaBtn) {
+    haryanaBtn.click();
+  }
+
+  setTimeout(() => {
+
+    if (typeof filterHaryanaDistrict === 'function') {
+      filterHaryanaDistrict(district);
+    }
+
+    const haryanaView =
+      document.getElementById('haryana-view');
+
+    if (haryanaView) {
+      haryanaView.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+
+  }, 150);
+}
+
+
+function openEditorialSection() {
+
+  const editorialBtn =
+    document.querySelector(
+      'nav button.nav-btn[data-cat="editorial"]'
+    );
+
+  if (editorialBtn) {
+    editorialBtn.click();
+    return;
+  }
+
+  const genericView =
+    document.getElementById('generic-view');
+
+  const titleEl =
+    document.getElementById('genericCatTitle');
+
+  const countEl =
+    document.getElementById('genericCatCount');
+
+  const gridEl =
+    document.getElementById('genericCatGrid');
+
+  const homeView =
+    document.getElementById('home-view');
+
+  const haryanaView =
+    document.getElementById('haryana-view');
+
+  const deshView =
+    document.getElementById('desh-view');
+
+  const yuvaView =
+    document.getElementById('yuva-view');
+
+  const caView =
+    document.getElementById('currentaffairs-view');
+
+  [
+    homeView,
+    haryanaView,
+    deshView,
+    yuvaView,
+    caView
+  ].forEach(el => {
+    if (el) el.style.display = 'none';
+  });
+
+  const editorials =
+    allLiveNews.filter(n =>
+      String(n.category || '')
+        .trim()
+        .toLowerCase() === 'संपादकीय'
+    );
+
+  if (genericView) {
+    genericView.style.display = 'block';
+  }
+
+  if (titleEl) {
+    titleEl.textContent = '✍️ संपादकीय';
+  }
+
+  if (countEl) {
+    countEl.textContent =
+      `${editorials.length} लेख`;
+  }
+
+  if (gridEl) {
+
+    gridEl.innerHTML =
+      editorials.length
+        ? editorials
+            .map(createCardHTML)
+            .join('')
+        : `
+          <div style="
+            grid-column:1/-1;
+            padding:45px;
+            text-align:center;
+            background:#fff;
+            border:1px dashed var(--line);
+          ">
+            <h3>अभी कोई संपादकीय प्रकाशित नहीं है।</h3>
+            <p>
+              Admin Panel से Category = संपादकीय
+              चुनकर पहला लेख प्रकाशित करें।
+            </p>
+          </div>
+        `;
+  }
+
+  if (genericView) {
+    genericView.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  }
+}
+function renderHomeEditorial() {
+
+  const container =
+    document.getElementById(
+      'homeEditorialCard'
+    );
+
+  if (!container) return;
+
+  const editorial =
+    allLiveNews.find(article =>
+      String(article.category || '')
+        .trim()
+        .toLowerCase() === 'संपादकीय'
+    );
+
+  if (!editorial) {
+
+    container.innerHTML = `
+      <div class="home-editorial-empty">
+        <span>✍️</span>
+        <strong>
+          आज का संपादकीय जल्द प्रकाशित होगा
+        </strong>
+        <p>
+          संपादकीय टीम द्वारा स्वीकृत लेख
+          यहाँ दिखाई देगा।
+        </p>
+      </div>
+    `;
+
+    return;
+  }
+
+  const imageHTML =
+    editorial.imageurl
+      ? `
+        <img
+          src="${escapeHtml(editorial.imageurl)}"
+          alt="${escapeHtml(editorial.title)}"
+          onerror="this.style.display='none'"
+        >
+      `
+      : `
+        <div class="editorial-placeholder">
+          ✍️
+        </div>
+      `;
+
+  container.innerHTML = `
+    <article
+      class="home-editorial-card"
+      onclick="openArticleModal('${editorial.id}')">
+
+      <div class="home-editorial-image">
+        ${imageHTML}
+      </div>
+
+      <div class="home-editorial-content">
+
+        <span class="editorial-label">
+          वार्ताप्राइम विचार
+        </span>
+
+        <h4>
+          ${escapeHtml(editorial.title)}
+        </h4>
+
+        <p>
+          ${escapeHtml(
+            editorial.description || ''
+          )}
+        </p>
+
+        <div class="editorial-read-more">
+          पूरा संपादकीय पढ़ें →
+        </div>
+
+      </div>
+
+    </article>
+  `;
 }
 
 // --------------------------------------------------------------------------
