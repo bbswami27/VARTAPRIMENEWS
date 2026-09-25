@@ -264,6 +264,7 @@ function toggleSelectAll(checked) {
 function updateBulkButtonState() {
   const bulkApproveBtn = document.getElementById('bulkApproveBtn');
   const bulkRejectBtn = document.getElementById('bulkRejectBtn');
+  const bulkRemoveBtn = document.getElementById('bulkRemoveImagesBtn');
   const countSpan = document.getElementById('selectedCount');
   
   const count = selectedPendingIds.size;
@@ -271,6 +272,7 @@ function updateBulkButtonState() {
   
   if (bulkApproveBtn) bulkApproveBtn.disabled = count === 0;
   if (bulkRejectBtn) bulkRejectBtn.disabled = count === 0;
+  if (bulkRemoveBtn) bulkRemoveBtn.disabled = count === 0;
 }
 
 // Single Action Handlers
@@ -540,7 +542,7 @@ function renderApprovedTable() {
   tbody.innerHTML = currentApprovedList.map(item => `
     <tr>
       <td style="width:70px;">
-        ${item.imageurl ? `<img src="${escapeHtml(item.imageurl)}" style="width:60px;height:42px;object-fit:cover;border-radius:4px;" onerror="this.parentElement.innerHTML='<div style=\\'width:60px;height:42px;background:#334155;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#94a3b8;\\'>तस्वीर नहीं</div>'">` : `<div style="width:60px;height:42px;background:#334155;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#94a3b8;">तस्वीर नहीं</div>`}
+        ${item.imageurl ? `<img src="${escapeHtml(item.imageurl)}" style="width:60px;height:42px;object-fit:cover;border-radius:4px;" onerror="this.parentElement.innerHTML='<div style=\\'width:60px;height:42px;background:#334155;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#94a3b8;\\'>तस्वीर नहीं</div>'">` : `<div style="width:60px;height:42px;background:#334155;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#94a3b8;">बिना तस्वीर</div>`}
       </td>
       <td>
         <div style="font-weight:600;margin-bottom:4px;">${escapeHtml(item.title)}</div>
@@ -548,6 +550,7 @@ function renderApprovedTable() {
           <span>🏷️ ${escapeHtml(item.source)}</span> &nbsp;•&nbsp;
           <span>⏱️ ${timeAgo(item.approvedAt || item.publishedAt)}</span> &nbsp;•&nbsp;
           <span>👁️ ${item.views || 0} व्यूज</span>
+          ${!item.imageurl ? ' &nbsp;•&nbsp; <span style="color:#38BDF8;">📝 टेक्स्ट-ओनली</span>' : ''}
         </div>
       </td>
       <td>
@@ -558,30 +561,12 @@ function renderApprovedTable() {
         ${item.isBreaking ? '<span class="badge-tag breaking">⚡ ब्रेकिंग</span>' : ''}
       </td>
       <td style="white-space:nowrap;">
-
-  <button
-    class="btn btn-outline btn-sm"
-    onclick="openEpaperPositioner('${item.id}')"
-    title="ई-पेपर में स्थान तय करें">
-    📰
-  </button>
-
-  <button
-    class="btn btn-primary btn-sm"
-    onclick="openEditModal('${item.id}')">
-    ✏️
-  </button>
-
-  <button
-    class="btn btn-danger btn-sm"
-    onclick="deleteArticle('${item.id}')">
-    🗑️
-  </button>
-
-</td>
+        <button class="btn btn-outline btn-sm" onclick="openEpaperPositioner('${item.id}')" title="ई-पेपर में स्थान तय करें">📰</button>
+        ${item.imageurl ? `<button class="btn btn-outline btn-sm" onclick="removeSingleNewsImage('${item.id}')" style="color:#F59E0B;border-color:#F59E0B;" title="तस्वीर हटाएं (Make Text Only)">🚫 फोटो हटाएं</button>` : `<button class="btn btn-outline btn-sm" onclick="openEditModal('${item.id}')" style="color:#38BDF8;border-color:#38BDF8;" title="तस्वीर जोड़ें">🖼️ फोटो जोड़ें</button>`}
+      </td>
       <td style="white-space:nowrap;">
-        <button class="btn btn-primary btn-sm" onclick="openEditModal('${item.id}')">✏️</button>
-        <button class="btn btn-danger btn-sm" onclick="deleteArticle('${item.id}')">🗑️</button>
+        <button class="btn btn-primary btn-sm" onclick="openEditModal('${item.id}')" title="एडिट करें">✏️</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteArticle('${item.id}')" title="हटाएं">🗑️</button>
       </td>
     </tr>
   `).join('');
@@ -1364,7 +1349,123 @@ function setupAutoApproveToggle() {
 }
      
 // --------------------------------------------------------------------------
-// 8. Tab Navigation & Initialization
+// --------------------------------------------------------------------------
+// 8. 15-Day Data Retention & Ultra-Light Picture Control
+// --------------------------------------------------------------------------
+
+async function loadRetentionInfo() {
+  try {
+    const res = await fetch('/api/admin/retention-info');
+    const json = await res.json();
+    if (json.success && json.data) {
+      const d = json.data;
+      const daysEl = document.getElementById('storageDaysStored');
+      const totalEl = document.getElementById('storageTotalNews');
+      const ratioEl = document.getElementById('storagePhotoRatio');
+      const sizeEl = document.getElementById('storageFileSize');
+
+      if (daysEl) daysEl.textContent = `${Math.max(15, d.daysStored || 15)}+ दिन`;
+      if (totalEl) totalEl.textContent = `${d.totalApproved} खबरें लाइव (${d.totalPending} लंबित)`;
+      if (ratioEl) ratioEl.textContent = `${d.withPhotos} फोटो / ${d.textOnly} टेक्स्ट-ओनली`;
+      if (sizeEl) sizeEl.textContent = `${d.fileSizeKB} KB (अल्ट्रा-लाइट)`;
+    }
+  } catch (err) {
+    console.error('Error loading retention info:', err);
+  }
+}
+
+async function triggerCleanOldNews(days = 15) {
+  if (!confirm(`क्या आप ${days} दिन से पुरानी अतिरिक्त खबरों को साफ (Archive/Purge) करना चाहते हैं? कम से कम 15 दिनों की ताज़ा खबरें हमेशा सुरक्षित रहेंगी।`)) return;
+
+  showToast('⏳ डेटाबेस साफ और ऑप्टिमाइज़ हो रहा है...');
+  try {
+    const res = await fetch('/api/admin/clean-old-news', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ days })
+    });
+    const json = await res.json();
+    if (json.success) {
+      showToast(`🎉 ${json.message}`);
+      loadStats();
+      loadApproved();
+      loadRetentionInfo();
+    } else {
+      showToast('त्रुटि: ' + json.message);
+    }
+  } catch (err) {
+    showToast('एरर: ' + err.message);
+  }
+}
+
+async function triggerRemoveAllImages(scope = 'all') {
+  if (!confirm('क्या आप सभी खबरों से तस्वीरें हटाकर वेबसाइट को 100% अल्ट्रा-लाइटवेट टेक्स्ट मोड (बिना फोटो) में चलाना चाहते हैं? (बाद में कभी भी AI तस्वीरें पुनः लगाई जा सकती हैं)')) return;
+
+  showToast('⏳ तस्वीरें हटाई जा रही हैं...');
+  try {
+    const res = await fetch('/api/admin/remove-all-images', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ scope })
+    });
+    const json = await res.json();
+    if (json.success) {
+      showToast(`🚫 ${json.message}`);
+      loadStats();
+      loadPending();
+      loadApproved();
+      loadRetentionInfo();
+    } else {
+      showToast('त्रुटि: ' + json.message);
+    }
+  } catch (err) {
+    showToast('एरर: ' + err.message);
+  }
+}
+
+async function removeSingleNewsImage(id) {
+  try {
+    const res = await fetch(`/api/admin/remove-image/${id}`, { method: 'POST' });
+    const json = await res.json();
+    if (json.success) {
+      showToast('🚫 तस्वीर हटा दी गई (समाचार अब बिना फोटो टेक्स्ट मोड में है)');
+      loadStats();
+      loadPending();
+      loadApproved();
+      loadRetentionInfo();
+    } else {
+      showToast('त्रुटि: ' + json.message);
+    }
+  } catch (err) {
+    showToast('एरर: ' + err.message);
+  }
+}
+
+async function bulkRemoveImagesSelected() {
+  const ids = Array.from(selectedPendingIds);
+  if (!ids.length) return;
+
+  try {
+    const res = await fetch('/api/admin/bulk-remove-images', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ids })
+    });
+    const json = await res.json();
+    if (json.success) {
+      showToast(`🚫 ${json.message}`);
+      selectedPendingIds.clear();
+      loadStats();
+      loadPending();
+      loadRetentionInfo();
+    }
+  } catch (err) {
+    showToast('त्रुटि: ' + err.message);
+  }
+}
+
+// --------------------------------------------------------------------------
+// 9. Tab Navigation & Initialization
 // --------------------------------------------------------------------------
 
 function setupTabs() {
@@ -1384,6 +1485,7 @@ function setupTabs() {
       if (tabId === 'pending') loadPending();
       if (tabId === 'approved') loadApproved();
       if (tabId === 'feeds') loadFeeds();
+      if (tabId === 'storage') loadRetentionInfo();
     });
   });
 }

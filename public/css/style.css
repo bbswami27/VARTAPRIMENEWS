@@ -1228,6 +1228,39 @@ nav button.nav-btn.active {
   border-top-color: var(--press-red);
 }
 
+/* Text-Only News Card: Clean, Ultra-Lightweight & Fast for No-Picture News */
+.horizontal-card.text-only-card {
+  border-left: 4px solid var(--press-red) !important;
+  border-top: 1px solid var(--line) !important;
+  padding: 16px 18px !important;
+  min-height: 100px !important;
+  background: #FFFFFF !important;
+}
+
+.horizontal-card.text-only-card .card-content-wrap {
+  width: 100% !important;
+}
+
+.horizontal-card.text-only-card .card-headline {
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: var(--ink) !important;
+  line-height: 1.45 !important;
+  margin: 4px 0 8px !important;
+}
+
+.text-mode-pill {
+  background: #F1F5F9;
+  color: #475569;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
 .card-thumb {
   width: 125px;
   height: 95px;

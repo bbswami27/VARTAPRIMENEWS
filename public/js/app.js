@@ -80,25 +80,29 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
-// Render Horizontal News Card: Small Pic on Left, Headline (Header Only) on Right
+// Render Horizontal News Card: With picture or sleek Text-Only format
 function createCardHTML(item) {
-  const imgHtml = item.imageurl
-    ? `<img src="${escapeHtml(item.imageurl)}" alt="${escapeHtml(item.title)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'card-thumb-placeholder\\'>${escapeHtml(item.category || 'वार्ताप्राइम')}</div>'">`
-    : `<div class="card-thumb-placeholder">${escapeHtml(item.category || 'वार्ताप्राइम')}</div>`;
+  const hasImg = !!(item.imageurl && String(item.imageurl).trim().length > 5);
+  const imgHtml = hasImg
+    ? `<div class="card-thumb"><img src="${escapeHtml(item.imageurl)}" alt="${escapeHtml(item.title)}" loading="lazy" onerror="this.parentElement.style.display='none';this.closest('.horizontal-card').classList.add('text-only-card');"></div>`
+    : '';
 
   const districtBadge = item.district && item.district !== 'मुख्य'
     ? `<span class="district-tag-badge">📍 ${escapeHtml(item.district)}</span>`
     : '';
 
+  const modeBadge = !hasImg
+    ? `<span class="text-mode-pill">📰 त्वरित संवाद</span>`
+    : '';
+
   return `
-    <article class="card horizontal-card" onclick="openArticleModal('${item.id}')">
-      <div class="card-thumb">
-        ${imgHtml}
-      </div>
+    <article class="card horizontal-card ${!hasImg ? 'text-only-card' : ''}" onclick="openArticleModal('${item.id}')">
+      ${imgHtml}
       <div class="card-content-wrap">
         <div class="card-top-meta">
           <span class="cat-badge">${escapeHtml(item.category)}</span>
           ${districtBadge}
+          ${modeBadge}
         </div>
         <h3 class="card-headline">${escapeHtml(item.title)}</h3>
         <div class="meta card-bottom-meta">

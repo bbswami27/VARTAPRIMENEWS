@@ -381,8 +381,11 @@
       </div>
 
       <div class="form-group">
-        <label>तस्वीर का URL (Image URL)</label>
-        <input type="url" id="editImage" class="form-control" placeholder="https://...">
+        <label style="display:flex;justify-content:space-between;align-items:center;">
+          <span>तस्वीर का URL (Image URL - वैकल्पिक)</span>
+          <button type="button" class="btn btn-outline" style="font-size:11px;padding:2px 8px;border-color:#cbd5e1;color:#b45309;" onclick="document.getElementById('editImage').value='';">🚫 तस्वीर हटाएं (Text Only)</button>
+        </label>
+        <input type="url" id="editImage" class="form-control" placeholder="https://... (बिना फोटो के खबर के लिए खाली छोड़ें)">
       </div>
 
       <div class="form-group">

@@ -205,16 +205,30 @@ function writeJSON(filePath, data) {
   try {
     let toWrite = data;
     if (filePath === APPROVED_FILE && Array.isArray(data)) {
-      toWrite = data.slice(0, 150);
+      // 15-Day Retention Policy: Keep all news from at least the last 15 days
+      const FIFTEEN_DAYS_MS = 15 * 24 * 60 * 60 * 1000;
+      const cutoffTime = Date.now() - FIFTEEN_DAYS_MS;
+      
+      const fifteenDaysArticles = data.filter(item => {
+        const itemTime = new Date(item.publishedAt || item.approvedAt || item.fetchedAt || 0).getTime();
+        return itemTime >= cutoffTime;
+      });
+
+      // Keep all news from last 15 days, or at least 500 articles minimum, capped at 1500 for lightweight storage
+      if (fifteenDaysArticles.length >= 500) {
+        toWrite = fifteenDaysArticles.slice(0, 1500);
+      } else {
+        toWrite = data.slice(0, Math.max(500, Math.min(1500, data.length)));
+      }
     } else if (filePath === PENDING_FILE && Array.isArray(data)) {
-  toWrite = data.slice(0, 200);
+      toWrite = data.slice(0, 300);
     } else if (filePath === REJECTED_FILE && Array.isArray(data)) {
-      toWrite = data.slice(0, 50);
+      toWrite = data.slice(0, 100);
     } else if (filePath === HISTORY_FILE && typeof data === 'object' && data !== null) {
       const keys = Object.keys(data);
-      if (keys.length > 1000) {
+      if (keys.length > 2000) {
         const trimmed = {};
-        keys.slice(-1000).forEach(k => trimmed[k] = data[k]);
+        keys.slice(-2000).forEach(k => trimmed[k] = data[k]);
         toWrite = trimmed;
       }
     }
@@ -1012,6 +1026,141 @@ const db = {
     const updated = { ...stats, ...patch };
     writeJSON(STATS_FILE, updated);
     return updated;
+  },
+
+  // --------------------------------------------------------------------------
+  // Retention & Storage Optimization Methods (15+ Days)
+  // --------------------------------------------------------------------------
+  getRetentionStats() {
+    const approved = readJSON(APPROVED_FILE, []);
+    const pending = readJSON(PENDING_FILE, []);
+    
+    let oldestDate = null;
+    let newestDate = null;
+    let daysStored = 0;
+
+    if (approved.length > 0) {
+      const timestamps = approved.map(a => new Date(a.publishedAt || a.approvedAt || a.fetchedAt || 0).getTime()).filter(t => !isNaN(t) && t > 0);
+      if (timestamps.length > 0) {
+        const minTime = Math.min(...timestamps);
+        const maxTime = Math.max(...timestamps);
+        oldestDate = new Date(minTime).toISOString();
+        newestDate = new Date(maxTime).toISOString();
+        daysStored = Math.max(1, Math.round((Date.now() - minTime) / (24 * 60 * 60 * 1000)));
+      }
+    }
+
+    let fileSizeKB = 0;
+    try {
+      if (fs.existsSync(APPROVED_FILE)) {
+        fileSizeKB = Math.round(fs.statSync(APPROVED_FILE).size / 1024);
+      }
+    } catch (_) {}
+
+    // Count how many articles have photos vs text-only
+    const withPhotos = approved.filter(a => !!(a.imageurl && a.imageurl.trim())).length;
+    const textOnly = approved.length - withPhotos;
+
+    return {
+      totalApproved: approved.length,
+      totalPending: pending.length,
+      daysStored,
+      oldestDate,
+      newestDate,
+      fileSizeKB,
+      retentionPolicyDays: 15,
+      withPhotos,
+      textOnly
+    };
+  },
+
+  cleanOldArticles(days = 15) {
+    const approved = readJSON(APPROVED_FILE, []);
+    const cutoffTime = Date.now() - (days * 24 * 60 * 60 * 1000);
+    const initialCount = approved.length;
+
+    const filtered = approved.filter(item => {
+      const itemTime = new Date(item.publishedAt || item.approvedAt || item.fetchedAt || 0).getTime();
+      return itemTime >= cutoffTime;
+    });
+
+    // Keep minimum 100 if available
+    const finalToKeep = filtered.length >= 100 ? filtered : approved.slice(0, Math.min(100, approved.length));
+    writeJSON(APPROVED_FILE, finalToKeep);
+
+    return {
+      removed: initialCount - finalToKeep.length,
+      remaining: finalToKeep.length,
+      retentionDays: days
+    };
+  },
+
+  // --------------------------------------------------------------------------
+  // Picture Control & Text-Only Mode
+  // --------------------------------------------------------------------------
+  removeArticleImage(id) {
+    const approved = readJSON(APPROVED_FILE, []);
+    const pending = readJSON(PENDING_FILE, []);
+
+    let found = false;
+    for (const item of approved) {
+      if (item.id === id) {
+        item.imageurl = '';
+        found = true;
+        break;
+      }
+    }
+    if (found) {
+      writeJSON(APPROVED_FILE, approved);
+      return { success: true, scope: 'approved' };
+    }
+
+    for (const item of pending) {
+      if (item.id === id) {
+        item.imageurl = '';
+        found = true;
+        break;
+      }
+    }
+    if (found) {
+      writeJSON(PENDING_FILE, pending);
+      return { success: true, scope: 'pending' };
+    }
+
+    return { success: false, message: 'समाचार नहीं मिला' };
+  },
+
+  removeAllImages(scope = 'all') {
+    let affectedApproved = 0;
+    let affectedPending = 0;
+
+    if (scope === 'all' || scope === 'approved') {
+      const approved = readJSON(APPROVED_FILE, []);
+      approved.forEach(item => {
+        if (item.imageurl) {
+          item.imageurl = '';
+          affectedApproved++;
+        }
+      });
+      writeJSON(APPROVED_FILE, approved);
+    }
+
+    if (scope === 'all' || scope === 'pending') {
+      const pending = readJSON(PENDING_FILE, []);
+      pending.forEach(item => {
+        if (item.imageurl) {
+          item.imageurl = '';
+          affectedPending++;
+        }
+      });
+      writeJSON(PENDING_FILE, pending);
+    }
+
+    return {
+      affectedApproved,
+      affectedPending,
+      totalAffected: affectedApproved + affectedPending
+    };
   }
 };
 

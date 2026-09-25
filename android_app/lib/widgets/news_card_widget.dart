@@ -196,33 +196,35 @@ class NewsCardWidget extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
               ],
-              // Thumbnail Photo
-              ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: SizedBox(
-                  width: 95,
-                  height: 80,
-                  child: CachedNetworkImage(
-                    imageUrl: item.imageurl,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Container(
-                      color: AppTheme.navyDark,
-                      child: const Center(
-                        child: SizedBox(
-                          width: 18,
-                          height: 18,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: AppTheme.pressRed),
+              // Thumbnail Photo (If image is present)
+              if (item.imageurl.trim().length > 5) ...[
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: SizedBox(
+                    width: 95,
+                    height: 80,
+                    child: CachedNetworkImage(
+                      imageUrl: item.imageurl,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Container(
+                        color: AppTheme.navyDark,
+                        child: const Center(
+                          child: SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(strokeWidth: 2, color: AppTheme.pressRed),
+                          ),
                         ),
                       ),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      color: AppTheme.paperDim,
-                      child: const Icon(Icons.image, color: AppTheme.inkMuted, size: 28),
+                      errorWidget: (context, url, error) => Container(
+                        color: AppTheme.paperDim,
+                        child: const Icon(Icons.newspaper, color: AppTheme.inkMuted, size: 28),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 12),
+                const SizedBox(width: 12),
+              ],
               // Content Area
               Expanded(
                 child: Column(

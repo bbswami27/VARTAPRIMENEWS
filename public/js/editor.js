@@ -87,14 +87,17 @@ function renderArticles() {
   }
 
   container.innerHTML = filteredArticles.map(article => {
-    const img = article.imageurl || '/images/default-news.jpg';
+    const hasImg = !!(article.imageurl && String(article.imageurl).trim().length > 5);
+    const thumb = hasImg
+      ? `<img src="${article.imageurl}" class="news-thumb" alt="News thumbnail" onerror="this.parentElement.innerHTML='<div class=\\'news-thumb\\' style=\\'background:#f1f5f9;display:flex;align-items:center;justify-content:center;color:#64748b;font-size:12px;font-weight:600;\\'>📝 टेक्स्ट-ओनली</div>'">`
+      : `<div class="news-thumb" style="background:#f1f5f9;display:flex;align-items:center;justify-content:center;color:#64748b;font-size:12px;font-weight:600;">📝 टेक्स्ट-ओनली</div>`;
     const districtTag = article.district ? `<span class="tag-district">📍 ${article.district}</span>` : '';
     const reporterTag = article.reporterName ? `<span style="color:#059669;font-weight:600;">✍️ ${article.reporterName}</span>` : '';
     const breakingTag = article.isBreaking ? `<span style="background:#fee2e2;color:#dc2626;padding:2px 6px;border-radius:4px;font-weight:700;">⚡ ब्रेकिंग</span>` : '';
 
     return `
       <div class="news-card" id="card-${article.id}">
-        <img src="${img}" class="news-thumb" alt="News thumbnail" onerror="this.src='/images/default-news.jpg'">
+        ${thumb}
         <div>
           <div class="news-meta">
             <span class="tag-cat">${article.category || 'सामान्य'}</span>

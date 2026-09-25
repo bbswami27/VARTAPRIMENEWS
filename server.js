@@ -517,6 +517,78 @@ app.post('/api/admin/fix-all-images', (req, res) => {
   }
 });
 
+// POST /api/admin/remove-image/:id - Remove image from a specific news item
+app.post('/api/admin/remove-image/:id', (req, res) => {
+  try {
+    const result = db.removeArticleImage(req.params.id);
+    if (!result.success) {
+      return res.status(404).json(result);
+    }
+    res.json({ success: true, message: 'तस्वीर सफलतापूर्वक हटा दी गई (समाचार बिना फोटो के लाइव रहेगा)।', data: result });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/admin/remove-all-images - Remove images across all news (enable ultra-light text mode)
+app.post('/api/admin/remove-all-images', (req, res) => {
+  try {
+    const { scope } = req.body; // 'all', 'approved', 'pending'
+    const result = db.removeAllImages(scope || 'all');
+    res.json({
+      success: true,
+      message: `सफलतापूर्वक ${result.totalAffected} समाचारों से तस्वीरें हटा दी गईं। अब समाचार अल्ट्रा-लाइटवेट टेक्स्ट मोड में चलेंगे!`,
+      data: result
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/admin/bulk-remove-images - Remove images from selected IDs
+app.post('/api/admin/bulk-remove-images', (req, res) => {
+  try {
+    const { ids } = req.body;
+    if (!Array.isArray(ids) || !ids.length) {
+      return res.status(400).json({ success: false, message: 'कोई आईडी नहीं मिली।' });
+    }
+    let count = 0;
+    for (const id of ids) {
+      const res = db.removeArticleImage(id);
+      if (res.success) count++;
+    }
+    res.json({ success: true, message: `${count} समाचारों से तस्वीरें हटा दी गईं!` });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// GET /api/admin/retention-info - Get storage statistics and 15-day retention metrics
+app.get('/api/admin/retention-info', (req, res) => {
+  try {
+    const info = db.getRetentionStats();
+    res.json({ success: true, data: info });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/admin/clean-old-news - Purge news older than specified days (default 15 days)
+app.post('/api/admin/clean-old-news', (req, res) => {
+  try {
+    const { days } = req.body;
+    const retentionDays = parseInt(days) || 15;
+    const result = db.cleanOldArticles(retentionDays);
+    res.json({
+      success: true,
+      message: `सफलतापूर्वक ${retentionDays} दिन से पुरानी ${result.removed} खबरें हटाई गईं। कुल ${result.remaining} ताज़ा खबरें सुरक्षित हैं।`,
+      data: result
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // GET /api/admin/stats - System stats & countdown info
 app.get('/api/admin/stats', (req, res) => {
   try {
