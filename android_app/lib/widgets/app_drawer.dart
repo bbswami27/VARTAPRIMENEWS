@@ -157,7 +157,7 @@ class AppDrawer extends StatelessWidget {
                 SwitchListTile(
                   title: Text('डार्क मोड (Dark Mode)', style: GoogleFonts.hind(fontWeight: FontWeight.w600)),
                   value: isDarkMode,
-                  activeColor: AppTheme.pressRed,
+                  activeThumbColor: AppTheme.pressRed,
                   onChanged: (val) {
                     onDarkModeChanged(val);
                   },

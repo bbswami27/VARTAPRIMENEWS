@@ -70,7 +70,7 @@ class HaryanaDistrictsBar extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 12),
               itemCount: haryanaDistricts.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 6),
+              separatorBuilder: (context, index) => const SizedBox(width: 6),
               itemBuilder: (context, index) {
                 final district = haryanaDistricts[index];
                 final isSelected = selectedDistrict == district ||

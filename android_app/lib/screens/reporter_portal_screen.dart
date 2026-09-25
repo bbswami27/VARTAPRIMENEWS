@@ -19,7 +19,7 @@ class _ReporterPortalScreenState extends State<ReporterPortalScreen> {
 
   String _selectedCategory = 'हरियाणा';
   String _selectedDistrict = 'पानीपत';
-  String _selectedState = 'हरियाणा';
+  final String _selectedState = 'हरियाणा';
   bool _isSubmitting = false;
 
   static const List<String> categories = [
@@ -152,7 +152,7 @@ class _ReporterPortalScreenState extends State<ReporterPortalScreen> {
               const SizedBox(height: 14),
               // Category Dropdown
               DropdownButtonFormField<String>(
-                value: _selectedCategory,
+                initialValue: _selectedCategory,
                 decoration: const InputDecoration(
                   labelText: 'श्रेणी (Category) *',
                   border: OutlineInputBorder(),
@@ -166,7 +166,7 @@ class _ReporterPortalScreenState extends State<ReporterPortalScreen> {
               const SizedBox(height: 14),
               // District Dropdown
               DropdownButtonFormField<String>(
-                value: _selectedDistrict,
+                initialValue: _selectedDistrict,
                 decoration: const InputDecoration(
                   labelText: 'हरियाणा जिला (District) *',
                   border: OutlineInputBorder(),
