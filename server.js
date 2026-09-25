@@ -741,6 +741,14 @@ app.get(['/advt-agency', '/advt-agency.html', '/advt', '/advt.html', '/advertise
   res.sendFile(path.join(__dirname, 'public', 'advt-agency.html'));
 });
 
+app.get(['/editor', '/editor.html'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'editor.html'));
+});
+
+app.get(['/login', '/login.html', '/hub', '/portal', '/portals'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+
 app.get(['/advt-dept', '/advt-dept.html', '/ad-manager', '/ad-manager.html', '/ad-management'], (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'ad-manager.html'));
 });

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>पोर्टल हब एवं लॉगिन गेटवे | वार्ताप्राइम न्यूज़</title>
+  <meta name="theme-color" content="#1e293b">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@600;700;800&family=Hind:wght@400;500;600;700&family=Teko:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #991b1b;
+      --primary-dark: #7f1d1d;
+      --navy: #0f172a;
+      --navy-light: #1e293b;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --gold: #d97706;
+      --emerald: #059669;
+      --blue: #2563eb;
+      --purple: #7c3aed;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Hind', sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .top-strip {
+      background: var(--navy);
+      color: #cbd5e1;
+      font-size: 13px;
+      padding: 6px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--primary);
+    }
+    .top-strip a {
+      color: #93c5fd;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .header {
+      background: #ffffff;
+      padding: 24px 16px 16px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo-container {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .flag-badge {
+      display: inline-block;
+      width: 24px;
+      height: 16px;
+      background: linear-gradient(180deg, #FF9933 33%, #FFFFFF 33%, #FFFFFF 66%, #138808 66%);
+      border-radius: 2px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .logo-title {
+      font-family: 'Noto Serif Devanagari', serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -0.5px;
+    }
+    .logo-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+    .hub-container {
+      max-width: 1100px;
+      margin: 32px auto;
+      padding: 0 16px;
+      flex: 1;
+      width: 100%;
+    }
+    .hub-intro {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .hub-intro h1 {
+      font-family: 'Noto Serif Devanagari', serif;
+      font-size: 26px;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .hub-intro p {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 650px;
+      margin: 0 auto;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+      border-color: #cbd5e1;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+    }
+    .card.admin::before { background: var(--primary); }
+    .card.editor::before { background: var(--purple); }
+    .card.reporter::before { background: var(--emerald); }
+    .card.ad::before { background: var(--gold); }
+    .card.citizen::before { background: var(--blue); }
+    .card.app::before { background: #0284c7; }
+
+    .card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+    .card-role {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .card-title {
+      font-family: 'Noto Serif Devanagari', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .card-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 20px;
+      flex: 1;
+    }
+    .card-features {
+      list-style: none;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: #475569;
+    }
+    .card-features li {
+      padding: 4px 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .card-features li::before {
+      content: '✓';
+      color: var(--emerald);
+      font-weight: bold;
+    }
+    .card-btn {
+      display: block;
+      width: 100%;
+      padding: 12px 16px;
+      text-align: center;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 15px;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-admin { background: var(--primary); color: #fff; }
+    .btn-admin:hover { background: var(--primary-dark); }
+    .btn-editor { background: var(--purple); color: #fff; }
+    .btn-editor:hover { background: #6d28d9; }
+    .btn-reporter { background: var(--emerald); color: #fff; }
+    .btn-reporter:hover { background: #047857; }
+    .btn-ad { background: var(--gold); color: #fff; }
+    .btn-ad:hover { background: #b45309; }
+    .btn-citizen { background: var(--blue); color: #fff; }
+    .btn-citizen:hover { background: #1d4ed8; }
+    .btn-app { background: #0284c7; color: #fff; }
+    .btn-app:hover { background: #0369a1; }
+
+    .info-footer {
+      background: var(--navy);
+      color: #94a3b8;
+      padding: 24px 16px;
+      text-align: center;
+      font-size: 13px;
+      margin-top: auto;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .info-footer a {
+      color: #38bdf8;
+      text-decoration: none;
+    }
+    @media (max-width: 640px) {
+      .grid { grid-template-columns: 1fr; }
+      .logo-title { font-size: 26px; }
+      .hub-intro h1 { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <div class="top-strip">
+    <div>🇮🇳 वार्ताप्राइम न्यूज़ - राष्ट्रीय एवं प्रादेशिक समाचार नेटवर्क</div>
+    <div><a href="/" target="_blank">🌐 मुख्य वेबसाइट पर जाएँ →</a></div>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="logo-container">
+      <span class="flag-badge"></span>
+      <div class="logo-title">वार्ताप्राइम न्यूज़</div>
+    </div>
+    <div class="logo-sub">केंद्रीय पोर्टल हब एवं अधिकृत लॉगिन गेटवे (Central Portal Hub)</div>
+  </header>
+
+  <!-- Hub Main Content -->
+  <main class="hub-container">
+    <div class="hub-intro">
+      <h1>सभी विभागीय डैशबोर्ड एवं पोर्टल</h1>
+      <p>अपनी भूमिका के अनुसार उपयुक्त पोर्टल का चयन करें। सभी डैशबोर्ड मुख्य सर्वर एवं डेटाबेस से सीधे जुड़े हुए हैं।</p>
+    </div>
+
+    <div class="grid">
+
+      <!-- Card 1: Super Admin Dashboard -->
+      <div class="card admin">
+        <div class="card-icon">🛡️</div>
+        <div class="card-role">प्रशासनिक अधिकार</div>
+        <h2 class="card-title">मुख्य एडमिन पैनल</h2>
+        <p class="card-desc">संपूर्ण न्यूज़ नेटवर्क, लाइव ट्रैफ़िक, ऑटो-फ़ेच आरएसएस, रिपोर्टर नियंत्रण व मुख्य सेटिंग्स।</p>
+        <ul class="card-features">
+          <li>सभी 22 जिलों की खबरों की अंतिम मंज़ूरी</li>
+          <li>तत्काल RSS ऑटो-फ़ेच ट्रिगर</li>
+          <li>ब्रेकिंग न्यूज़ एवं हीरो लीड स्टोरी कंट्रोल</li>
+          <li>सिस्टम आँकड़े एवं ट्रैफ़िक विश्लेषण</li>
+        </ul>
+        <a href="/admin.html" class="card-btn btn-admin">🛡️ एडमिन डैशबोर्ड खोलें →</a>
+      </div>
+
+      <!-- Card 2: Editor Desk -->
+      <div class="card editor">
+        <div class="card-icon">✒️</div>
+        <div class="card-role">संपादकीय डेस्क</div>
+        <h2 class="card-title">संपादक पोर्टल (Editor Desk)</h2>
+        <p class="card-desc">फील्ड रिपोर्टर्स एवं न्यूज़ एजेंसियों से प्राप्त खबरों की समीक्षा, हेडलाइन एडिटिंग व प्रकाशन।</p>
+        <ul class="card-features">
+          <li>लंबित समाचारों की त्वरित समीक्षा</li>
+          <li>AI पाठन व पैराफ्रेज़िंग सहायता</li>
+          <li>कैटेगरी, जिला व तस्वीर सुधार</li>
+          <li>एक क्लिक में लाइव प्रकाशन</li>
+        </ul>
+        <a href="/editor.html" class="card-btn btn-editor">✒️ संपादक डेस्क खोलें →</a>
+      </div>
+
+      <!-- Card 3: District Field Reporter -->
+      <div class="card reporter">
+        <div class="card-icon">✍️</div>
+        <div class="card-role">संवाददाता डेस्क</div>
+        <h2 class="card-title">फील्ड रिपोर्टर पोर्टल</h2>
+        <p class="card-desc">हरियाणा के सभी 22 जिलों व राष्ट्रीय राज्यों से ग्राउंड रिपोर्टर्स के लिए न्यूज़ सबमिशन फॉर्म।</p>
+        <ul class="card-features">
+          <li>मोबाइल फ्रेंडली त्वरित न्यूज़ सबमिशन</li>
+          <li>तस्वीर व वीडियो लिंक अटैचमेंट</li>
+          <li>तत्काल ब्रेकिंग न्यूज़ अलर्ट फ्लैग</li>
+          <li>मोबाइल पर PWA ऐप इंस्टॉल समर्थन</li>
+        </ul>
+        <a href="/reporter.html" class="card-btn btn-reporter">✍️ रिपोर्टर पोर्टल खोलें →</a>
+      </div>
+
+      <!-- Card 4: Advertisement & Commercial -->
+      <div class="card ad">
+        <div class="card-icon">📢</div>
+        <div class="card-role">वाणिज्यिक विभाग</div>
+        <h2 class="card-title">विज्ञापन विभाग (Advt Dept)</h2>
+        <p class="card-desc">वेबसाइट व ऐप पर विज्ञापन स्लॉट्स, क्लाइंट बैनर मैनेजमेंट एवं सीटीआर/इम्प्रैशन ट्रैकिंग।</p>
+        <ul class="card-features">
+          <li>सभी 6 विज्ञापन स्लॉट्स का प्रबंधन</li>
+          <li>इम्प्रैशन एवं क्लिक्स लाइव रिपोर्ट</li>
+          <li>स्पॉन्सरशिप व क्लाइंट रेट कार्ड</li>
+          <li>विज्ञापन चालू/बंद करने की सुविधा</li>
+        </ul>
+        <a href="/ad-manager.html" class="card-btn btn-ad">📢 विज्ञापन पोर्टल खोलें →</a>
+      </div>
+
+      <!-- Card 5: Citizen Journalism -->
+      <div class="card citizen">
+        <div class="card-icon">👥</div>
+        <div class="card-role">नागरिक मंच</div>
+        <h2 class="card-title">नागरिक पत्रकार पोर्टल</h2>
+        <p class="card-desc">आम नागरिकों एवं पाठकों द्वारा अपने क्षेत्र की समस्याओं, घटनाओं व आवाज़ को उठाने का मंच।</p>
+        <ul class="card-features">
+          <li>जनसमस्या व स्थानीय मुद्दे भेजें</li>
+          <li>फ़ोटो व स्थान विवरण के साथ दर्ज करें</li>
+          <li>संपादकीय टीम द्वारा प्रत्यक्ष सत्यापन</li>
+        </ul>
+        <a href="/citizen-reporter.html" class="card-btn btn-citizen">👥 नागरिक रिपोर्ट भेजें →</a>
+      </div>
+
+      <!-- Card 6: Android App & E-Paper -->
+      <div class="card app">
+        <div class="card-icon">📱</div>
+        <div class="card-role">पाठक एवं मोबाइल</div>
+        <h2 class="card-title">एंड्रॉयड ऐप एवं ई-पेपर</h2>
+        <p class="card-desc">एंड्रॉयड उपयोगकर्ताओं के लिए पूर्ण नेटिव न्यूज़ ऐप और दैनिक डिजिटल ई-पेपर संस्करण।</p>
+        <ul class="card-features">
+          <li>एंड्रॉयड नेटिव ऐप (ऑफलाइन बुकमार्क्स, वेदर)</li>
+          <li>दैनिक डिजिटल ई-पेपर पठन</li>
+          <li>रियल-टाइम ब्रेकिंग नोटिफिकेशन</li>
+        </ul>
+        <a href="/epaper.html" class="card-btn btn-app">📰 डिजिटल ई-पेपर खोलें →</a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="info-footer">
+    <p>© 2026 वार्ताप्राइम न्यूज़ (VartaPrime News) | सर्वाधिकार सुरक्षित</p>
+    <p style="margin-top:4px;">पानीपत, हरियाणा | मुख्य वेबसाइट: <a href="/">vartaprime-news-1.onrender.com</a></p>
+  </footer>
+
+</body>
+</html>

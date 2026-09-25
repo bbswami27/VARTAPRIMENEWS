@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>संपादक डेस्क (Editor Desk) | वार्ताप्राइम न्यूज़</title>
+  <meta name="theme-color" content="#7c3aed">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@600;700;800&family=Hind:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #7c3aed;
+      --primary-dark: #6d28d9;
+      --navy: #0f172a;
+      --navy-light: #1e293b;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --emerald: #059669;
+      --red: #dc2626;
+      --amber: #d97706;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Hind', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .header {
+      background: var(--navy);
+      color: white;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid var(--primary);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .header-logo h1 {
+      font-family: 'Noto Serif Devanagari', serif;
+      font-size: 22px;
+      color: #fff;
+    }
+    .badge {
+      background: var(--primary);
+      color: #fff;
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .btn {
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-success { background: var(--emerald); color: white; }
+    .btn-success:hover { background: #047857; }
+    .btn-danger { background: var(--red); color: white; }
+    .btn-danger:hover { background: #b91c1c; }
+    .btn-outline { background: transparent; border: 1px solid #475569; color: #cbd5e1; }
+    .btn-outline:hover { background: #334155; color: white; }
+
+    .container {
+      max-width: 1200px;
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .stat-box {
+      background: white;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+    .stat-label { font-size: 13px; color: var(--muted); font-weight: 600; }
+    .stat-val { font-size: 24px; font-weight: 800; color: var(--navy); margin-top: 4px; }
+
+    .controls-bar {
+      background: white;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      margin-bottom: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .search-input {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+      min-width: 250px;
+    }
+    .filter-select {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .news-grid {
+      display: grid;
+      gap: 16px;
+    }
+    .news-card {
+      background: white;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 140px 1fr auto;
+      gap: 16px;
+      align-items: start;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      transition: all 0.2s;
+    }
+    .news-card:hover {
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+      border-color: #cbd5e1;
+    }
+    .news-thumb {
+      width: 140px;
+      height: 95px;
+      border-radius: 6px;
+      object-fit: cover;
+      background: #e2e8f0;
+    }
+    .news-meta {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 6px;
+      font-size: 12px;
+    }
+    .tag-cat { background: #ede9fe; color: var(--primary-dark); padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+    .tag-district { background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+    .tag-source { color: var(--muted); }
+    .news-title {
+      font-family: 'Noto Serif Devanagari', serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+    .news-desc {
+      font-size: 14px;
+      color: #475569;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 120px;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+    .modal-box {
+      background: white;
+      width: 100%;
+      max-width: 750px;
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 10px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+    .modal-header h3 {
+      font-family: 'Noto Serif Devanagari', serif;
+      font-size: 20px;
+      color: var(--navy);
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .form-control {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 15px;
+      font-family: inherit;
+    }
+    .form-control:focus {
+      outline: 2px solid var(--primary);
+      border-color: var(--primary);
+    }
+    textarea.form-control {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    @media (max-width: 768px) {
+      .news-card {
+        grid-template-columns: 1fr;
+      }
+      .news-thumb {
+        width: 100%;
+        height: 180px;
+      }
+      .card-actions {
+        flex-direction: row;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-logo">
+      <span style="font-size:24px;">✒️</span>
+      <div>
+        <h1>वार्ताप्राइम न्यूज़ - संपादक डेस्क</h1>
+      </div>
+      <span class="badge">संपादकीय विंग</span>
+    </div>
+    <div class="header-actions">
+      <a href="/login.html" class="btn btn-outline">🏠 पोर्टल हब</a>
+      <a href="/" target="_blank" class="btn btn-outline">🌐 मुख्य साइट</a>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="container">
+    
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <div class="stat-box">
+        <div class="stat-label">⏳ समीक्षा हेतु लंबित (Pending)</div>
+        <div class="stat-val" id="pendingCount">0</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">✅ आज स्वीकृत व लाइव (Approved)</div>
+        <div class="stat-val" id="approvedCount">0</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">✍️ फील्ड रिपोर्टर खबरें</div>
+        <div class="stat-val" id="reporterCount">0</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">⚡ ब्रेकिंग अलर्ट्स</div>
+        <div class="stat-val" id="breakingCount">0</div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls-bar">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+        <input type="text" id="searchInput" class="search-input" placeholder="खबर या जिला खोजें..." oninput="filterArticles()">
+        <select id="categoryFilter" class="filter-select" onchange="filterArticles()">
+          <option value="">सभी श्रेणियां (All Categories)</option>
+          <option value="हरियाणा">हरियाणा</option>
+          <option value="दिल्ली">दिल्ली</option>
+          <option value="युवा">युवा</option>
+          <option value="देश">देश</option>
+          <option value="क्राइम">क्राइम</option>
+          <option value="राजनीति">राजनीति</option>
+          <option value="बिज़नेस">बिज़नेस</option>
+          <option value="शिक्षा">शिक्षा</option>
+          <option value="करियर">करियर</option>
+          <option value="स्वास्थ्य">स्वास्थ्य</option>
+          <option value="खेल">खेल</option>
+          <option value="मनोरंजन">मनोरंजन</option>
+          <option value="विदेश">विदेश</option>
+        </select>
+        <button class="btn btn-primary" onclick="loadPendingArticles()">🔄 रीफ़्रेश करें</button>
+      </div>
+    </div>
+
+    <!-- News List -->
+    <div id="newsGrid" class="news-grid">
+      <div style="text-align:center;padding:40px;color:#64748b;">लंबित समाचार लोड हो रहे हैं...</div>
+    </div>
+
+  </div>
+
+  <!-- Edit & Approve Modal -->
+  <div id="editModal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>✏️ समाचार संपादन एवं प्रकाशन</h3>
+        <button onclick="closeModal()" style="border:none;background:none;font-size:22px;cursor:pointer;">✕</button>
+      </div>
+
+      <input type="hidden" id="editArticleId">
+
+      <div class="form-group">
+        <label>समाचार शीर्षक (Headline) *</label>
+        <input type="text" id="editTitle" class="form-control" required>
+      </div>
+
+      <div class="form-group" style="display:flex;gap:12px;">
+        <div style="flex:1;">
+          <label>श्रेणी (Category) *</label>
+          <select id="editCategory" class="form-control">
+            <option value="हरियाणा">हरियाणा</option>
+            <option value="दिल्ली">दिल्ली</option>
+            <option value="युवा">युवा</option>
+            <option value="देश">देश</option>
+            <option value="क्राइम">क्राइम</option>
+            <option value="राजनीति">राजनीति</option>
+            <option value="बिज़नेस">बिज़नेस</option>
+            <option value="शिक्षा">शिक्षा</option>
+            <option value="करियर">करियर</option>
+            <option value="स्वास्थ्य">स्वास्थ्य</option>
+            <option value="खेल">खेल</option>
+            <option value="मनोरंजन">मनोरंजन</option>
+            <option value="विदेश">विदेश</option>
+          </select>
+        </div>
+        <div style="flex:1;">
+          <label>जिला / स्थान (District/Location)</label>
+          <input type="text" id="editDistrict" class="form-control" placeholder="उदा. पानीपत">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>तस्वीर का URL (Image URL)</label>
+        <input type="url" id="editImage" class="form-control" placeholder="https://...">
+      </div>
+
+      <div class="form-group">
+        <label>संक्षिप्त विवरण (Short Summary / Description)</label>
+        <textarea id="editDescription" class="form-control" style="min-height:70px;"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>पूरी खबर का विवरण (Full Content)</label>
+        <textarea id="editContent" class="form-control"></textarea>
+      </div>
+
+      <div class="form-group" style="display:flex;gap:16px;">
+        <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;">
+          <input type="checkbox" id="editIsBreaking"> ⚡ ब्रेकिंग न्यूज़ (Breaking News Ticker)
+        </label>
+        <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;">
+          <input type="checkbox" id="editIsHero"> ⭐ मुख्य बड़ी खबर (Lead Hero Story)
+        </label>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;border-top:1px solid var(--border);padding-top:16px;">
+        <button class="btn btn-outline" style="color:var(--navy);border-color:var(--border);" onclick="triggerAiRewrite()">✨ AI भाषा सुधार (Rewrite)</button>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-outline" style="color:#64748b;" onclick="closeModal()">रद्द करें</button>
+          <button class="btn btn-danger" onclick="rejectCurrentModal()">अस्वीकृत करें</button>
+          <button class="btn btn-success" onclick="saveAndApproveModal()">✅ स्वीकृत व लाइव करें</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/js/editor.js"></script>
+</body>
+</html>
