@@ -346,66 +346,109 @@ function getInitialApprovedNews() {
 }
 
 // --------------------------------------------------------------------------
-// RANKING LOGIC: Tier 1 (City) -> Tier 2 (Region) -> Tier 3 (General)
-// Within each tier: publishedAt DESC
+// SMART RANKING & PERSONALIZATION LOGIC:
+// 1. Hyper-Local Location Match (City/District -> State/Region)
+// 2. Reader Category Affinity & Preference (Favorite News Types)
+// 3. Breaking / Hero Importance
+// 4. Time Recency Decay
 // --------------------------------------------------------------------------
 function rankArticles(articles = [], options = {}) {
   if (!Array.isArray(articles) || !articles.length) return [];
-  const { userCity, userRegion } = options;
+  const { userCity, userRegion, categoryAffinity } = options;
 
-  // Pure date sort helper
-  const sortByDateDesc = (a, b) => {
-    const timeA = new Date(a.publishedAt || a.approvedAt || a.fetchedAt || 0).getTime();
-    const timeB = new Date(b.publishedAt || b.approvedAt || b.fetchedAt || 0).getTime();
-    return timeB - timeA;
-  };
-
-  // If no location provided, fallback to pure date ordering
-  if (!userCity && !userRegion) {
-    return [...articles].sort(sortByDateDesc);
+  let normCity = '';
+  let normRegion = '';
+  if (userCity || userRegion) {
+    const norm = normalizeLocation(userCity, userRegion);
+    normCity = norm.cityHindi;
+    normRegion = norm.regionHindi;
   }
 
-  const norm = normalizeLocation(userCity, userRegion);
-  const targetCity = norm.cityHindi;
-  const targetRegion = norm.regionHindi;
+  // Parse categoryAffinity if passed as JSON string or object
+  let catWeights = {};
+  if (categoryAffinity) {
+    try {
+      catWeights = typeof categoryAffinity === 'string' ? JSON.parse(categoryAffinity) : categoryAffinity;
+    } catch (_) {
+      if (typeof categoryAffinity === 'object') catWeights = categoryAffinity;
+    }
+  }
 
-  const tier1 = []; // Exact City Match
-  const tier2 = []; // Same Region / State Match
-  const tier3 = []; // Other / National / General
+  // Normalize category weights
+  let maxWeight = 1;
+  if (catWeights && typeof catWeights === 'object') {
+    for (const k in catWeights) {
+      if (typeof catWeights[k] === 'number' && catWeights[k] > maxWeight) {
+        maxWeight = catWeights[k];
+      }
+    }
+  }
 
-  for (const article of articles) {
+  const scoredArticles = articles.map(article => {
+    let score = 0;
+    const matchReasons = [];
+
     const artCity = article.city || article.district || '';
     const artRegion = article.region || article.state || '';
     const text = ((article.title || '') + ' ' + (article.description || '')).toLowerCase();
 
-    // Check Tier 1: City match
-    const isCityMatch = isMatchingCity(artCity, targetCity) ||
-      (targetCity && text.includes(targetCity.toLowerCase()));
-
-    if (isCityMatch) {
-      tier1.push({ ...article, _rankTier: 1, _matchedLocation: targetCity });
-      continue;
+    // 1. Hyper-Local Location Match (Highest Priority)
+    if (normCity) {
+      const isCityMatch = isMatchingCity(artCity, normCity) || (normCity.length > 2 && text.includes(normCity.toLowerCase()));
+      if (isCityMatch) {
+        score += 300; // Top Boost for reader's district/city
+        matchReasons.push(`📍 ${normCity}`);
+      } else if (normRegion && (isMatchingRegion(artRegion, normRegion) || (normRegion !== 'राष्ट्रीय / देश' && text.includes(normRegion.toLowerCase())))) {
+        score += 140; // Boost for reader's state/region
+        matchReasons.push(`🏛️ ${normRegion}`);
+      }
+    } else if (normRegion) {
+      if (isMatchingRegion(artRegion, normRegion) || (normRegion !== 'राष्ट्रीय / देश' && text.includes(normRegion.toLowerCase()))) {
+        score += 140;
+        matchReasons.push(`🏛️ ${normRegion}`);
+      }
     }
 
-    // Check Tier 2: Region / State match
-    const isRegionMatch = isMatchingRegion(artRegion, targetRegion) ||
-      (targetRegion && targetRegion !== 'राष्ट्रीय / देश' && text.includes(targetRegion.toLowerCase()));
-
-    if (isRegionMatch) {
-      tier2.push({ ...article, _rankTier: 2, _matchedLocation: targetRegion });
-      continue;
+    // 2. Category Reading Affinity Match (Reader's Preferred News Types)
+    const cat = article.category || '';
+    if (cat && catWeights && catWeights[cat]) {
+      const normalizedAffinity = Math.min(1, catWeights[cat] / maxWeight);
+      const affinityBoost = Math.round(normalizedAffinity * 200); // Up to +200 points for favorite category
+      score += affinityBoost;
+      matchReasons.push(`✨ आपकी पसंदीदा श्रेणी (${cat})`);
     }
 
-    // Tier 3: Everything else
-    tier3.push({ ...article, _rankTier: 3, _matchedLocation: 'General' });
-  }
+    // 3. Editorial Hero & Breaking Importance
+    if (article.isHero) score += 50;
+    if (article.isBreaking) score += 35;
 
-  // Sort each tier by publishedAt DESC
-  tier1.sort(sortByDateDesc);
-  tier2.sort(sortByDateDesc);
-  tier3.sort(sortByDateDesc);
+    // 4. Recency Score (Decays smoothly over hours)
+    const timeMs = new Date(article.publishedAt || article.approvedAt || article.fetchedAt || 0).getTime();
+    if (!isNaN(timeMs) && timeMs > 0) {
+      const hoursAgo = Math.max(0, (Date.now() - timeMs) / (1000 * 60 * 60));
+      const recencyBoost = Math.max(0, Math.round(40 - (hoursAgo * 1.2)));
+      score += recencyBoost;
+    }
 
-  return [...tier1, ...tier2, ...tier3];
+    return {
+      ...article,
+      _relevanceScore: score,
+      _matchReason: matchReasons.join(' • ') || 'ताज़ा समाचार',
+      _rankTier: score >= 250 ? 1 : (score >= 120 ? 2 : 3)
+    };
+  });
+
+  // Sort by score DESC, then by publication time DESC
+  scoredArticles.sort((a, b) => {
+    if (b._relevanceScore !== a._relevanceScore) {
+      return b._relevanceScore - a._relevanceScore;
+    }
+    const timeA = new Date(a.publishedAt || a.approvedAt || a.fetchedAt || 0).getTime();
+    const timeB = new Date(b.publishedAt || b.approvedAt || b.fetchedAt || 0).getTime();
+    return timeB - timeA;
+  });
+
+  return scoredArticles;
 }
 
 // ---------------- Database Methods ----------------
@@ -575,11 +618,12 @@ const db = {
       list = list.filter(item => (item.title && item.title.toLowerCase().includes(q)) || (item.description && item.description.toLowerCase().includes(q)));
     }
 
-    // Query-Level Tiered Ranking by User Location
-    if (filter.userCity || filter.userRegion || filter.ranked) {
+    // Query-Level Smart Ranking by User Location & Category Preference
+    if (filter.userCity || filter.userRegion || filter.categoryAffinity || filter.ranked) {
       list = rankArticles(list, {
         userCity: filter.userCity || filter.city,
-        userRegion: filter.userRegion || filter.region
+        userRegion: filter.userRegion || filter.region,
+        categoryAffinity: filter.categoryAffinity
       });
     } else {
       // Default: Sort by publishedAt DESC

@@ -74,7 +74,19 @@ app.get('/api/weather/haryana', async (req, res) => {
   }
 });
 
-// GET /api/news - List approved news (supports query-level location prioritization, search, category, pagination)
+// GET /api/locations/detect - Auto-detect viewer's city and state from IP
+app.get('/api/locations/detect', async (req, res) => {
+  try {
+    const forwarded = req.headers['x-forwarded-for'];
+    const ip = forwarded ? forwarded.split(',')[0].trim() : req.socket.remoteAddress;
+    const location = await detectLocationFromIP(ip);
+    res.json({ success: true, data: location });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// GET /api/news - List approved news (supports location & reader interest personalization)
 app.get('/api/news', (req, res) => {
   try {
     const { 
@@ -86,6 +98,7 @@ app.get('/api/news', (req, res) => {
       region, 
       userCity, 
       userRegion, 
+      categoryAffinity,
       ranked, 
       limit, 
       offset, 
@@ -104,7 +117,8 @@ app.get('/api/news', (req, res) => {
       region: region || state,
       userCity: userCity || city, 
       userRegion: userRegion || region, 
-      ranked: ranked === 'true' || ranked === '1' || !!userCity || !!userRegion,
+      categoryAffinity,
+      ranked: ranked === 'true' || ranked === '1' || !!userCity || !!userRegion || !!categoryAffinity,
       limit: effectiveLimit,
       offset: effectiveOffset
     });

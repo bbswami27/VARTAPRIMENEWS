@@ -7,12 +7,16 @@ class ApiService {
   // Live Render Production API Endpoint
   static const String baseUrl = 'https://vartaprime-news-1.onrender.com/api';
 
-  // 1. Fetch News with Filters
+  // 1. Fetch News with Filters & Personalization
   static Future<List<NewsItem>> fetchNews({
     String? category,
     String? district,
     String? state,
     String? search,
+    String? userCity,
+    String? userRegion,
+    String? categoryAffinity,
+    bool ranked = true,
     int? limit,
   }) async {
     try {
@@ -21,6 +25,10 @@ class ApiService {
         if (district != null && district != 'सभी' && district != 'मुख्य') 'district': district,
         if (state != null && state != 'सभी') 'state': state,
         if (search != null && search.isNotEmpty) 'search': search,
+        if (userCity != null && userCity.isNotEmpty) 'userCity': userCity,
+        if (userRegion != null && userRegion.isNotEmpty) 'userRegion': userRegion,
+        if (categoryAffinity != null && categoryAffinity.isNotEmpty) 'categoryAffinity': categoryAffinity,
+        if (ranked) 'ranked': 'true',
         if (limit != null) 'limit': limit.toString(),
       });
 

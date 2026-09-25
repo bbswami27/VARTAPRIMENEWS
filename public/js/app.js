@@ -80,14 +80,213 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
-// Render Horizontal News Card: With picture or sleek Text-Only format
+// ==========================================================================
+// Reader Geo-Location & AI Category Affinity Personalization Engine
+// ==========================================================================
+const ReaderProfile = {
+  LOCATION_KEY: 'vp_reader_location',
+  AFFINITY_KEY: 'vp_reader_category_affinity',
+
+  getLocation() {
+    try {
+      const saved = localStorage.getItem(this.LOCATION_KEY);
+      if (saved) return JSON.parse(saved);
+    } catch (_) {}
+    return { city: 'पानीपत', region: 'हरियाणा', isDefault: true };
+  },
+
+  setLocation(city, region) {
+    try {
+      const loc = { city: city || 'पानीपत', region: region || 'हरियाणा', isDefault: false, updatedAt: Date.now() };
+      localStorage.setItem(this.LOCATION_KEY, JSON.stringify(loc));
+      this.updateLocationBadgeUI(loc);
+      loadNews();
+    } catch (e) {
+      console.error('Error saving reader location:', e);
+    }
+  },
+
+  updateLocationBadgeUI(loc) {
+    const textEl = document.getElementById('readerLocationText');
+    if (textEl && loc) {
+      textEl.textContent = `${loc.city || 'पानीपत'} (लोकल)`;
+    }
+  },
+
+  getAffinities() {
+    try {
+      const saved = localStorage.getItem(this.AFFINITY_KEY);
+      if (saved) return JSON.parse(saved);
+    } catch (_) {}
+    return {};
+  },
+
+  recordArticleView(article) {
+    if (!article) return;
+    try {
+      const aff = this.getAffinities();
+      const cat = (article.category || '').trim();
+      if (cat) {
+        aff[cat] = (aff[cat] || 0) + 1;
+      }
+      if (article.district && article.district !== 'मुख्य') {
+        aff[`loc_${article.district}`] = (aff[`loc_${article.district}`] || 0) + 1;
+      }
+      localStorage.setItem(this.AFFINITY_KEY, JSON.stringify(aff));
+    } catch (e) {
+      console.error('Error recording affinity:', e);
+    }
+  },
+
+  async autoDetectLocation() {
+    const current = this.getLocation();
+    if (current && !current.isDefault) {
+      this.updateLocationBadgeUI(current);
+      return current;
+    }
+
+    try {
+      const res = await fetch('/api/locations/detect');
+      const json = await res.json();
+      if (json.success && json.data && json.data.city) {
+        const detected = {
+          city: json.data.city,
+          region: json.data.region || 'हरियाणा',
+          isDefault: false,
+          isAutoDetected: true
+        };
+        localStorage.setItem(this.LOCATION_KEY, JSON.stringify(detected));
+        this.updateLocationBadgeUI(detected);
+        return detected;
+      }
+    } catch (e) {
+      console.log('Location auto-detect fallback:', e);
+    }
+
+    this.updateLocationBadgeUI(current);
+    return current;
+  },
+
+  rankForReader(articles) {
+    if (!Array.isArray(articles) || articles.length === 0) return [];
+    const loc = this.getLocation();
+    const aff = this.getAffinities();
+
+    const targetCity = (loc.city || '').toLowerCase();
+    const targetRegion = (loc.region || '').toLowerCase();
+
+    return articles.map(art => {
+      let score = 0;
+      const reasons = [];
+
+      const artDist = (art.district || '').toLowerCase();
+      const artState = (art.state || art.region || '').toLowerCase();
+      const artTitle = (art.title || '').toLowerCase();
+      const artDesc = (art.description || '').toLowerCase();
+      const text = `${artDist} ${artState} ${artTitle} ${artDesc}`;
+
+      // 1. Hyper-local district/city match (Highest Priority)
+      if (targetCity && (artDist.includes(targetCity) || text.includes(targetCity))) {
+        score += 300;
+        reasons.push(`📍 ${loc.city}`);
+      } else if (targetRegion && (artState.includes(targetRegion) || text.includes(targetRegion))) {
+        score += 120;
+        reasons.push(`🏛️ ${loc.region}`);
+      }
+
+      // 2. Category / Topic Affinity match (Dynamic learning)
+      const cat = (art.category || '').trim();
+      const catViews = aff[cat] || 0;
+      if (catViews > 0) {
+        const boost = Math.min(200, catViews * 25);
+        score += boost;
+        if (catViews >= 2) {
+          reasons.push('✨ आपकी पसंद');
+        }
+      }
+
+      // 3. Editorial Hero / Breaking
+      if (art.isHero) score += 40;
+      if (art.isBreaking) score += 30;
+
+      // 4. Recency
+      const timeMs = new Date(art.publishedAt || art.approvedAt || art.fetchedAt || 0).getTime();
+      if (!isNaN(timeMs) && timeMs > 0) {
+        const hoursAgo = Math.max(0, (Date.now() - timeMs) / (1000 * 60 * 60));
+        score += Math.max(0, Math.round(35 - (hoursAgo * 1.0)));
+      }
+
+      return {
+        ...art,
+        _readerScore: score,
+        _personalBadge: reasons[0] || null
+      };
+    }).sort((a, b) => {
+      if (b._readerScore !== a._readerScore) {
+        return b._readerScore - a._readerScore;
+      }
+      const timeA = new Date(a.publishedAt || a.approvedAt || a.fetchedAt || 0).getTime();
+      const timeB = new Date(b.publishedAt || b.approvedAt || b.fetchedAt || 0).getTime();
+      return timeB - timeA;
+    });
+  }
+};
+
+// Location Modal Control Functions
+function openLocationPickerModal() {
+  const modal = document.getElementById('locationPickerModal');
+  if (!modal) return;
+  populateLocationModalDistricts();
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLocationPickerModal() {
+  const modal = document.getElementById('locationPickerModal');
+  if (modal) modal.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function selectReaderLocation(city, region) {
+  ReaderProfile.setLocation(city, region);
+  closeLocationPickerModal();
+  showToast(`लोकेशन सेट: ${city} की खबरें अब सबसे ऊपर दिखेंगी`);
+}
+
+function populateLocationModalDistricts() {
+  const container = document.getElementById('locationModalDistricts');
+  if (!container) return;
+
+  const haryanaDistricts = [
+    'पानीपत', 'करनाल', 'कुरुक्षेत्र', 'अंबाला', 'पंचकुला', 'यमुनानगर',
+    'कैथल', 'हिसार', 'रोहतक', 'सोनीपत', 'गुरुग्राम', 'फरीदाबाद',
+    'झज्जर', 'रेवाड़ी', 'महेंद्रगढ़ (नारनौल)', 'भिवानी', 'चरखी दादरी',
+    'जींद', 'फतेहाबाद', 'सिरसा', 'पलवल', 'नूंह'
+  ];
+
+  const currentLoc = ReaderProfile.getLocation();
+  container.innerHTML = haryanaDistricts.map(d => {
+    const isSelected = currentLoc.city === d;
+    return `
+      <button class="district-pill ${isSelected ? 'active' : ''}" onclick="selectReaderLocation('${d}', 'हरियाणा')" style="cursor:pointer;padding:6px 12px;border-radius:16px;border:1px solid ${isSelected ? 'var(--press-red)' : 'var(--line)'};background:${isSelected ? 'var(--press-red)' : '#fff'};color:${isSelected ? '#fff' : 'var(--ink)'};font-size:12.5px;font-weight:${isSelected ? '700' : '500'};display:inline-flex;align-items:center;gap:4px;">
+        ${isSelected ? '✓ ' : ''}${d}
+      </button>
+    `;
+  }).join('');
+}
+
+// Render Horizontal News Card: With picture or sleek Text-Only format + Personalization Badges
 function createCardHTML(item) {
   const hasImg = !!(item.imageurl && String(item.imageurl).trim().length > 5);
   const imgHtml = hasImg
     ? `<div class="card-thumb"><img src="${escapeHtml(item.imageurl)}" alt="${escapeHtml(item.title)}" loading="lazy" onerror="this.parentElement.style.display='none';this.closest('.horizontal-card').classList.add('text-only-card');"></div>`
     : '';
 
-  const districtBadge = item.district && item.district !== 'मुख्य'
+  const personalBadge = item._personalBadge
+    ? `<span class="affinity-badge" style="background:#fef3c7;color:#92400e;border:1px solid #fde68a;font-size:10.5px;padding:1px 7px;border-radius:10px;font-weight:700;">${escapeHtml(item._personalBadge)}</span>`
+    : '';
+
+  const districtBadge = item.district && item.district !== 'मुख्य' && !item._personalBadge
     ? `<span class="district-tag-badge">📍 ${escapeHtml(item.district)}</span>`
     : '';
 
@@ -101,6 +300,7 @@ function createCardHTML(item) {
       <div class="card-content-wrap">
         <div class="card-top-meta">
           <span class="cat-badge">${escapeHtml(item.category)}</span>
+          ${personalBadge}
           ${districtBadge}
           ${modeBadge}
         </div>
@@ -155,13 +355,18 @@ async function loadCategoryCounts() {
   }
 }
 
-// Fetch and Render Public News
+// Fetch and Render Public News (with Location & Category Affinity Personalization)
 async function loadNews() {
   try {
-    const res = await fetch(`${API_BASE}/news`);
+    const loc = ReaderProfile.getLocation();
+    const aff = ReaderProfile.getAffinities();
+    const affParam = encodeURIComponent(JSON.stringify(aff));
+    const url = `${API_BASE}/news?userCity=${encodeURIComponent(loc.city || '')}&userRegion=${encodeURIComponent(loc.region || '')}&categoryAffinity=${affParam}&ranked=true`;
+
+    const res = await fetch(url);
     const json = await res.json();
     if (json.success) {
-      allLiveNews = json.data;
+      allLiveNews = ReaderProfile.rankForReader(json.data);
       renderPortal();
     }
   } catch (err) {
@@ -173,9 +378,10 @@ async function loadNews() {
 function renderPortal() {
   if (!allLiveNews || allLiveNews.length === 0) return;
 
-  // 1. Hero Lead Article (Prioritize Positive/National/Haryana/Youth/Development, EXCLUDE CRIME)
-  const nonCrimeNews = allLiveNews.filter(n => n.category !== 'क्राइम');
-  const heroItem = nonCrimeNews.find(n => n.isHero) || nonCrimeNews[0] || allLiveNews[0];
+  const rankedNonCrime = allLiveNews.filter(n => n.category !== 'क्राइम');
+
+  // 1. Hero Lead Article (Prioritize Positive/Youth/National/Local Development, EXCLUDE CRIME)
+  const heroItem = rankedNonCrime.find(n => n.isHero) || rankedNonCrime[0] || allLiveNews[0];
   const heroLead = document.getElementById('heroLead');
   if (heroLead && heroItem) {
     heroLead.onclick = () => openArticleModal(heroItem.id);
@@ -190,14 +396,14 @@ function renderPortal() {
     const p = heroLead.querySelector('p');
     if (p) p.style.display = 'none'; // Headline only on front page
     const metaSource = heroLead.querySelector('.meta-source');
-    if (metaSource) metaSource.textContent = heroItem.source || 'वार्ताप्राइम';
+    if (metaSource) metaSource.textContent = heroItem.source || (heroItem.district && heroItem.district !== 'मुख्य' ? `📍 ${heroItem.district}` : 'वार्ताप्राइम');
     const metaTime = heroLead.querySelector('.meta-time');
     if (metaTime) metaTime.textContent = timeAgo(heroItem.publishedAt || heroItem.approvedAt);
   }
 
-  // 2. Hero Side Top Stories (Remaining 4 of 5 Top Stories - EXCLUDE CRIME, Prioritize Knowledge/Youth/Desh)
-  const sideItems = (nonCrimeNews.length >= 5 ? nonCrimeNews : allLiveNews)
-    .filter(n => n.id !== heroItem.id && n.category !== 'क्राइम')
+  // 2. Hero Side Top Stories (Next 4 top ranked non-crime stories)
+  const sideItems = rankedNonCrime
+    .filter(n => n.id !== heroItem.id)
     .slice(0, 4);
   const heroSide = document.getElementById('heroSide');
   if (heroSide) {
@@ -210,10 +416,13 @@ function renderPortal() {
           <span class="num">0${idx + 1}</span>
           ${sideImg}
           <div class="content-box">
-            <span class="cat-badge">${escapeHtml(item.category)}</span>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span class="cat-badge">${escapeHtml(item.category)}</span>
+              ${item._personalBadge ? `<span style="font-size:11px;color:#2563eb;font-weight:600;">${escapeHtml(item._personalBadge)}</span>` : ''}
+            </div>
             <h3 class="side-headline">${escapeHtml(item.title)}</h3>
             <div class="side-meta">
-              <span>${escapeHtml(item.source || 'संवाद')}</span>
+              <span>${escapeHtml(item.source || item.district || 'संवाद')}</span>
               <span>•</span>
               <span>${timeAgo(item.publishedAt || item.approvedAt)}</span>
             </div>
@@ -223,77 +432,14 @@ function renderPortal() {
     }).join('');
   }
 
-  // 3. Populate Main Dense Grid with Curated News (Total exactly 30 on main page: 5 Hero + 25 Feed)
+  // 3. Main Dense Grid (Next top personalized news - up to 25 items for rich 30-item page)
   const mainDenseGrid = document.getElementById('mainDenseGrid');
   if (mainDenseGrid) {
-    const curatedFeedMap = [
-      { cat: 'देश', count: 5 },
-      { cat: 'युवा', count: 5, aliases: ['युवा', 'करियर'] },
-      { cat: 'विदेश', count: 4 },
-      { cat: 'बिज़नेस', count: 4 },
-      { cat: 'समसामयिकी', count: 4, aliases: ['समसामयिकी', 'शिक्षा'] },
-      { cat: 'हरियाणा', count: 3 }
-    ];
-
-    const curatedArticles = [];
     const usedIds = new Set([heroItem.id, ...sideItems.map(s => s.id)]);
+    const feedItems = rankedNonCrime.filter(n => !usedIds.has(n.id)).slice(0, 25);
 
-    curatedFeedMap.forEach(spec => {
-      const aliases = spec.aliases || [spec.cat];
-      const matchArticles = allLiveNews.filter(n => 
-        aliases.includes(n.category) && !usedIds.has(n.id)
-      );
-
-      const selected = matchArticles.slice(0, spec.count);
-      selected.forEach(art => {
-        usedIds.add(art.id);
-        curatedArticles.push(art);
-      });
-    });
-
-    // If any slots remain to make exactly 25 items in feed (total 30 on page), fill from other high-relevance non-crime news
-    if (curatedArticles.length < 25) {
-      const extra = allLiveNews.filter(n => n.category !== 'क्राइम' && !usedIds.has(n.id));
-      for (const item of extra) {
-        if (curatedArticles.length >= 25) break;
-        usedIds.add(item.id);
-        curatedArticles.push(item);
-      }
-    }
-
-    // Limit feed to exactly 25 news (so 5 Hero + 25 Feed = 30 total news on main page)
-    const finalMainFeed = allLiveNews
-  .filter(n =>
-    n.category !== 'क्राइम' &&
-    n.id !== heroItem?.id &&
-    !sideItems.some(s => s.id === n.id)
-  )
-  .sort((a, b) => {
-    // Hero/Breaking को priority
-    const priorityA =
-      (a.isHero ? 2 : 0) +
-      (a.isBreaking ? 1 : 0);
-
-    const priorityB =
-      (b.isHero ? 2 : 0) +
-      (b.isBreaking ? 1 : 0);
-
-    if (priorityB !== priorityA) {
-      return priorityB - priorityA;
-    }
-
-    // बाकी में latest approved news पहले
-    return new Date(
-      b.approvedAt || b.publishedAt || 0
-    ) - new Date(
-      a.approvedAt || a.publishedAt || 0
-    );
-  })
-  .slice(0, 10);
-
-mainDenseGrid.innerHTML =
-  finalMainFeed.map(createCardHTML).join('');
-}
+    mainDenseGrid.innerHTML = feedItems.map(createCardHTML).join('');
+  }
   
   // 4. Trending in Sidebar (top 6 by views - exclude crime)
   const sortedByViews = [...allLiveNews].filter(n => n.category !== 'क्राइम').sort((a, b) => (b.views || 0) - (a.views || 0));
@@ -650,6 +796,9 @@ async function openArticleModal(id) {
 
   if (!article) return;
   currentArticle = article;
+
+  // Record reader category affinity and district interest
+  ReaderProfile.recordArticleView(article);
 
   // Increment view counter locally
   article.views = (article.views || 0) + 1;
@@ -1567,9 +1716,10 @@ window.addEventListener('keydown', (e) => {
 });
 
 // Init on DOM ready
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   initDate();
   setupNav();
+  await ReaderProfile.autoDetectLocation();
   loadBreakingNews();
   loadCategoryCounts();
   loadNews();
