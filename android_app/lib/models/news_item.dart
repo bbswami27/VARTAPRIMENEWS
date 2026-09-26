@@ -43,6 +43,14 @@ class NewsItem {
       pubDate = DateTime.tryParse(json['approvedAt'].toString());
     }
 
+    final rawImg = json['imageurl']?.toString().trim() ?? '';
+    final cleanImg = (rawImg.isNotEmpty &&
+            rawImg != 'null' &&
+            rawImg != 'undefined' &&
+            !rawImg.contains('unsplash.com'))
+        ? rawImg
+        : '';
+
     return NewsItem(
       id: json['id']?.toString() ?? '',
       title: json['title']?.toString() ?? '',
@@ -55,13 +63,20 @@ class NewsItem {
       sourceType: json['sourceType']?.toString() ?? 'rss',
       reporterName: json['reporterName']?.toString() ?? '',
       link: json['link']?.toString() ?? '',
-      imageurl: json['imageurl']?.toString() ?? 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&auto=format&fit=crop&q=80',
+      imageurl: cleanImg,
       publishedAt: pubDate,
       isBreaking: json['isBreaking'] == true,
       isHero: json['isHero'] == true,
       views: (json['views'] as num?)?.toInt() ?? 0,
     );
   }
+
+  bool get hasImage =>
+      imageurl.trim().isNotEmpty &&
+      imageurl.trim() != 'null' &&
+      (imageurl.trim().startsWith('http://') ||
+          imageurl.trim().startsWith('https://') ||
+          imageurl.trim().startsWith('data:image'));
 
   Map<String, dynamic> toJson() {
     return {

@@ -123,7 +123,7 @@ class ApiService {
           'state': state,
           'district': district,
           'reporterName': reporterName,
-          'imageurl': imageurl ?? 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&auto=format&fit=crop&q=80',
+          'imageurl': imageurl ?? '',
         }),
       ).timeout(const Duration(seconds: 15));
 

@@ -136,8 +136,8 @@ class _ArticleDetailScreenState extends State<ArticleDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Hero Photo
-            if (widget.item.imageurl.isNotEmpty)
+            // Hero Photo ONLY if an authentic image exists
+            if (widget.item.hasImage)
               AspectRatio(
                 aspectRatio: 16 / 9,
                 child: CachedNetworkImage(

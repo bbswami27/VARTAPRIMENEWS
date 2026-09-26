@@ -96,7 +96,7 @@ class AppMasthead extends StatelessWidget {
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppTheme.navyDark,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(color: AppTheme.gold, width: 1.5),
                     boxShadow: [
@@ -107,16 +107,11 @@ class AppMasthead extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: Image.network(
-                      'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=200&auto=format&fit=crop&q=80',
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => const Icon(
-                        Icons.map,
-                        size: 24,
-                        color: AppTheme.pressRed,
-                      ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.newspaper,
+                      size: 24,
+                      color: AppTheme.saffron,
                     ),
                   ),
                 ),

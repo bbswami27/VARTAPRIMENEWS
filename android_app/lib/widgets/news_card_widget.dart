@@ -44,6 +44,8 @@ class NewsCardWidget extends StatelessWidget {
 
   // 1. Hero Full Card
   Widget _buildHeroCard(BuildContext context) {
+    final hasImg = item.hasImage;
+
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       clipBehavior: Clip.antiAlias,
@@ -52,74 +54,122 @@ class NewsCardWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image Box
-            Stack(
-              children: [
-                AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: CachedNetworkImage(
-                    imageUrl: item.imageurl,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Container(
-                      color: AppTheme.navyDark,
-                      child: const Center(
-                        child: CircularProgressIndicator(color: AppTheme.pressRed),
+            // Image Box ONLY if hasImg is true
+            if (hasImg)
+              Stack(
+                children: [
+                  AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: CachedNetworkImage(
+                      imageUrl: item.imageurl,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Container(
+                        color: AppTheme.navyDark,
+                        child: const Center(
+                          child: CircularProgressIndicator(color: AppTheme.pressRed),
+                        ),
                       ),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      color: AppTheme.navyDark,
-                      child: const Icon(Icons.newspaper, color: Colors.white54, size: 40),
+                      errorWidget: (context, url, error) => const SizedBox.shrink(),
                     ),
                   ),
-                ),
-                // Category Chip
-                Positioned(
-                  top: 10,
-                  left: 10,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: AppTheme.pressRed,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      item.category,
-                      style: GoogleFonts.hind(
-                        fontSize: 11.5,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                if (item.district.isNotEmpty && item.district != 'मुख्य')
+                  // Category Chip
                   Positioned(
                     top: 10,
-                    right: 10,
+                    left: 10,
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.7),
+                        color: AppTheme.pressRed,
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        '📍 ${item.district}',
+                        item.category,
                         style: GoogleFonts.hind(
                           fontSize: 11.5,
-                          fontWeight: FontWeight.w600,
-                          color: AppTheme.saffron,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
                         ),
                       ),
                     ),
                   ),
-              ],
-            ),
+                  if (item.district.isNotEmpty && item.district != 'मुख्य')
+                    Positioned(
+                      top: 10,
+                      right: 10,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.7),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          '📍 ${item.district}',
+                          style: GoogleFonts.hind(
+                            fontSize: 11.5,
+                            fontWeight: FontWeight.w600,
+                            color: AppTheme.saffron,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             // Title & Content
             Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  if (!hasImg) ...[
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: AppTheme.pressRed,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            item.category,
+                            style: GoogleFonts.hind(
+                              fontSize: 11.5,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: AppTheme.saffron.withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(color: AppTheme.saffron.withOpacity(0.4)),
+                          ),
+                          child: Text(
+                            '📰 मुख्य समाचार',
+                            style: GoogleFonts.hind(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: AppTheme.saffron,
+                            ),
+                          ),
+                        ),
+                        if (item.district.isNotEmpty && item.district != 'मुख्य') ...[
+                          const SizedBox(width: 8),
+                          Text(
+                            '📍 ${item.district}',
+                            style: GoogleFonts.hind(
+                              fontSize: 11.5,
+                              fontWeight: FontWeight.w600,
+                              color: AppTheme.inkSoft,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                  ],
                   Text(
                     item.title,
                     style: GoogleFonts.notoSerifDevanagari(
@@ -196,8 +246,8 @@ class NewsCardWidget extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
               ],
-              // Thumbnail Photo (If image is present)
-              if (item.imageurl.trim().length > 5) ...[
+              // Thumbnail Photo (ONLY if image is present)
+              if (item.hasImage) ...[
                 ClipRRect(
                   borderRadius: BorderRadius.circular(6),
                   child: SizedBox(
@@ -216,10 +266,7 @@ class NewsCardWidget extends StatelessWidget {
                           ),
                         ),
                       ),
-                      errorWidget: (context, url, error) => Container(
-                        color: AppTheme.paperDim,
-                        child: const Icon(Icons.newspaper, color: AppTheme.inkMuted, size: 28),
-                      ),
+                      errorWidget: (context, url, error) => const SizedBox.shrink(),
                     ),
                   ),
                 ),
@@ -248,6 +295,24 @@ class NewsCardWidget extends StatelessWidget {
                             ),
                           ),
                         ),
+                        if (!item.hasImage) ...[
+                          const SizedBox(width: 5),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                            decoration: BoxDecoration(
+                              color: Colors.blue.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(3),
+                            ),
+                            child: Text(
+                              '📰 त्वरित संवाद',
+                              style: GoogleFonts.hind(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.blue.shade700,
+                              ),
+                            ),
+                          ),
+                        ],
                         if (item.district.isNotEmpty && item.district != 'मुख्य') ...[
                           const SizedBox(width: 5),
                           Text(
