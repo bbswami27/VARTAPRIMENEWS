@@ -6,6 +6,9 @@ import '../screens/bookmarks_screen.dart';
 import '../screens/haryana_weather_screen.dart';
 import '../screens/reporter_portal_screen.dart';
 import '../screens/search_screen.dart';
+import '../screens/admin_screen.dart';
+import '../screens/citizen_reporter_screen.dart';
+import '../screens/advt_agency_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   final Function(String) onCategorySelected;
@@ -125,10 +128,34 @@ class AppDrawer extends StatelessWidget {
                 ),
                 ListTile(
                   leading: const Icon(Icons.rate_review, color: AppTheme.green),
-                  title: Text('रिपोर्टर पोर्टल (खबर भेजें)', style: GoogleFonts.hind(fontWeight: FontWeight.w600)),
+                  title: Text('✍️ रिपोर्टर पोर्टल (Reporter Desk)', style: GoogleFonts.hind(fontWeight: FontWeight.w600)),
                   onTap: () {
                     Navigator.pop(context);
                     Navigator.push(context, MaterialPageRoute(builder: (_) => const ReporterPortalScreen()));
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.record_voice_over, color: AppTheme.saffron),
+                  title: Text('📢 सिटीजन रिपोर्टर (Citizen Report)', style: GoogleFonts.hind(fontWeight: FontWeight.w600)),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => const CitizenReporterScreen()));
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.admin_panel_settings, color: AppTheme.pressRed),
+                  title: Text('👑 मुख्य संपादक व एडमिन डेस्क', style: GoogleFonts.hind(fontWeight: FontWeight.w600)),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => const AdminScreen()));
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.campaign, color: Color(0xFF7C3AED)),
+                  title: Text('💼 विज्ञापन एजेंसी व स्पॉन्सर', style: GoogleFonts.hind(fontWeight: FontWeight.w600)),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => const AdvtAgencyScreen()));
                   },
                 ),
                 const Divider(),

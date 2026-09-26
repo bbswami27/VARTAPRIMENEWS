@@ -13,8 +13,11 @@ class AppTheme {
   static const Color inkSoft = Color(0xFF4A463B);
   static const Color inkMuted = Color(0xFF7C7768);
   static const Color saffron = Color(0xFFE08D3C);
+  static const Color saffronLight = Color(0xFFFFEDD5);
   static const Color green = Color(0xFF1F7A4D);
   static const Color gold = Color(0xFFB4863A);
+  static const Color blue = Color(0xFF2563EB);
+  static const Color navyLight = Color(0xFF1E293B);
   static const Color borderLine = Color(0xFFD9D3C1);
 
   static ThemeData get lightTheme {
